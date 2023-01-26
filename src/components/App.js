@@ -11,22 +11,40 @@ import Map from './Map';
 import Error from './Error';
 import AddTree from './AddTree';
 import Progress from './Progress';
+import Login from './Login';
 import { useNavigate } from 'react-router-dom'
 
 
 function App() {
 
+  const [user, setUser] = useState(null)
   const [useCustomLocation, setUseCustomLocation] = useState(true)
   const [latitude, setLatitude] = useState(null)
   const [longitude, setLongitude] = useState(null)
 
   const [trees, setTrees] = useState([])
 
+  // set user
+  useEffect(() => {
+    fetch("/me", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+      }
+    })
+    .then((r) => {
+      console.log(r)
+      if (r.ok) {
+        r.json().then((user) => setUser(user));
+      }
+    });
+  }, [localStorage.getItem("jwt")]);
+
   useEffect(() => {
     fetch('https://data.cityofnewyork.us/resource/5rq2-4hqu.json')
     .then((res) => res.json())
     .then(obj => {
-      console.log(obj[0])
+      // console.log(obj[0])
       setTrees(obj.filter(t => t['spc_common'] !== undefined))
     })
   }, [setTrees])
@@ -231,15 +249,22 @@ function App() {
     }
   }
 
+  if (!user) {
+    console.log(user)
+    return (<div className="login"><Login setUser={setUser} /></div>);
+  }
+
+
   return (
     <div className="App">
-      <Header/>
+      <Header setUser={setUser}/>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="map" element={<Map center={center} zoom={zoom} showTreeInfo={showTreeInfo} setShowTreeInfo={setShowTreeInfo} treeInfo={treeInfo} setTreeInfo={setTreeInfo} treeOptions={treeOptions} trees={trees}/>} />
         <Route path="addtree" element={<AddTree handleSubmit={handleSubmit} encodeImageFileAsURL={encodeImageFileAsURL} pos={pos} handleNameChange={handleNameChange} setUseCustomLocation={setUseCustomLocation} handleLatChange={handleLatChange} handleLngChange={handleLngChange} useCustomLocation={useCustomLocation}/>} />
         <Route path="progress" element={<Progress treeOptions={treeOptions} trees={trees}/>} />
         <Route path="*" element={<Error />} /> 
+        <Route path="login" element={<Login setUser={setUser} />} />
       </Routes>
       <Footer />
     </div>

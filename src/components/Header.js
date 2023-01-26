@@ -2,7 +2,11 @@ import React from 'react';
 import logo from '../images/logo.png'
 import { NavLink } from 'react-router-dom';
 
-function Header() {
+function Header({setUser}) {
+    function handleClick() {
+        localStorage.removeItem("jwt");
+        setUser(null);
+      }
     return(
         <header className='header'>
             <nav className='nav'>
@@ -26,6 +30,11 @@ function Header() {
                     <li>
                         <NavLink to='/progress' end className='link' style={({ isActive }) => ({borderBottom: isActive? '1.5px solid #3d4637' : null, paddingBottom: isActive ? "5px" : null})}>
                         Progress
+                        </NavLink>
+                    </li>
+                    <li onClick={handleClick}>
+                        <NavLink to='/login' end className='link' style={({ isActive }) => ({borderBottom: isActive? '1.5px solid #3d4637' : null, paddingBottom: isActive ? "5px" : null})}>
+                        log out
                         </NavLink>
                     </li>
                 </ul>
