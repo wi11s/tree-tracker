@@ -5,8 +5,7 @@ import { useInRouterContext } from "react-router-dom";
 import { motion } from 'framer-motion'
 
 
-export default function Map({center, zoom, showTreeInfo, setShowTreeInfo, treeInfo, setTreeInfo, treeOptions, trees}) {
-
+export default function Map({center, zoom, showTreeInfo, setShowTreeInfo, treeInfo, setTreeInfo, treeOptions, trees, pos}) {
   const {isLoaded} = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_API_KEY
   })
@@ -17,7 +16,7 @@ export default function Map({center, zoom, showTreeInfo, setShowTreeInfo, treeIn
     fetch('https://trusted-swanky-whimsey.glitch.me/trees')
     .then((res) => res.json())
     .then(obj => {
-      // console.log(obj.length)
+      // console.log(obj)
       setUserTrees(obj)
     })
   }, [setUserTrees])
@@ -63,16 +62,12 @@ export default function Map({center, zoom, showTreeInfo, setShowTreeInfo, treeIn
   }
 
   const userTreeOptions = userTrees.filter((item, index) => index === userTrees.indexOf(userTrees.find(tree => tree['spc_common'] === item['spc_common'])))
-  // console.log(userTreeOptions)
 
   const [filterBy, setFilterBy] = useState('')
 
   let displayTrees = trees.filter((tree) => {
-    // console.log(tree['spc_common'].toLowerCase().includes('honeylocust'))
     return (tree['spc_common'].toLowerCase().includes(filterBy.toLowerCase()))
   })
-  // console.log(displayTrees)
-  // console.log(trees.filter(tree => tree['spc_common'].toLowerCase().includes('g')))
 
   function handleOriginalSelectChange(e) {
     console.log(e.target.value)
@@ -88,7 +83,7 @@ export default function Map({center, zoom, showTreeInfo, setShowTreeInfo, treeIn
   const [userFilterBy, setUserFilterBy] = useState('')
 
   let userDisplayTrees = userTrees.filter((tree) => {
-    console.log(tree['spc_common'])
+    // console.log(tree['spc_common'])
     if (tree['spc_common']) {
       return (tree['spc_common'].toLowerCase().includes(userFilterBy.toLowerCase()))
     }
@@ -117,6 +112,8 @@ export default function Map({center, zoom, showTreeInfo, setShowTreeInfo, treeIn
   if (!isLoaded) {
     return <p>loading</p>
   }
+
+  console.log(pos)
   return (
     <main className="map">
       <motion.div className='container' initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1, transition:{duration: .8}}}>
@@ -142,6 +139,7 @@ export default function Map({center, zoom, showTreeInfo, setShowTreeInfo, treeIn
               }
             })}
           </select>
+          {pos.lat ? null : <label>Loading Your Location...</label>}
         </div>
         <div className="feature">
           <div className={`map-container ${showTreeInfo ? '' : 'map-container-full'}`}>
@@ -149,15 +147,16 @@ export default function Map({center, zoom, showTreeInfo, setShowTreeInfo, treeIn
               {displayTrees.map(tree => {           
                 if (tree['spc_common']) {
                   return (
-                    <Marker onClick={() => handleClick(tree)} key={tree["tree_id"]} position={{ lat:parseFloat(tree.latitude), lng:parseFloat(tree.longitude)}} icon={{url:'https://cdn.glitch.global/9f685967-c8a4-42aa-8c04-dcb09837b5fd/tree-icon%20(1).png?v=1665071872635'}}/>
+                    <Marker onClick={() => handleClick(tree)} key={tree["tree_id"]} position={{ lat:parseFloat(tree.latitude), lng:parseFloat(tree.longitude)}} icon={{url:'https://cdn.glitch.global/9f685967-c8a4-42aa-8c04-dcb09837b5fd/tree-icon%20(1).png?v=1665071872635'}} optimized='true'/>
                   )
                 }
               })}
               {userDisplayTrees.map(tree => {
                 return (
-                  <Marker onClick={() => handleUserTreeClick(tree)} key={tree.id} position={{ lat:parseFloat(tree.position.lat), lng:parseFloat(tree.position.lng)}} icon={{url:'https://i.imgur.com/6WzuSjd.png'}}/>
+                  <Marker onClick={() => handleUserTreeClick(tree)} key={tree.id} position={{ lat:parseFloat(tree.position.lat), lng:parseFloat(tree.position.lng) }} icon={{url:'https://i.imgur.com/6WzuSjd.png'}}/>
                 )
               })}
+              <Marker position={{ lat:pos.lat, lng:pos.lng }}/>
             </GoogleMap>
           </div>
           <div className={`card ${showTreeInfo ? '' : 'card-none'}`}>

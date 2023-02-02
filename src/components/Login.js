@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom' 
+import { motion } from "framer-motion";
 
 
 export default function Login({setUser}) {
@@ -64,37 +65,52 @@ export default function Login({setUser}) {
   return (
     <div>
         {showSignup ? (
-            <div>
-                <h1>Login</h1>
-                <form onSubmit={handleSubmit}>
-                    <label>email</label>
-                    <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} />
-                    <label>Password</label>
-                    <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                    <input type="submit" value="Login" />
-                </form>
-                <button onClick={() => setShowSignup(false)}>Sign Up</button>
-            </div>
+          <main className='add-tree'>
+            <motion.div className='form-container' initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1, transition:{duration: .8}}}>
+              <div className='title'>LOG IN</div>
+              <hr></hr>
+              <form onSubmit={handleSubmit}>
+                <div className='sign-up'>
+                  <h2 className='sub-head'>Email</h2>
+                  <input type="text" className='inputStyle' value={email} onChange={(e) => setEmail(e.target.value)} placeholder='Email'/>
+                  <h2 className='sub-head'>Password</h2>
+                  <input type="password" className='inputStyle' value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Password'/>
+                  <div className='submitBtn'>
+                    <input type="submit" value='Log In'/>
+                  </div>
+                </div>
+              </form>
+              <h3>Don't have an account?</h3>
+              <button onClick={() => setShowSignup(false)}>Sign Up</button>
+            </motion.div>
+          </main>
         ) : (
-            <div>
-                <h1>Sign Up</h1>
-                <form onSubmit={handleSignupSubmit}>
-                    <label>Name</label>
-                    <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
-                    <label>Email</label>
-                    <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} />
-                    <label>Username</label>
-                    <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
-                    <label>Password</label>
-                    <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                    <label>Password Confirmation</label>
-                    <input type="password" value={passwordConfirmation} onChange={(e) => setPasswordConfirmation(e.target.value)} />
-                    <input type="submit" value="Sign Up" />
-                </form>
-                <button onClick={() => setShowSignup(true)}>Login</button>
-            </div>
+          <main className='add-tree'>
+            <motion.div className='form-container' initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1, transition:{duration: .8}}}>
+              <div className='title'>SIGN UP</div>
+              <hr></hr>
+              <form onSubmit={handleSignupSubmit}>
+                <div className='sign-up'>
+                  <h2 className='sub-head'>Name</h2>
+                  <input type="text" className='inputStyle' value={name} onChange={(e) => setName(e.target.value)} placeholder='Name'/>
+                  <h2 className='sub-head'>Email</h2>
+                  <input type="text" className='inputStyle' value={email} onChange={(e) => setEmail(e.target.value)} placeholder='Email'/>
+                  <h2 className='sub-head'>Username</h2>
+                  <input type="text" className='inputStyle' value={username} onChange={(e) => setUsername(e.target.value)} placeholder='Username'/>
+                  <h2 className='sub-head'>Password</h2>
+                  <input type="password" className='inputStyle' value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Password'/>
+                  <h2 className='sub-head'>Confirm Password</h2>
+                  <input type="password" className='inputStyle' value={passwordConfirmation} onChange={(e) => setPasswordConfirmation(e.target.value)} placeholder='Confirm Password'/>
+                  <div className='submitBtn'>
+                    <input type="submit" value='Sign Up'/>
+                  </div>
+                </div>
+              </form>
+              <h3>Already have an account?</h3>
+              <button onClick={() => setShowSignup(true)}>Login</button>
+            </motion.div>
+          </main>
         )}
-        
     </div>
   )
 }

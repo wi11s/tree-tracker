@@ -34,7 +34,7 @@ function Header({setUser}) {
                     </li>
                     <li onClick={handleClick}>
                         <NavLink to='/login' end className='link' style={({ isActive }) => ({borderBottom: isActive? '1.5px solid #3d4637' : null, paddingBottom: isActive ? "5px" : null})}>
-                        log out
+                        Sign Out
                         </NavLink>
                     </li>
                 </ul>

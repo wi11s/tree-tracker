@@ -29,8 +29,6 @@ export default function ({ treeOptions, trees}) {
         setPoints(pts)
     }, [pts])
 
-    console.log(treeOptions[0])
-
     return (
         <main className='progress'>
         <motion.div initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1, transition:{duration: .8}}} className='progress-container'>

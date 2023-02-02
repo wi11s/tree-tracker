@@ -317,6 +317,41 @@ h4{
 
 /* ================= Add Tree ================= */
 
+.sign-up h2 {
+    font-family: var(--main-font);
+    font-weight: var(--regular);
+    color: var(--main-color);
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.sign-up input {
+    margin-bottom: 10px;
+}
+
+.add-tree h3 {
+    font-family: var(--main-font);
+    font-weight: var(--regular);
+    color: var(--main-color);
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.add-tree button {
+    border: none;
+    background-color: #fff;
+    font-family: var(--main-font);
+    font-weight: var(--medium);
+    color: var(--main-color);
+    font-size: 13px;
+    margin-bottom: 5px;
+    border: .5px solid #3d4637;
+    border-radius: 3px;
+    padding: 3px 8px;
+    transition: .5s;
+    cursor: pointer;
+}
+
 .add-tree{
     display: flex;
     height: 100vh;

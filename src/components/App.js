@@ -13,6 +13,7 @@ import AddTree from './AddTree';
 import Progress from './Progress';
 import Login from './Login';
 import { useNavigate } from 'react-router-dom'
+import { isCompositeComponent } from 'react-dom/test-utils';
 
 
 function App() {
@@ -40,6 +41,8 @@ function App() {
     });
   }, [localStorage.getItem("jwt")]);
 
+  // set trees from census data
+
   useEffect(() => {
     fetch('https://data.cityofnewyork.us/resource/5rq2-4hqu.json')
     .then((res) => res.json())
@@ -49,13 +52,15 @@ function App() {
     })
   }, [setTrees])
 
+  // set trees from user data
+
   const [userTrees, setUserTrees] = useState([])
   
   useEffect(() => {
     fetch('https://trusted-swanky-whimsey.glitch.me/trees')
     .then((res) => res.json())
     .then(obj => {
-      // console.log(obj.length)
+      console.log(obj)
       setUserTrees(obj)
     })
   }, [setUserTrees])
@@ -67,29 +72,37 @@ function App() {
     setLongitude(e.target.value)
   }
 
-  let pos;
-  function getLocation() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          if (useCustomLocation) {
-            pos = {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude
-            };
-            // console.log(pos)
-          } else {
-            pos = {
-              lat: parseFloat(latitude),
-              lng: parseFloat(longitude)
+  // get user location
+
+  const [pos, setPos] = useState({})
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            if (useCustomLocation) {
+              let newPos = {
+                lat: parseFloat(position.coords.latitude),
+                lng: parseFloat(position.coords.longitude)
+              };
+              setPos(newPos)
+
+            } else {
+              pos = {
+                lat: parseFloat(latitude),
+                lng: parseFloat(longitude)
+              }
+              
             }
-            
           }
-        }
-      )
-    }
-  }
-  getLocation()
+        )
+      }
+    }, 3000)
+    return () => clearTimeout(timer)
+  }, [pos])
+  // console.log(pos)
+
+  // set states
 
   const navigate = useNavigate()
   const apiKey = process.env.REACT_APP_PLANT_KEY
@@ -117,8 +130,6 @@ function App() {
       const page = await wiki.page(name);
       const summary = await page.summary();
 
-      // console.log(summary)
-
       setWikiLink(summary['content_urls'].desktop.page)
 
       setWikiImage(summary.thumbnail.source)
@@ -127,7 +138,7 @@ function App() {
       
 
     } catch (error) {
-      // console.log(error);
+      console.log(error);
     }
   })();
 
@@ -137,10 +148,7 @@ function App() {
     setAllTrees([...trees, ...userTrees])
   }, [trees, userTrees])
 
-  // console.log(allTrees)
   const treeOptions = allTrees.filter((item, index) => index === allTrees.indexOf(allTrees.find(tree => tree['spc_common'] === item['spc_common'])))
-  // const [treeOptions, setTreeOptions] = useState(tOps)
-  // console.log(treeOptions)
   
   function idPost(base64files) {
     fetch('https://api.plant.id/v2/identify', {
@@ -181,7 +189,7 @@ function App() {
     reader.readAsDataURL(file);
   }
   
-
+  // new tree post
   function handleSubmit(e) {
     e.preventDefault()
     if (pos===undefined) {
@@ -249,8 +257,8 @@ function App() {
     }
   }
 
+  // check to see if user is logged in
   if (!user) {
-    console.log(user)
     return (<div className="login"><Login setUser={setUser} /></div>);
   }
 
@@ -260,8 +268,8 @@ function App() {
       <Header setUser={setUser}/>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="map" element={<Map center={center} zoom={zoom} showTreeInfo={showTreeInfo} setShowTreeInfo={setShowTreeInfo} treeInfo={treeInfo} setTreeInfo={setTreeInfo} treeOptions={treeOptions} trees={trees}/>} />
-        <Route path="addtree" element={<AddTree handleSubmit={handleSubmit} encodeImageFileAsURL={encodeImageFileAsURL} pos={pos} handleNameChange={handleNameChange} setUseCustomLocation={setUseCustomLocation} handleLatChange={handleLatChange} handleLngChange={handleLngChange} useCustomLocation={useCustomLocation}/>} />
+        <Route path="map" element={<Map center={center} zoom={zoom} showTreeInfo={showTreeInfo} setShowTreeInfo={setShowTreeInfo} treeInfo={treeInfo} setTreeInfo={setTreeInfo} treeOptions={treeOptions} trees={trees} pos={pos}/>} />
+        <Route path="addtree" element={<AddTree handleSubmit={handleSubmit} encodeImageFileAsURL={encodeImageFileAsURL} pos={pos} handleNameChange={handleNameChange} setUseCustomLocation={setUseCustomLocation} handleLatChange={handleLatChange} handleLngChange={handleLngChange} useCustomLocation={useCustomLocation} pos={pos}/>} />
         <Route path="progress" element={<Progress treeOptions={treeOptions} trees={trees}/>} />
         <Route path="*" element={<Error />} /> 
         <Route path="login" element={<Login setUser={setUser} />} />
