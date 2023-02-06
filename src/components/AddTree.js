@@ -2,11 +2,11 @@ import React, {useState} from 'react'
 import { motion } from 'framer-motion';
 
 
-export default function AddTree({handleSubmit, encodeImageFileAsURL, handleNameChange, useCustomLocation, setUseCustomLocation, handleLatChange, handleLngChange, pos }) {
+export default function AddTree({handleSubmit, encodeImageFileAsURL, handleNameChange, useCustomLocation, setUseCustomLocation, handleLatChange, handleLngChange, pos, uploaded, setPetName }) {
 
   function handleCheckBox() {
     setUseCustomLocation(!useCustomLocation)
-}
+  }
 
 return (
 <main className='add-tree'>
@@ -32,17 +32,24 @@ return (
           <span className='sub-head'>Upload Image</span>
           <input type='file' onChange={(e) => encodeImageFileAsURL(e)}/>
         </div>
-        <div className="or">or</div>
+
         <div className="upload-img">
-            <span className="sub-head">Use Species Name</span>
-            <input className='inputStyle' type='text' placeholder='Enter Species' onChange={(e) => handleNameChange(e)}/>
+            <span className="sub-head">Add Pet Name</span>
+            <input className='inputStyle' type='text' placeholder='Enter Pet Name' onChange={(e) => {
+              console.log(e.target.value)
+              setPetName(e.target.value)
+            }}/>
         </div>
 
-        {pos.lat ? (
-          <div className='submitBtn'>
-            <input type="submit" value='Submit'/>
-          </div>
-        ) : null}
+        {uploaded ? (
+          pos.lat ? (
+            <div className='submitBtn'>
+              <input type="submit" value='Submit'/>
+            </div>
+          ) : <h3>Please Wait...</h3>
+        ) : <h3>Please Upload Image</h3>}
+
+        
         
       </div>
     </form>

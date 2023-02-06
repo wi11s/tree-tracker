@@ -12,11 +12,11 @@ function Header({setUser}) {
             <nav className='nav'>
                 <NavLink to='/' end><img src={logo} alt='logo' /></NavLink>              
                 <ul className='menu'>
-                    <li>
+                    {/* <li>
                         <NavLink to='/' end className='link' style={({ isActive }) => ({borderBottom: isActive? '1.5px solid #3d4637' : null, paddingBottom: isActive ? "5px" : null})}>
                         Home
                         </NavLink>
-                    </li>
+                    </li> */}
                     <li>
                         <NavLink to='/map' end className='link' style={({ isActive }) => ({borderBottom: isActive? '1.5px solid #3d4637' : null, paddingBottom: isActive ? "5px" : null})}>
                         Map
@@ -29,14 +29,24 @@ function Header({setUser}) {
                     </li>
                     <li>
                         <NavLink to='/progress' end className='link' style={({ isActive }) => ({borderBottom: isActive? '1.5px solid #3d4637' : null, paddingBottom: isActive ? "5px" : null})}>
-                        Progress
+                        Profile
                         </NavLink>
                     </li>
-                    <li onClick={handleClick}>
+                    <li>
+                        <NavLink to='/forum' end className='link' style={({ isActive }) => ({borderBottom: isActive? '1.5px solid #3d4637' : null, paddingBottom: isActive ? "5px" : null})}>
+                        Forum
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink to='/search' end className='link' style={({ isActive }) => ({borderBottom: isActive? '1.5px solid #3d4637' : null, paddingBottom: isActive ? "5px" : null})}>
+                        Search
+                        </NavLink>
+                    </li>
+                    {/* <li onClick={handleClick}>
                         <NavLink to='/login' end className='link' style={({ isActive }) => ({borderBottom: isActive? '1.5px solid #3d4637' : null, paddingBottom: isActive ? "5px" : null})}>
                         Sign Out
                         </NavLink>
-                    </li>
+                    </li> */}
                 </ul>
             </nav>
         </header>

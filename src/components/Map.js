@@ -5,21 +5,13 @@ import { useInRouterContext } from "react-router-dom";
 import { motion } from 'framer-motion'
 
 
-export default function Map({center, zoom, showTreeInfo, setShowTreeInfo, treeInfo, setTreeInfo, treeOptions, trees, pos}) {
+export default function Map({center, zoom, showTreeInfo, setShowTreeInfo, treeInfo, setTreeInfo, treeOptions, trees, pos, userTrees, setUserTrees}) {
+  // console.log(treeOptions)
   const {isLoaded} = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_API_KEY
   })
 
-  const [userTrees, setUserTrees] = useState([])
-  
-  useEffect(() => {
-    fetch('https://trusted-swanky-whimsey.glitch.me/trees')
-    .then((res) => res.json())
-    .then(obj => {
-      // console.log(obj)
-      setUserTrees(obj)
-    })
-  }, [setUserTrees])
+
   
   const [opens, setOpens] = useState(0)
   const [treeId, setTreeId] = useState(0)
@@ -44,6 +36,7 @@ export default function Map({center, zoom, showTreeInfo, setShowTreeInfo, treeIn
   }
 
   function handleUserTreeClick(tree) {
+    console.log(tree)
 
     if (treeId === tree['id']) {
       console.log(tree)
@@ -58,7 +51,7 @@ export default function Map({center, zoom, showTreeInfo, setShowTreeInfo, treeIn
     setTreeId(tree['id'])
     
     
-    setTreeInfo({spc_common: tree['spc_common'], wiki: tree.wiki, image: tree.image, userAdded: true, id: tree.id})
+    setTreeInfo({spc_common: tree['common_name'], wiki: tree.wiki, image: tree.image, userAdded: true, id: tree.id})
   }
 
   const userTreeOptions = userTrees.filter((item, index) => index === userTrees.indexOf(userTrees.find(tree => tree['spc_common'] === item['spc_common'])))
@@ -83,9 +76,9 @@ export default function Map({center, zoom, showTreeInfo, setShowTreeInfo, treeIn
   const [userFilterBy, setUserFilterBy] = useState('')
 
   let userDisplayTrees = userTrees.filter((tree) => {
-    // console.log(tree['spc_common'])
-    if (tree['spc_common']) {
-      return (tree['spc_common'].toLowerCase().includes(userFilterBy.toLowerCase()))
+    // console.log(tree)
+    if (tree['common_name']) {
+      return (tree['common_name'].toLowerCase().includes(userFilterBy.toLowerCase()))
     }
   })
   
@@ -99,8 +92,11 @@ export default function Map({center, zoom, showTreeInfo, setShowTreeInfo, treeIn
   }
 
   function handleDelete(id) {
-    fetch(`https://trusted-swanky-whimsey.glitch.me/trees/${id}`, {
-      method: 'DELETE'
+    fetch(`/user_trees/${id}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("jwt")}`
+      }
     })
     .then(res => res.json())
     .then(() => {
@@ -113,7 +109,7 @@ export default function Map({center, zoom, showTreeInfo, setShowTreeInfo, treeIn
     return <p>loading</p>
   }
 
-  console.log(pos)
+  // console.log(pos)
   return (
     <main className="map">
       <motion.div className='container' initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1, transition:{duration: .8}}}>
@@ -153,7 +149,7 @@ export default function Map({center, zoom, showTreeInfo, setShowTreeInfo, treeIn
               })}
               {userDisplayTrees.map(tree => {
                 return (
-                  <Marker onClick={() => handleUserTreeClick(tree)} key={tree.id} position={{ lat:parseFloat(tree.position.lat), lng:parseFloat(tree.position.lng) }} icon={{url:'https://i.imgur.com/6WzuSjd.png'}}/>
+                  <Marker onClick={() => handleUserTreeClick(tree)} key={tree.id} position={{ lat:parseFloat(tree.lat), lng:parseFloat(tree.lng) }} icon={{url:'https://i.imgur.com/6WzuSjd.png'}}/>
                 )
               })}
               <Marker position={{ lat:pos.lat, lng:pos.lng }}/>

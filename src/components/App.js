@@ -12,6 +12,8 @@ import Error from './Error';
 import AddTree from './AddTree';
 import Progress from './Progress';
 import Login from './Login';
+import Forum from './forum/Forum.js'
+import Search from './Search'
 import { useNavigate } from 'react-router-dom'
 import { isCompositeComponent } from 'react-dom/test-utils';
 
@@ -50,20 +52,27 @@ function App() {
       // console.log(obj[0])
       setTrees(obj.filter(t => t['spc_common'] !== undefined))
     })
-  }, [setTrees])
+  }, [])
 
   // set trees from user data
 
   const [userTrees, setUserTrees] = useState([])
   
   useEffect(() => {
-    fetch('https://trusted-swanky-whimsey.glitch.me/trees')
-    .then((res) => res.json())
-    .then(obj => {
-      console.log(obj)
-      setUserTrees(obj)
-    })
-  }, [setUserTrees])
+    if (user) {
+      fetch(`/users/${user.id}`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("jwt")}`
+        }
+      })
+      .then((res) => res.json())
+      .then(obj => {
+        // console.log(obj['user_trees'])
+        setUserTrees(obj['user_trees'])
+      })
+    }
+  }, [user])
 
   function handleLatChange(e) {
     setLatitude(e.target.value)
@@ -100,7 +109,7 @@ function App() {
     }, 3000)
     return () => clearTimeout(timer)
   }, [pos])
-  // console.log(pos)
+  // console.log('pos', pos)
 
   // set states
 
@@ -110,6 +119,8 @@ function App() {
   const [showTreeInfo, setShowTreeInfo] = useState(false)
   const [treeInfo, setTreeInfo] = useState({spc_common: '', userAdded: true})
   const [newTree, setNewTree] = useState({})
+  const [petName, setPetName] = useState('')
+  const [uploaded, setUploaded] = useState(false)
 
   const [center, setCenter] = useState({ lat: 40.74, lng: -73.90 })
   const [zoom, setZoom] = useState(12)
@@ -120,32 +131,33 @@ function App() {
   const [wikiImage, setWikiImage] = useState('')
   const [description, setDescription] = useState('')
 
-  const [name, setName] = useState('')
-  function handleNameChange(e) {
-    setName(e.target.value)
-  }
+  // const [name, setName] = useState('')
+  // function handleNameChange(e) {
+  //   setName(e.target.value)
+  // }
 
-  (async () => {
-    try {
-      const page = await wiki.page(name);
-      const summary = await page.summary();
+  // (async () => {
+  //   try {
+  //     const page = await wiki.page(name);
+  //     const summary = await page.summary();
 
-      setWikiLink(summary['content_urls'].desktop.page)
+  //     setWikiLink(summary['content_urls'].desktop.page)
 
-      setWikiImage(summary.thumbnail.source)
+  //     setWikiImage(summary.thumbnail.source)
       
-      setDescription(summary.description)
+  //     setDescription(summary.description)
       
 
-    } catch (error) {
-      console.log(error);
-    }
-  })();
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // })();
 
   
   const [allTrees, setAllTrees] = useState([])
   useEffect(() => {
     setAllTrees([...trees, ...userTrees])
+    // console.log([...trees, ...userTrees])
   }, [trees, userTrees])
 
   const treeOptions = allTrees.filter((item, index) => index === allTrees.indexOf(allTrees.find(tree => tree['spc_common'] === item['spc_common'])))
@@ -165,13 +177,18 @@ function App() {
     })
     .then(response => response.json())
     .then(data => {
-      // console.log('Success:', data);
+      console.log('Success:', data);
       setNewTree({
-        spc_common: data.suggestions[0]['plant_name'],
+        pet_name: petName,
+        common_name: data.suggestions[0]['plant_details']['common_names'][0],
+        scientific_name: data.suggestions[0]['plant_details']['scientific_name'],
         wiki: data.suggestions[0]['plant_details'].url,
         image: data.images[0].url,
-        position: pos,
-        suggestions: data.suggestions
+        lat: pos.lat,
+        lng: pos.lng,
+        health: '',
+        description: '',
+        user_id: user.id
       })
     })
     .catch((error) => {
@@ -180,6 +197,7 @@ function App() {
   }
 
   function encodeImageFileAsURL(e) {
+    setUploaded(true)
     let file = e.target.files[0];
     let reader = new FileReader();
     reader.onloadend = function() {
@@ -194,13 +212,14 @@ function App() {
     e.preventDefault()
     if (pos===undefined) {
       alert('please wait for your current location to load')
-    } else if (name==='') {
-      // console.log(newTree, name)
+    } else if (newTree['common_name'])/*if (name==='')*/ {
+      console.log(newTree)
     
-      fetch('https://trusted-swanky-whimsey.glitch.me/trees', {
+      fetch('user_trees', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem("jwt")}`
         },
         body: JSON.stringify(newTree)
       })
@@ -213,47 +232,49 @@ function App() {
           navigate('/map')
           setCenter(pos)
           setZoom(16)
-          setTreeInfo({spc_common: obj['spc_common'], wiki: obj.wiki, image: obj.image, userAdded: true})
+          setTreeInfo({spc_common: obj['common_name'], wiki: obj.wiki, image: obj.image, userAdded: true})
   
           setAllTrees(allTrees => [...allTrees, obj])
     
           setShowTreeInfo(true)
         }
       })
-    } else if (!description.toLowerCase().includes('tree') && !description.toLowerCase().includes('plant')) {
-      
-      alert('Please enter a valid tree name')
     } else {
+      alert('Sorry but we couldn\'t find tree, please try again.')
+    // } else if (!description.toLowerCase().includes('tree') && !description.toLowerCase().includes('plant')) {
+      
+    //   alert('Please enter a valid tree name')
+    // } else {
 
-      let newTreeByName = {
-        spc_common: name,
-        wiki: wikiLink,
-        image: wikiImage,
-        position: pos,
-      }   
+    //   let newTreeByName = {
+    //     spc_common: name,
+    //     wiki: wikiLink,
+    //     image: wikiImage,
+    //     position: pos,
+    //   }   
   
-      console.log('newtreebyname:', pos)
+    //   console.log('newtreebyname:', pos)
 
-      fetch('https://trusted-swanky-whimsey.glitch.me/trees', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newTreeByName)
-      })
-      .then(response => response.json())
-      .then((obj) => {
-        console.log('obj', obj)
+    //   fetch('https://trusted-swanky-whimsey.glitch.me/trees', {
+    //     method: 'POST',
+    //     headers: {
+    //         'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify(newTreeByName)
+    //   })
+    //   .then(response => response.json())
+    //   .then((obj) => {
+    //     console.log('obj', obj)
 
-        navigate('/map')
-        setCenter(pos)
-        setZoom(16)
-        setTreeInfo({spc_common: obj['spc_common'], wiki: obj.wiki, image: obj.image})
+    //     navigate('/map')
+    //     setCenter(pos)
+    //     setZoom(16)
+    //     setTreeInfo({spc_common: obj['spc_common'], wiki: obj.wiki, image: obj.image})
 
-        setAllTrees(allTrees => [...allTrees, obj])
+    //     setAllTrees(allTrees => [...allTrees, obj])
   
-        setShowTreeInfo(true)
-      })
+    //     setShowTreeInfo(true)
+    //   })
     }
   }
 
@@ -268,11 +289,13 @@ function App() {
       <Header setUser={setUser}/>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="map" element={<Map center={center} zoom={zoom} showTreeInfo={showTreeInfo} setShowTreeInfo={setShowTreeInfo} treeInfo={treeInfo} setTreeInfo={setTreeInfo} treeOptions={treeOptions} trees={trees} pos={pos}/>} />
-        <Route path="addtree" element={<AddTree handleSubmit={handleSubmit} encodeImageFileAsURL={encodeImageFileAsURL} pos={pos} handleNameChange={handleNameChange} setUseCustomLocation={setUseCustomLocation} handleLatChange={handleLatChange} handleLngChange={handleLngChange} useCustomLocation={useCustomLocation} pos={pos}/>} />
-        <Route path="progress" element={<Progress treeOptions={treeOptions} trees={trees}/>} />
+        <Route path="map" element={<Map center={center} zoom={zoom} showTreeInfo={showTreeInfo} setShowTreeInfo={setShowTreeInfo} treeInfo={treeInfo} setTreeInfo={setTreeInfo} treeOptions={treeOptions} trees={trees} pos={pos} userTrees={userTrees} setUserTrees={setUserTrees}/>} />
+        <Route path="addtree" element={<AddTree handleSubmit={handleSubmit} encodeImageFileAsURL={encodeImageFileAsURL} /*handleNameChange={handleNameChange}*/ setUseCustomLocation={setUseCustomLocation} handleLatChange={handleLatChange} handleLngChange={handleLngChange} useCustomLocation={useCustomLocation} pos={pos} uploaded={uploaded} setPetName={setPetName}/>} />
+        <Route path="progress" element={<Progress treeOptions={treeOptions} trees={trees} setUser={setUser}/>} />
         <Route path="*" element={<Error />} /> 
         <Route path="login" element={<Login setUser={setUser} />} />
+        <Route path="forum" element={<Forum />} />
+        <Route path="search" element={<Search />} />
       </Routes>
       <Footer />
     </div>

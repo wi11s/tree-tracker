@@ -11,7 +11,7 @@ function Home() {
                 <h1>TREE TRACKER</h1>
                 <img src={banner} alt='banner' />
                 <p>
-                We've got you started with one thousand trees (39 species). Identify these species yourself, and discover new ones; we'll let you take it from here. 
+                We got you started with one thousand trees (39 species). Identify these species yourself, and discover new ones. You take it from here. 
                 </p>
                 <NavLink to='/map' end className='button'>Explore Map</NavLink>
             </motion.div>           
