@@ -221,40 +221,6 @@ function App() {
       })
     } else {
       alert('Sorry but we couldn\'t find tree, please try again.')
-    // } else if (!description.toLowerCase().includes('tree') && !description.toLowerCase().includes('plant')) {
-      
-    //   alert('Please enter a valid tree name')
-    // } else {
-
-    //   let newTreeByName = {
-    //     spc_common: name,
-    //     wiki: wikiLink,
-    //     image: wikiImage,
-    //     position: pos,
-    //   }   
-  
-    //   console.log('newtreebyname:', pos)
-
-    //   fetch('https://trusted-swanky-whimsey.glitch.me/trees', {
-    //     method: 'POST',
-    //     headers: {
-    //         'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify(newTreeByName)
-    //   })
-    //   .then(response => response.json())
-    //   .then((obj) => {
-    //     console.log('obj', obj)
-
-    //     navigate('/map')
-    //     setCenter(pos)
-    //     setZoom(16)
-    //     setTreeInfo({spc_common: obj['spc_common'], wiki: obj.wiki, image: obj.image})
-
-    //     setAllTrees(allTrees => [...allTrees, obj])
-  
-    //     setShowTreeInfo(true)
-    //   })
     }
   }
 
@@ -273,7 +239,7 @@ function App() {
         <Route path="progress" element={<Progress treeOptions={treeOptions} trees={trees} setUser={setUser}/>} />
         <Route path="*" element={<Error />} /> 
         <Route path="login" element={<Login setUser={setUser} />} />
-        <Route path="forum" element={<Forum />} />
+        <Route path="forum" element={<Forum user={user}/>} />
         <Route path="search" element={<Search />} />
       </Routes>
       <Footer />

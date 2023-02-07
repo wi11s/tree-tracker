@@ -590,3 +590,28 @@ form .submitBtn input:hover{
     border: .5px solid #3d4637;
     background-color: #fff;
 }
+
+/* ================= Forum ================= */
+
+#forum {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.replyDiv {
+    margin-left: 10%;
+    margin-right: -10%;
+}
+
+/* ================= Post ================= */
+
+.post {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+}
