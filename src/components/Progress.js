@@ -14,20 +14,20 @@ export default function ({ treeOptions, trees, setUser }) {
       setUser(null);
     }
   
-    useEffect(() => {
-      fetch('https://trusted-swanky-whimsey.glitch.me/trees')
-      .then((res) => res.json())
-      .then(obj => {
-        console.log(obj)
-        obj.map(o => {
-          if (o['spc_common']) {
-            arr.push(o['spc_common'].toLowerCase())
-          }
-        })
-        setUserTreesArray(arr)
-        // console.log(arr)
-      })
-    }, [setUserTreesArray])
+    // useEffect(() => {
+    //   fetch('https://trusted-swanky-whimsey.glitch.me/trees')
+    //   .then((res) => res.json())
+    //   .then(obj => {
+    //     console.log(obj)
+    //     obj.map(o => {
+    //       if (o['spc_common']) {
+    //         arr.push(o['spc_common'].toLowerCase())
+    //       }
+    //     })
+    //     setUserTreesArray(arr)
+    //     // console.log(arr)
+    //   })
+    // }, [setUserTreesArray])
 
     let total = treeOptions.length
     let pts = userTreesArray.length

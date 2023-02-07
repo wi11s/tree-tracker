@@ -6,18 +6,14 @@ import { motion } from 'framer-motion'
 
 
 export default function Map({center, zoom, showTreeInfo, setShowTreeInfo, treeInfo, setTreeInfo, treeOptions, trees, pos, userTrees, setUserTrees}) {
-  // console.log(treeOptions)
   const {isLoaded} = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_API_KEY
   })
-
-
   
   const [opens, setOpens] = useState(0)
   const [treeId, setTreeId] = useState(0)
 
   function handleClick(tree) {
-    // console.log(treeId, tree['tree_id'], tree['tree_id'] === treeId, opens===0)
 
     if (treeId === tree['tree_id']) {
       setShowTreeInfo(!showTreeInfo)
@@ -27,10 +23,8 @@ export default function Map({center, zoom, showTreeInfo, setShowTreeInfo, treeIn
       setShowTreeInfo(true)
     }
 
-  
     setOpens(1)
     setTreeId(tree['tree_id'])
-    
     
     setTreeInfo({spc_common: tree['spc_common'], health: tree.health, tree: tree, userAdded: false})
   }
@@ -62,7 +56,7 @@ export default function Map({center, zoom, showTreeInfo, setShowTreeInfo, treeIn
     return (tree['spc_common'].toLowerCase().includes(filterBy.toLowerCase()))
   })
 
-  function handleOriginalSelectChange(e) {
+  function handleSelectChange(e) {
     console.log(e.target.value)
 
     if (e.target.value === 'all') {
@@ -73,25 +67,15 @@ export default function Map({center, zoom, showTreeInfo, setShowTreeInfo, treeIn
 
   }
 
-  const [userFilterBy, setUserFilterBy] = useState('')
-
   let userDisplayTrees = userTrees.filter((tree) => {
     // console.log(tree)
     if (tree['common_name']) {
-      return (tree['common_name'].toLowerCase().includes(userFilterBy.toLowerCase()))
+      return (tree['common_name'].toLowerCase().includes(filterBy.toLowerCase()))
     }
   })
-  
-  function handleUserSelectChange(e) {
-    console.log(e.target.value)
-    if (e.target.value === 'all') {
-      setUserFilterBy('')
-    } else {
-      setUserFilterBy(e.target.value)
-    }
-  }
 
   function handleDelete(id) {
+    console.log(id)
     fetch(`/user_trees/${id}`, {
       method: 'DELETE',
       headers: {
@@ -101,7 +85,10 @@ export default function Map({center, zoom, showTreeInfo, setShowTreeInfo, treeIn
     .then(res => res.json())
     .then(() => {
       setShowTreeInfo(false)
-      setUserTrees(userTrees.filter(t => t.id !== id))
+      setUserTrees(userTrees.filter(t => {
+        console.log(t.id)
+        return t.id !== id
+      }))
     }) 
   }
 
@@ -115,23 +102,19 @@ export default function Map({center, zoom, showTreeInfo, setShowTreeInfo, treeIn
       <motion.div className='container' initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1, transition:{duration: .8}}}>
         <h1>EXPLORE MAP</h1>
         <div className="select-container">
-          <label>Filter Original Trees</label>
-          <select onChange={handleOriginalSelectChange} type='select'>
+          <label>Filter Trees</label>
+          <select onChange={handleSelectChange} type='select'>
             <option value='all'>ALL</option>
             <option value='none'>NONE</option>
             {treeOptions.map(tree => {
               if (tree['spc_common']) {
-              return (<option value={tree['spc_common']} key={tree['spc_common']}>{tree['spc_common'].toLowerCase()}</option>)
+                return (<option value={tree['spc_common']} key={tree['spc_common']}>{tree['spc_common'].toLowerCase()}</option>)
               }
             })}
-          </select>
-          <label>Filter Your Trees</label>
-          <select onChange={handleUserSelectChange} type='select'>
-            <option value='all'>ALL</option>
-            <option value='none'>NONE</option>
             {userTreeOptions.map(tree => {
-              if (tree['spc_common']) {
-                return (<option value={tree['spc_common']} key={tree['spc_common']}>{tree['spc_common'].toLowerCase()}</option>)
+              console.log(tree['common_name'])
+              if (tree['common_name']) {
+                return (<option value={tree['common_name']} key={tree['common_name']}>{tree['common_name'].toLowerCase()}</option>)
               }
             })}
           </select>

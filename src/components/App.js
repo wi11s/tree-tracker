@@ -19,6 +19,7 @@ import { isCompositeComponent } from 'react-dom/test-utils';
 
 
 function App() {
+  console.log('start')
 
   const [user, setUser] = useState(null)
   const [useCustomLocation, setUseCustomLocation] = useState(true)
@@ -28,6 +29,7 @@ function App() {
   const [trees, setTrees] = useState([])
 
   // set user
+
   useEffect(() => {
     fetch("/me", {
       method: "GET",
@@ -49,7 +51,6 @@ function App() {
     fetch('https://data.cityofnewyork.us/resource/5rq2-4hqu.json')
     .then((res) => res.json())
     .then(obj => {
-      // console.log(obj[0])
       setTrees(obj.filter(t => t['spc_common'] !== undefined))
     })
   }, [])
@@ -85,7 +86,7 @@ function App() {
 
   const [pos, setPos] = useState({})
   useEffect(() => {
-    const timer = setTimeout(() => {
+    // const timer = setTimeout(() => {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
           (position) => {
@@ -101,15 +102,15 @@ function App() {
                 lat: parseFloat(latitude),
                 lng: parseFloat(longitude)
               }
-              
+              setCenter(pos)
+              setZoom(15)
             }
           }
         )
       }
-    }, 3000)
-    return () => clearTimeout(timer)
-  }, [pos])
-  // console.log('pos', pos)
+    // }, 3000)
+    // return () => clearTimeout(timer)
+  }, [])
 
   // set states
 
@@ -130,29 +131,6 @@ function App() {
   const [wikiLink, setWikiLink] = useState('')
   const [wikiImage, setWikiImage] = useState('')
   const [description, setDescription] = useState('')
-
-  // const [name, setName] = useState('')
-  // function handleNameChange(e) {
-  //   setName(e.target.value)
-  // }
-
-  // (async () => {
-  //   try {
-  //     const page = await wiki.page(name);
-  //     const summary = await page.summary();
-
-  //     setWikiLink(summary['content_urls'].desktop.page)
-
-  //     setWikiImage(summary.thumbnail.source)
-      
-  //     setDescription(summary.description)
-      
-
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // })();
-
   
   const [allTrees, setAllTrees] = useState([])
   useEffect(() => {
@@ -235,6 +213,8 @@ function App() {
           setTreeInfo({spc_common: obj['common_name'], wiki: obj.wiki, image: obj.image, userAdded: true})
   
           setAllTrees(allTrees => [...allTrees, obj])
+          let newUserTrees = [...userTrees, obj]
+          setUserTrees(newUserTrees)
     
           setShowTreeInfo(true)
         }
@@ -282,7 +262,6 @@ function App() {
   if (!user) {
     return (<div className="login"><Login setUser={setUser} /></div>);
   }
-
 
   return (
     <div className="App">
