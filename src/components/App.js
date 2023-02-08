@@ -10,7 +10,7 @@ import Footer from './Footer';
 import Map from './Map';
 import Error from './Error';
 import AddTree from './AddTree';
-import Progress from './Progress';
+import Profile from './Profile';
 import Login from './Login';
 import Forum from './forum/Forum.js'
 import Search from './Search'
@@ -19,7 +19,7 @@ import { isCompositeComponent } from 'react-dom/test-utils';
 
 
 function App() {
-  console.log('start')
+  // console.log('start')
 
   const [user, setUser] = useState(null)
   const [useCustomLocation, setUseCustomLocation] = useState(true)
@@ -27,6 +27,7 @@ function App() {
   const [longitude, setLongitude] = useState(null)
 
   const [trees, setTrees] = useState([])
+  const [treeTypes, setTreeTypes] = useState([])
 
   // set user
 
@@ -38,12 +39,28 @@ function App() {
       }
     })
     .then((r) => {
-      console.log(r)
+      // console.log(r)
       if (r.ok) {
         r.json().then((user) => setUser(user));
       }
     });
   }, [localStorage.getItem("jwt")]);
+
+  // set tree types
+
+  useEffect(() => {
+    fetch(`/tree_types`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("jwt")}`
+      }
+    })
+    .then((res) => res.json())
+    .then(obj => {
+      // console.log(obj)
+      setTreeTypes(obj)
+    })
+  }, [user])
 
   // set trees from census data
 
@@ -69,7 +86,7 @@ function App() {
       })
       .then((res) => res.json())
       .then(obj => {
-        // console.log(obj['user_trees'])
+        // console.log(obj['tree_types'])
         setUserTrees(obj['user_trees'])
       })
     }
@@ -84,9 +101,9 @@ function App() {
 
   // get user location
 
-  const [pos, setPos] = useState({})
+  const [pos, setPos] = useState({lat: 0, lng: 0})
   useEffect(() => {
-    // const timer = setTimeout(() => {
+    const timer = setTimeout(() => {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
           (position) => {
@@ -108,8 +125,8 @@ function App() {
           }
         )
       }
-    // }, 3000)
-    // return () => clearTimeout(timer)
+    }, 3000)
+    return () => clearTimeout(timer)
   }, [])
 
   // set states
@@ -122,24 +139,19 @@ function App() {
   const [newTree, setNewTree] = useState({})
   const [petName, setPetName] = useState('')
   const [uploaded, setUploaded] = useState(false)
+  const [allCommonNames, setAllCommonNames] = useState([])
 
   const [center, setCenter] = useState({ lat: 40.74, lng: -73.90 })
   const [zoom, setZoom] = useState(12)
 
-  const wiki = require('wikipedia');
-
-  const [wikiLink, setWikiLink] = useState('')
-  const [wikiImage, setWikiImage] = useState('')
-  const [description, setDescription] = useState('')
-  
   const [allTrees, setAllTrees] = useState([])
+
   useEffect(() => {
     setAllTrees([...trees, ...userTrees])
     // console.log([...trees, ...userTrees])
   }, [trees, userTrees])
 
-  const treeOptions = allTrees.filter((item, index) => index === allTrees.indexOf(allTrees.find(tree => tree['spc_common'] === item['spc_common'])))
-  
+  // get tree info from census data  
   function idPost(base64files) {
     fetch('https://api.plant.id/v2/identify', {
       method: 'POST',
@@ -155,7 +167,9 @@ function App() {
     })
     .then(response => response.json())
     .then(data => {
-      console.log('Success:', data);
+      console.log('Success:', data.suggestions[0]['plant_details']['common_names']);
+      setAllCommonNames(data.suggestions[0]['plant_details']['common_names'])
+      console.log(petName)
       setNewTree({
         pet_name: petName,
         common_name: data.suggestions[0]['plant_details']['common_names'][0],
@@ -203,7 +217,7 @@ function App() {
       })
       .then(response => response.json())
       .then((obj) => {
-        console.log(obj)
+        // console.log(obj)
         if (obj.error) {
           alert(obj.error)
         } else {
@@ -217,12 +231,60 @@ function App() {
           setUserTrees(newUserTrees)
     
           setShowTreeInfo(true)
+          return obj
         }
       })
+      .then((obj) => {
+        console.log(obj.id)
+        // if any of the names in allCommonNames is included in any of the names in userTrees, create association for progress
+        let allCommonNamesString = allCommonNames.join()
+
+        for (let x = 0; x < treeTypes.length; x++) {
+          console.log(allCommonNamesString.toLowerCase(), treeTypes[x]['common_name'].toLowerCase())
+
+          if (allCommonNamesString.toLowerCase().replace(/\s+/g, '').includes(treeTypes[x]['common_name'].toLowerCase().replace(/\s+/g, ''))) {
+            console.log(treeTypes[x].id, 'about to post jointype')
+            fetch('/join_types', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${localStorage.getItem("jwt")}`
+              },
+              body: JSON.stringify({
+                user_id: user.id,
+                tree_type_id: treeTypes[x].id,
+                user_tree_id: obj.id
+              })
+            })
+            .then(response => response.json())
+            .then((obj) => {
+              console.log(obj)
+            })
+            break
+          }
+        }
+      })
+
     } else {
       alert('Sorry but we couldn\'t find tree, please try again.')
     }
   }
+
+  // console.log(user)
+  // useEffect(() => {
+  //   fetch('/join_types', {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       Authorization: `Bearer ${localStorage.getItem("jwt")}`
+  //     },
+  //     body: JSON.stringify({
+  //       user_id: 4,
+  //       tree_type_id: 241,
+  //       user_tree_id: 12
+  //     })
+  //   })
+  // }, [])
 
   // check to see if user is logged in
   if (!user) {
@@ -234,9 +296,9 @@ function App() {
       <Header setUser={setUser}/>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="map" element={<Map center={center} zoom={zoom} showTreeInfo={showTreeInfo} setShowTreeInfo={setShowTreeInfo} treeInfo={treeInfo} setTreeInfo={setTreeInfo} treeOptions={treeOptions} trees={trees} pos={pos} userTrees={userTrees} setUserTrees={setUserTrees}/>} />
+        <Route path="map" element={<Map center={center} zoom={zoom} showTreeInfo={showTreeInfo} setShowTreeInfo={setShowTreeInfo} treeInfo={treeInfo} setTreeInfo={setTreeInfo} treeTypes={treeTypes} trees={trees} pos={pos} userTrees={userTrees} setUserTrees={setUserTrees}/>} />
         <Route path="addtree" element={<AddTree handleSubmit={handleSubmit} encodeImageFileAsURL={encodeImageFileAsURL} /*handleNameChange={handleNameChange}*/ setUseCustomLocation={setUseCustomLocation} handleLatChange={handleLatChange} handleLngChange={handleLngChange} useCustomLocation={useCustomLocation} pos={pos} uploaded={uploaded} setPetName={setPetName}/>} />
-        <Route path="progress" element={<Progress treeOptions={treeOptions} trees={trees} setUser={setUser}/>} />
+        <Route path="profile" element={<Profile treeTypes={treeTypes} userTrees={userTrees} setUser={setUser} user={user}/>} />
         <Route path="*" element={<Error />} /> 
         <Route path="login" element={<Login setUser={setUser} />} />
         <Route path="forum" element={<Forum user={user}/>} />

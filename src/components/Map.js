@@ -5,7 +5,7 @@ import { useInRouterContext } from "react-router-dom";
 import { motion } from 'framer-motion'
 
 
-export default function Map({center, zoom, showTreeInfo, setShowTreeInfo, treeInfo, setTreeInfo, treeOptions, trees, pos, userTrees, setUserTrees}) {
+export default function Map({center, zoom, showTreeInfo, setShowTreeInfo, treeInfo, setTreeInfo, treeTypes, trees, pos, userTrees, setUserTrees}) {
   const {isLoaded} = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_API_KEY
   })
@@ -89,7 +89,7 @@ export default function Map({center, zoom, showTreeInfo, setShowTreeInfo, treeIn
         console.log(t.id)
         return t.id !== id
       }))
-    }) 
+    })
   }
 
   if (!isLoaded) {
@@ -106,13 +106,13 @@ export default function Map({center, zoom, showTreeInfo, setShowTreeInfo, treeIn
           <select onChange={handleSelectChange} type='select'>
             <option value='all'>ALL</option>
             <option value='none'>NONE</option>
-            {treeOptions.map(tree => {
-              if (tree['spc_common']) {
-                return (<option value={tree['spc_common']} key={tree['spc_common']}>{tree['spc_common'].toLowerCase()}</option>)
+            {treeTypes.map(tree => {
+              if (tree['common_name']) {
+                return (<option value={tree['common_name']} key={tree['common_name']}>{tree['common_name'].toLowerCase()}</option>)
               }
             })}
             {userTreeOptions.map(tree => {
-              console.log(tree['common_name'])
+              // console.log(tree['common_name'])
               if (tree['common_name']) {
                 return (<option value={tree['common_name']} key={tree['common_name']}>{tree['common_name'].toLowerCase()}</option>)
               }

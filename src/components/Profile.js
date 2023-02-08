@@ -4,33 +4,16 @@ import { motion } from 'framer-motion'
 import { NavLink } from 'react-router-dom';
 
 
-export default function ({ treeOptions, trees, setUser }) {
+export default function ({ treeTypes, userTrees, setUser, user }) {
     const [points, setPoints] = useState(0)
-    const [userTreesArray, setUserTreesArray] = useState([])
-    let arr = [];
 
     function handleClick() {
       localStorage.removeItem("jwt");
       setUser(null);
     }
-  
-    // useEffect(() => {
-    //   fetch('https://trusted-swanky-whimsey.glitch.me/trees')
-    //   .then((res) => res.json())
-    //   .then(obj => {
-    //     console.log(obj)
-    //     obj.map(o => {
-    //       if (o['spc_common']) {
-    //         arr.push(o['spc_common'].toLowerCase())
-    //       }
-    //     })
-    //     setUserTreesArray(arr)
-    //     // console.log(arr)
-    //   })
-    // }, [setUserTreesArray])
 
-    let total = treeOptions.length
-    let pts = userTreesArray.length
+    let total = treeTypes.length
+    let pts = userTrees.length
 
     useEffect(() => {
         setPoints(pts)
@@ -48,10 +31,10 @@ export default function ({ treeOptions, trees, setUser }) {
             </div>
             <hr></hr>
             <div className='progree-card-container'>
-              {treeOptions.map(tree => {
-                if (tree['spc_common']) {
+              {treeTypes.map(tree => {
+                if (tree['common_name']) {
                   return (
-                    <TreeType key={tree['spc_common']} tree={tree} trees={trees} userTreesArray={userTreesArray}/>
+                    <TreeType key={tree['common_name']} tree={tree} userTrees={userTrees} userId={user.id}/>
                   )
                 }  
               })}

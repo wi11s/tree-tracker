@@ -28,7 +28,7 @@ function Header({setUser}) {
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink to='/progress' end className='link' style={({ isActive }) => ({borderBottom: isActive? '1.5px solid #3d4637' : null, paddingBottom: isActive ? "5px" : null})}>
+                        <NavLink to='/profile' end className='link' style={({ isActive }) => ({borderBottom: isActive? '1.5px solid #3d4637' : null, paddingBottom: isActive ? "5px" : null})}>
                         Profile
                         </NavLink>
                     </li>
