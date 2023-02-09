@@ -171,7 +171,6 @@ function App() {
       setAllCommonNames(data.suggestions[0]['plant_details']['common_names'])
       console.log(petName)
       setNewTree({
-        pet_name: petName,
         common_name: data.suggestions[0]['plant_details']['common_names'][0],
         scientific_name: data.suggestions[0]['plant_details']['scientific_name'],
         wiki: data.suggestions[0]['plant_details'].url,
@@ -194,7 +193,7 @@ function App() {
     let reader = new FileReader();
     reader.onloadend = function() {
         idPost(reader.result.slice(23), pos)
-        console.log(reader.result.slice(23), pos)
+        // console.log(reader.result.slice(23), pos)
     }
     reader.readAsDataURL(file);
   }
@@ -202,10 +201,12 @@ function App() {
   // new tree post
   function handleSubmit(e) {
     e.preventDefault()
+    console.log(petName)
+
     if (pos===undefined) {
       alert('please wait for your current location to load')
-    } else if (newTree['common_name'])/*if (name==='')*/ {
-      console.log(newTree)
+    } else if (newTree['common_name']) {
+      // console.log(newTree)
     
       fetch('user_trees', {
         method: 'POST',
@@ -213,11 +214,11 @@ function App() {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${localStorage.getItem("jwt")}`
         },
-        body: JSON.stringify(newTree)
+        body: JSON.stringify({pet_name: petName, ...newTree})
       })
       .then(response => response.json())
       .then((obj) => {
-        // console.log(obj)
+        console.log(obj)
         if (obj.error) {
           alert(obj.error)
         } else {
@@ -235,15 +236,15 @@ function App() {
         }
       })
       .then((obj) => {
-        console.log(obj.id)
+        // console.log(obj.id)
         // if any of the names in allCommonNames is included in any of the names in userTrees, create association for progress
         let allCommonNamesString = allCommonNames.join()
 
         for (let x = 0; x < treeTypes.length; x++) {
-          console.log(allCommonNamesString.toLowerCase(), treeTypes[x]['common_name'].toLowerCase())
+          // console.log(allCommonNamesString.toLowerCase(), treeTypes[x]['common_name'].toLowerCase())
 
           if (allCommonNamesString.toLowerCase().replace(/\s+/g, '').includes(treeTypes[x]['common_name'].toLowerCase().replace(/\s+/g, ''))) {
-            console.log(treeTypes[x].id, 'about to post jointype')
+            // console.log(treeTypes[x].id, 'about to post jointype')
             fetch('/join_types', {
               method: 'POST',
               headers: {
@@ -269,22 +270,6 @@ function App() {
       alert('Sorry but we couldn\'t find tree, please try again.')
     }
   }
-
-  // console.log(user)
-  // useEffect(() => {
-  //   fetch('/join_types', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //       Authorization: `Bearer ${localStorage.getItem("jwt")}`
-  //     },
-  //     body: JSON.stringify({
-  //       user_id: 4,
-  //       tree_type_id: 241,
-  //       user_tree_id: 12
-  //     })
-  //   })
-  // }, [])
 
   // check to see if user is logged in
   if (!user) {

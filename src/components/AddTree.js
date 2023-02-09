@@ -34,8 +34,8 @@ return (
         </div>
 
         <div className="upload-img">
-            <span className="sub-head">Add Pet Name</span>
-            <input className='inputStyle' type='text' placeholder='Enter Pet Name' onChange={(e) => {
+            <span className="sub-head">Add Nickname</span>
+            <input className='inputStyle' type='text' placeholder='Enter Nickname' onChange={(e) => {
               console.log(e.target.value)
               setPetName(e.target.value)
             }}/>

@@ -30,7 +30,7 @@ export default function Map({center, zoom, showTreeInfo, setShowTreeInfo, treeIn
   }
 
   function handleUserTreeClick(tree) {
-    console.log(tree)
+    // console.log(tree)
 
     if (treeId === tree['id']) {
       console.log(tree)
@@ -45,7 +45,7 @@ export default function Map({center, zoom, showTreeInfo, setShowTreeInfo, treeIn
     setTreeId(tree['id'])
     
     
-    setTreeInfo({spc_common: tree['common_name'], wiki: tree.wiki, image: tree.image, userAdded: true, id: tree.id})
+    setTreeInfo({pet_name: tree['pet_name'], spc_common: tree['common_name'], wiki: tree.wiki, image: tree.image, userAdded: true, id: tree.id})
   }
 
   const userTreeOptions = userTrees.filter((item, index) => index === userTrees.indexOf(userTrees.find(tree => tree['spc_common'] === item['spc_common'])))
@@ -139,7 +139,7 @@ export default function Map({center, zoom, showTreeInfo, setShowTreeInfo, treeIn
             </GoogleMap>
           </div>
           <div className={`card ${showTreeInfo ? '' : 'card-none'}`}>
-            {showTreeInfo ? <TreeInfo info={treeInfo} handleClick={handleDelete}/> : null} 
+            {showTreeInfo ? <TreeInfo info={treeInfo} handleClick={handleDelete} treeTypes={treeTypes}/> : null} 
           </div>
         </div>
         
