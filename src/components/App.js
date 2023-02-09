@@ -77,7 +77,7 @@ function App() {
   const [userTrees, setUserTrees] = useState([])
   
   useEffect(() => {
-    if (user) {
+    if (user && user.id) {
       fetch(`/users/${user.id}`, {
         method: 'GET',
         headers: {
