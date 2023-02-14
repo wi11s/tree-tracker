@@ -17,11 +17,19 @@ import Search from './Search'
 import { useNavigate } from 'react-router-dom'
 import { isCompositeComponent } from 'react-dom/test-utils';
 
+import { useSelector, useDispatch } from 'react-redux'
+import { set, selectUser } from './userSlice'
+
 
 function App() {
   // console.log('start')
 
-  const [user, setUser] = useState(null)
+  // const [user, setUser] = useState(null)
+  const user = useSelector(selectUser)
+  console.log('redux:', user)
+  const dispatch = useDispatch()
+
+
   const [useCustomLocation, setUseCustomLocation] = useState(true)
   const [latitude, setLatitude] = useState(null)
   const [longitude, setLongitude] = useState(null)
@@ -41,7 +49,10 @@ function App() {
     .then((r) => {
       // console.log(r)
       if (r.ok) {
-        r.json().then((user) => setUser(user));
+        r.json().then((user) => {
+          // console.log(user)
+          dispatch(set(user))
+        });
       }
     });
   }, [localStorage.getItem("jwt")]);
@@ -273,19 +284,19 @@ function App() {
 
   // check to see if user is logged in
   if (!user) {
-    return (<div className="login"><Login setUser={setUser} /></div>);
+    return (<div className="login"><Login/></div>);
   }
 
   return (
     <div className="App">
-      <Header setUser={setUser}/>
+      <Header/>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="map" element={<Map center={center} zoom={zoom} showTreeInfo={showTreeInfo} setShowTreeInfo={setShowTreeInfo} treeInfo={treeInfo} setTreeInfo={setTreeInfo} treeTypes={treeTypes} trees={trees} pos={pos} userTrees={userTrees} setUserTrees={setUserTrees}/>} />
-        <Route path="addtree" element={<AddTree handleSubmit={handleSubmit} encodeImageFileAsURL={encodeImageFileAsURL} /*handleNameChange={handleNameChange}*/ setUseCustomLocation={setUseCustomLocation} handleLatChange={handleLatChange} handleLngChange={handleLngChange} useCustomLocation={useCustomLocation} pos={pos} uploaded={uploaded} setPetName={setPetName}/>} />
-        <Route path="profile" element={<Profile treeTypes={treeTypes} userTrees={userTrees} setUser={setUser} user={user}/>} />
+        <Route path="addtree" element={<AddTree handleSubmit={handleSubmit} encodeImageFileAsURL={encodeImageFileAsURL} setUseCustomLocation={setUseCustomLocation} handleLatChange={handleLatChange} handleLngChange={handleLngChange} useCustomLocation={useCustomLocation} pos={pos} uploaded={uploaded} setPetName={setPetName}/>} />
+        <Route path="profile" element={<Profile treeTypes={treeTypes} userTrees={userTrees} user={user}/>} />
         <Route path="*" element={<Error />} /> 
-        <Route path="login" element={<Login setUser={setUser} />} />
+        <Route path="login" element={<Login />} />
         <Route path="forum" element={<Forum user={user}/>} />
         <Route path="search" element={<Search />} />
       </Routes>
