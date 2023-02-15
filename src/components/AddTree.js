@@ -1,59 +1,214 @@
 import React, {useState} from 'react'
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom'
+
+import { useSelector, useDispatch } from 'react-redux'
+import { set as setPosition, selectPosition } from '../slices/positionSlice'
 
 
-export default function AddTree({handleSubmit, encodeImageFileAsURL, handleNameChange, useCustomLocation, setUseCustomLocation, handleLatChange, handleLngChange, pos, uploaded, setPetName }) {
+export default function AddTree({ user }) {
+  const navigate = useNavigate()
+
+  const pos = useSelector(selectPosition)
+  const dispatch = useDispatch()
+
+  const apiKey = process.env.REACT_APP_PLANT_KEY
+
+  const [useCustomLocation, setUseCustomLocation] = useState(true)
+  const [uploaded, setUploaded] = useState(false)
+  const [petName, setPetName] = useState('')
+  const [newTree, setNewTree] = useState({})
+
+
+  const [latitude, setLatitude] = useState(null)
+  const [longitude, setLongitude] = useState(null)
 
   function handleCheckBox() {
     setUseCustomLocation(!useCustomLocation)
   }
 
-return (
-<main className='add-tree'>
-  <motion.div className='form-container' initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1, transition:{duration: .8}}}>
-    <div className='title'>ADD TREE</div>
-    <hr></hr>
-    <form onSubmit={e => handleSubmit(e, useCustomLocation)}>
-      <div className="details">
-        <div className="input-box">
-          <div className="check-box">
-            <span className='sub-head'>Use Current Location</span>
-            <input type='checkbox' onChange={handleCheckBox} checked={useCustomLocation}/>
-          </div>
-          {useCustomLocation ? 
-          null :
-          <>
-          <input type='text' className='inputStyle' placeholder='Latitude' onChange={handleLatChange}/>
-          <input type='text' className='inputStyle' placeholder='Longitude' onChange={handleLngChange}/>
-          </>}
-        </div>
+  function handleLatChange(e) {
+    setLatitude(e.target.value)
+  }
+  function handleLngChange(e) {
+    setLongitude(e.target.value)
+  }
 
-        <div className="upload-img">
-          <span className='sub-head'>Upload Image</span>
-          <input type='file' onChange={(e) => encodeImageFileAsURL(e)}/>
-        </div>
+  function idPost(base64files) {
+    fetch('https://api.plant.id/v2/identify', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        "Api-Key": apiKey
+      },
+      body: JSON.stringify({
+        images: [base64files],
+        modifiers: ["similar_images"],
+        plant_details: ["common_names", "url"],
+        }),
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Success:', data.suggestions[0]['plant_details']['common_names']);
+      console.log(petName)
 
-        <div className="upload-img">
-            <span className="sub-head">Add Nickname</span>
-            <input className='inputStyle' type='text' placeholder='Enter Nickname' onChange={(e) => {
-              console.log(e.target.value)
-              setPetName(e.target.value)
-            }}/>
-        </div>
+      setNewTree({
+        common_name: data.suggestions[0]['plant_details']['common_names'][0],
+        scientific_name: data.suggestions[0]['plant_details']['scientific_name'],
+        wiki: data.suggestions[0]['plant_details'].url,
+        image: data.images[0].url,
+        lat: pos.lat,
+        lng: pos.lng,
+        health: '',
+        description: '',
+        user_id: user.id
+      })
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+  }
 
-        {uploaded ? (
-          pos.lat ? (
-            <div className='submitBtn'>
-              <input type="submit" value='Submit'/>
+  function encodeImageFileAsURL(e) {
+    setUploaded(true)
+    let file = e.target.files[0];
+    let reader = new FileReader();
+    reader.onloadend = function() {
+        idPost(reader.result.slice(23), pos)
+        // console.log(reader.result.slice(23), pos)
+    }
+    reader.readAsDataURL(file);
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault()
+    console.log(petName)
+
+    if (pos===undefined) {
+      alert('please wait for your current location to load')
+    } else if (newTree['common_name']) {
+      // console.log(newTree)
+    
+      fetch('user_trees', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem("jwt")}`
+        },
+        body: JSON.stringify({pet_name: petName, ...newTree})
+      })
+      .then(response => response.json())
+      .then((obj) => {
+        console.log(obj)
+        if (obj.error) {
+          alert(obj.error)
+        } else {
+          navigate('/map')
+
+          dispatch(setPosition({
+            userPosition: {
+              lat: pos.userPosition.lat,
+              lng: pos.userPosition.lng
+            },
+            center: {
+              lat: pos.userPosition.lat,
+              lng: pos.userPosition.lng
+            },
+            zoom: 16
+          }))
+
+          setTreeInfo({spc_common: obj['common_name'], wiki: obj.wiki, image: obj.image, userAdded: true})
+  
+          setAllTrees(allTrees => [...allTrees, obj])
+          let newUserTrees = [...userTrees, obj]
+          setUserTrees(newUserTrees)
+    
+          setShowTreeInfo(true)
+          return obj
+        }
+      })
+      .then((obj) => {
+        // console.log(obj.id)
+        // if any of the names in allCommonNames is included in any of the names in userTrees, create association for progress
+        let allCommonNamesString = allCommonNames.join()
+
+        for (let x = 0; x < treeTypes.length; x++) {
+          // console.log(allCommonNamesString.toLowerCase(), treeTypes[x]['common_name'].toLowerCase())
+
+          if (allCommonNamesString.toLowerCase().replace(/\s+/g, '').includes(treeTypes[x]['common_name'].toLowerCase().replace(/\s+/g, ''))) {
+            // console.log(treeTypes[x].id, 'about to post jointype')
+            fetch('/join_types', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${localStorage.getItem("jwt")}`
+              },
+              body: JSON.stringify({
+                user_id: user.id,
+                tree_type_id: treeTypes[x].id,
+                user_tree_id: obj.id
+              })
+            })
+            .then(response => response.json())
+            .then((obj) => {
+              console.log(obj)
+            })
+            break
+          }
+        }
+      })
+
+    } else {
+      alert('Sorry but we couldn\'t find tree, please try again.')
+    }
+  }
+
+  return (
+  <main className='add-tree'>
+    <motion.div className='form-container' initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1, transition:{duration: .8}}}>
+      <div className='title'>ADD TREE</div>
+      <hr></hr>
+      <form onSubmit={e => handleSubmit(e, useCustomLocation)}>
+        <div className="details">
+          <div className="input-box">
+            <div className="check-box">
+              <span className='sub-head'>Use Current Location</span>
+              <input type='checkbox' onChange={handleCheckBox} checked={useCustomLocation}/>
             </div>
-          ) : <h3>Please Wait...</h3>
-        ) : <h3>Please Upload Image</h3>}
+            {useCustomLocation ? 
+            null :
+            <>
+            <input type='text' className='inputStyle' placeholder='Latitude' onChange={handleLatChange}/>
+            <input type='text' className='inputStyle' placeholder='Longitude' onChange={handleLngChange}/>
+            </>}
+          </div>
 
-        
-        
-      </div>
-    </form>
-  </motion.div>
-</main>
-)
+          <div className="upload-img">
+            <span className='sub-head'>Upload Image</span>
+            <input type='file' onChange={(e) => encodeImageFileAsURL(e)}/>
+          </div>
+
+          <div className="upload-img">
+              <span className="sub-head">Add Nickname</span>
+              <input className='inputStyle' type='text' placeholder='Enter Nickname' onChange={(e) => {
+                console.log(e.target.value)
+                setPetName(e.target.value)
+              }}/>
+          </div>
+
+          {uploaded ? (
+            pos.lat ? (
+              <div className='submitBtn'>
+                <input type="submit" value='Submit'/>
+              </div>
+            ) : <h3>Please Wait...</h3>
+          ) : <h3>Please Upload Image</h3>}
+
+          
+          
+        </div>
+      </form>
+    </motion.div>
+  </main>
+  )
 }

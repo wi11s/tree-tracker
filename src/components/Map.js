@@ -4,14 +4,47 @@ import TreeInfo from "./TreeInfo";
 import { useInRouterContext } from "react-router-dom";
 import { motion } from 'framer-motion'
 
+import { useSelector, useDispatch } from 'react-redux'
+import { set as setPosition, selectPosition } from '../slices/positionSlice'
 
-export default function Map({center, zoom, showTreeInfo, setShowTreeInfo, treeInfo, setTreeInfo, treeTypes, trees, pos, userTrees, setUserTrees}) {
+export default function Map({ showTreeInfo, setShowTreeInfo, treeInfo, setTreeInfo, treeTypes, trees, userTrees, setUserTrees}) {
+  const pos = useSelector(selectPosition)
+  const center = pos.center
+  const zoom = pos.zoom
+  const dispatch = useDispatch()
+
   const {isLoaded} = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_API_KEY
   })
   
   const [opens, setOpens] = useState(0)
   const [treeId, setTreeId] = useState(0)
+
+    // get user location
+
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              let newPos = {
+                userPosition: {
+                  lat: parseFloat(position.coords.latitude),
+                  lng: parseFloat(position.coords.longitude)
+                },
+                center: {
+                  lat: parseFloat(position.coords.latitude), 
+                  lng: parseFloat(position.coords.longitude)
+                },
+                zoom: 15
+              };
+              dispatch(setPosition(newPos))
+            }
+          )
+        }
+      }, 3000)
+      return () => clearTimeout(timer)
+    }, [])
 
   function handleClick(tree) {
 

@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { motion } from "framer-motion";
 
 import { useDispatch } from 'react-redux'
-import { set } from './userSlice'
+import { set } from '../slices/userSlice'
 
 export default function Login() {
     const dispatch = useDispatch()
