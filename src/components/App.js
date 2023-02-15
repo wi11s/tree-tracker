@@ -276,6 +276,8 @@ function App() {
     return (<div className="login"><Login setUser={setUser} /></div>);
   }
 
+  console.log(user)
+
   return (
     <div className="App">
       <Header setUser={setUser}/>
@@ -289,7 +291,7 @@ function App() {
         <Route path="forum" element={<Forum user={user}/>} />
         <Route path="search" element={<Search />} />
       </Routes>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }

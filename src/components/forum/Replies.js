@@ -16,12 +16,14 @@ export default function Replies({postId, user, replyCount, setParentReplyCount, 
             setReplies(data)
         })
     }, [replyCount])
+
+    console.log(replies)
     
   return (
-    <div>{replies.map(reply => {
+    <>{replies.map(reply => {
         if (reply !== null) {
             return <Reply user={user} postId={postId} key={reply.id} reply={reply} setReplies={setReplies} replies={replies} setParentReplyCount={setParentReplyCount} parentReplyCount={parentReplyCount}/>
         }
-    })}</div>
+    })}</>
   )
 }

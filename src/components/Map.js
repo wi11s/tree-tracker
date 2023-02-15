@@ -7,7 +7,7 @@ import { motion } from 'framer-motion'
 
 export default function Map({center, zoom, showTreeInfo, setShowTreeInfo, treeInfo, setTreeInfo, treeTypes, trees, pos, userTrees, setUserTrees}) {
   const {isLoaded} = useJsApiLoader({
-    googleMapsApiKey: process.env.REACT_APP_API_KEY
+    googleMapsApiKey: process.env.REACT_APP_API_KEY 
   })
   
   const [opens, setOpens] = useState(0)

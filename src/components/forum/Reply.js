@@ -169,47 +169,38 @@ export default function Reply({reply, user, postId, setReplies, replies, setPare
   return (
 
     <div className='replyDiv'>
+            <div className="reply-container">
+              <div className="card-header" onClick={toViewProfile}>
+                  {reply.user.username} :
+              </div>
 
-        <div className='ReplyCard'>
-            <div className='card-reply-upper'>
-        {/* <div className='ReplyCard'> */}
-            <div className='username-delete-wrapper'>
-            <div className="card-header-reply" onClick={toViewProfile}>
-                {reply.user.username}
-            </div>
-            <motion.div
-              className="box"
-              whileHover={{ scale: 1.1 }}
-              transition={{ type: "spring", stiffness: 400, damping: 10 }}
-            >
-              {user.id===reply.user.id ? <div className="btn btn-danger delete-post" onClick={() => handleDelete(reply.id)}><p>x</p></div> : null}
-            </motion.div>
-            
+              {user.id===reply.user.id ? <i className='bx bx-x' id="reply-x" onClick={() => handleDelete(reply.id)} /> : null}
+
+              <p className='postContent reply-content'>{reply.content}</p>
+          
+                <div className="post-icons-container reply-icons-container">
+                  <div className="post-icons">
+                    {liked ? <i className='bx bxs-heart' onClick={handleClick}></i> : <i className='bx bx-heart' onClick={handleClick}></i>}
+                    <p>{likes}</p>
+                  </div>
+
+                  <div className="post-icons">
+                    <i className='bx bx-message-square-dots' onClick={handleReplyClick}></i>
+                    <p>{replyCount}</p>
+                  </div>
+                </div>
+        
             </div>
 
-            <div className="card-body-home">
-                <blockquote className="blockquote mb-0">
-                    <p className='postContent'>{reply.content}</p>
-                </blockquote>
-            </div>
-
-            <p className="reply-counts replyCount" onClick={handleExpand}>{likes} {likes===1 ? 'like' : 'likes'} - {replyCount} {replyCount===1 ? 'reply' : 'replies'}</p>
-            </div>
-           
-            <button className='btn likeBtn' onClick={handleClick}>{liked ? '♥' : '♡'}</button>
-            <button className='btn replyBtn' onClick={handleReplyClick}>💬</button>
-
-        </div>
- 
             {showReplies ? (
               <form className="replyForm" onSubmit={handleReplySubmit}>
-                <input type="text" className="form-control-reply form-control" placeholder="Reply to this post" onChange={handleContentChange}/>
+                <input type="text" className="form-control-reply form-control" placeholder="Reply to this common" onChange={handleContentChange}/>
                 <motion.div
                   className="box"
                   whileHover={{ scale: 1.04 }}
                   transition={{ type: "spring", stiffness: 400, damping: 10 }}
                 >
-                  <input type="submit" className="form-control-reply-button form-control" value="Post" />
+                  <input type="submit" className="forum-btn reply-btn" value="Reply" />
                 </motion.div>
               </form>
             ) : null}
