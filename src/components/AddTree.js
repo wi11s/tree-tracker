@@ -4,16 +4,22 @@ import { useNavigate } from 'react-router-dom'
 
 import { useSelector, useDispatch } from 'react-redux'
 import { set as setPosition, selectPosition } from '../slices/positionSlice'
+import { set as setInfo, setShowInfo, selectInfo } from '../slices/infoSlice'
 
 
-export default function AddTree({ user }) {
+export default function AddTree({ user, treeTypes, setAllTrees, allTrees, userTrees, setUserTrees }) {
   const navigate = useNavigate()
 
   const pos = useSelector(selectPosition)
+  const userPosition = pos.userPosition
+  console.log(userPosition)
+  const info = useSelector(selectInfo)
+  console.log(info)
   const dispatch = useDispatch()
 
   const apiKey = process.env.REACT_APP_PLANT_KEY
 
+  const [allCommonNames, setAllCommonNames] = useState([])
   const [useCustomLocation, setUseCustomLocation] = useState(true)
   const [uploaded, setUploaded] = useState(false)
   const [petName, setPetName] = useState('')
@@ -57,12 +63,14 @@ export default function AddTree({ user }) {
         scientific_name: data.suggestions[0]['plant_details']['scientific_name'],
         wiki: data.suggestions[0]['plant_details'].url,
         image: data.images[0].url,
-        lat: pos.lat,
-        lng: pos.lng,
+        lat: userPosition.lat,
+        lng: userPosition.lng,
         health: '',
         description: '',
         user_id: user.id
       })
+
+      dispatch(setShowInfo(true))
     })
     .catch((error) => {
       console.error('Error:', error);
@@ -74,7 +82,7 @@ export default function AddTree({ user }) {
     let file = e.target.files[0];
     let reader = new FileReader();
     reader.onloadend = function() {
-        idPost(reader.result.slice(23), pos)
+        idPost(reader.result.slice(23))
         // console.log(reader.result.slice(23), pos)
     }
     reader.readAsDataURL(file);
@@ -84,9 +92,7 @@ export default function AddTree({ user }) {
     e.preventDefault()
     console.log(petName)
 
-    if (pos===undefined) {
-      alert('please wait for your current location to load')
-    } else if (newTree['common_name']) {
+    if (newTree['common_name']) {
       // console.log(newTree)
     
       fetch('user_trees', {
@@ -103,32 +109,27 @@ export default function AddTree({ user }) {
         if (obj.error) {
           alert(obj.error)
         } else {
-          navigate('/map')
-
-          dispatch(setPosition({
-            userPosition: {
-              lat: pos.userPosition.lat,
-              lng: pos.userPosition.lng
-            },
-            center: {
-              lat: pos.userPosition.lat,
-              lng: pos.userPosition.lng
-            },
-            zoom: 16
+          dispatch(setInfo({
+            id: obj.id, 
+            pet_name: obj.pet_name, 
+            spc_common: obj.common_name, 
+            wiki: obj.wiki, 
+            image: obj.image, 
+            userAdded: obj.userAdded
           }))
+          console.log(info)
 
-          setTreeInfo({spc_common: obj['common_name'], wiki: obj.wiki, image: obj.image, userAdded: true})
-  
-          setAllTrees(allTrees => [...allTrees, obj])
+          navigate('/map')  
+          setAllTrees(() => [...allTrees, obj])
           let newUserTrees = [...userTrees, obj]
           setUserTrees(newUserTrees)
     
-          setShowTreeInfo(true)
+          console.log('about to show info')
           return obj
         }
       })
       .then((obj) => {
-        // console.log(obj.id)
+        console.log(obj)
         // if any of the names in allCommonNames is included in any of the names in userTrees, create association for progress
         let allCommonNamesString = allCommonNames.join()
 
@@ -159,7 +160,7 @@ export default function AddTree({ user }) {
       })
 
     } else {
-      alert('Sorry but we couldn\'t find tree, please try again.')
+      alert('Sorry but we haven\'t found your tree yet, please try again.')
     }
   }
 
@@ -197,15 +198,12 @@ export default function AddTree({ user }) {
           </div>
 
           {uploaded ? (
-            pos.lat ? (
+            userPosition.lat ? (
               <div className='submitBtn'>
                 <input type="submit" value='Submit'/>
               </div>
             ) : <h3>Please Wait...</h3>
-          ) : <h3>Please Upload Image</h3>}
-
-          
-          
+          ) : <h3>Please Upload Image</h3>}         
         </div>
       </form>
     </motion.div>

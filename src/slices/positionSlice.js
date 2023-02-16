@@ -15,7 +15,6 @@ export const positionSlice = createSlice({
     },
     reducers: {
         set: (state, action) => {
-            console.log(action.payload)
             state.userPosition = action.payload.userPosition
             state.center = action.payload.center
             state.zoom = action.payload.zoom

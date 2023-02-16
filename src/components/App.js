@@ -17,13 +17,13 @@ import Search from './Search'
 
 import { useSelector, useDispatch } from 'react-redux'
 import { set, selectUser } from '../slices/userSlice'
+import { set as setPosition } from '../slices/positionSlice'
 
 
 function App() {
   // console.log('start')
 
   const user = useSelector(selectUser)
-  console.log('redux:', user)
   const dispatch = useDispatch()
 
   const [trees, setTrees] = useState([])
@@ -48,6 +48,32 @@ function App() {
       }
     });
   }, [localStorage.getItem("jwt")]);
+
+  // get user location
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            let newPos = {
+              userPosition: {
+                lat: parseFloat(position.coords.latitude),
+                lng: parseFloat(position.coords.longitude)
+              },
+              center: {
+                lat: parseFloat(position.coords.latitude), 
+                lng: parseFloat(position.coords.longitude)
+              },
+              zoom: 15
+            };
+            dispatch(setPosition(newPos))
+          }
+        )
+      }
+    }, 3000)
+    return () => clearTimeout(timer)
+  }, [])
 
   // set tree types
 
@@ -117,8 +143,8 @@ function App() {
       <Header/>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="map" element={<Map showTreeInfo={showTreeInfo} setShowTreeInfo={setShowTreeInfo} treeInfo={treeInfo} setTreeInfo={setTreeInfo} treeTypes={treeTypes} trees={trees} userTrees={userTrees} setUserTrees={setUserTrees}/>} />
-        <Route path="addtree" element={<AddTree user={user}/>} />
+        <Route path="map" element={<Map treeTypes={treeTypes} trees={trees} userTrees={userTrees} setUserTrees={setUserTrees}/>} />
+        <Route path="addtree" element={<AddTree user={user} treeTypes={treeTypes} userTrees={userTrees} setUserTrees={setUserTrees}/>} />
         <Route path="profile" element={<Profile treeTypes={treeTypes} userTrees={userTrees} user={user}/>} />
         <Route path="*" element={<Error />} /> 
         <Route path="login" element={<Login />} />

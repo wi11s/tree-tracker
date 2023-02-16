@@ -15,7 +15,6 @@ export const userSlice = createSlice({
     },
     reducers: {
         set: (state, action) => {
-            console.log(action.payload)
             state.id = action.payload.id
             state.email = action.payload.email
             state.followers = action.payload.followers
