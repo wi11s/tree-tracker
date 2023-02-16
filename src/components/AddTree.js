@@ -7,7 +7,7 @@ import { set as setPosition, selectPosition } from '../slices/positionSlice'
 import { set as setInfo, setShowInfo, selectInfo } from '../slices/infoSlice'
 import { set as setUserTrees, selectUserTrees } from '../slices/userTreesSlice'
 
-export default function AddTree({ user, treeTypes, setAllTrees, allTrees }) {
+export default function AddTree({ user, treeTypes }) {
   const navigate = useNavigate()
 
   const pos = useSelector(selectPosition)
@@ -112,16 +112,15 @@ export default function AddTree({ user, treeTypes, setAllTrees, allTrees }) {
             spc_common: obj.common_name, 
             wiki: obj.wiki, 
             image: obj.image, 
-            userAdded: obj.userAdded
+            userAdded: true
           }))
 
           console.log(info)
-          setAllTrees(() => [...allTrees, obj])
 
           let newUserTrees = [...userTrees, obj]
           console.log('HERERERE', newUserTrees)
           dispatch(setUserTrees(newUserTrees))
-          
+
           navigate('/map')  
 
           return obj

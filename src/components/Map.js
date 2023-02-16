@@ -18,7 +18,6 @@ export default function Map({ treeTypes, trees }) {
   // console.log(info)
   const showInfo = info.showInfo
   const userTrees = useSelector(selectUserTrees).userTrees
-  console.log('usertrees:', userTrees)
 
   const dispatch = useDispatch()
 
@@ -46,7 +45,6 @@ export default function Map({ treeTypes, trees }) {
     setTreeId(tree['tree_id'])
     
     dispatch(setInfo({id: tree.id, spc_common: tree['spc_common'], health: tree.health, tree: tree, userAdded: false}))
-    // setTreeInfo({spc_common: tree['spc_common'], health: tree.health, tree: tree, userAdded: false})
   }
 
   function handleUserTreeClick(tree) {
@@ -55,13 +53,10 @@ export default function Map({ treeTypes, trees }) {
     if (treeId === tree['id']) {
       console.log(tree)
       dispatch(setShowInfo(!showInfo))
-      // setShowTreeInfo(!showTreeInfo)
     } else if (opens===0) {
       dispatch(setShowInfo(true))
-      // setShowTreeInfo(true)
     } else if (treeId !== tree['tree_id']) {
       dispatch(setShowInfo(true))
-      // setShowTreeInfo(true)
     }
 
     setOpens(1)
@@ -69,7 +64,6 @@ export default function Map({ treeTypes, trees }) {
     
     
     dispatch(setInfo({id: tree.id, pet_name: tree['pet_name'], spc_common: tree['common_name'], wiki: tree.wiki, image: tree.image, userAdded: true, id: tree.id}))
-    // setTreeInfo({pet_name: tree['pet_name'], spc_common: tree['common_name'], wiki: tree.wiki, image: tree.image, userAdded: true, id: tree.id})
   }
 
   const userTreeOptions = userTrees.filter((item, index) => index === userTrees.indexOf(userTrees.find(tree => tree['spc_common'] === item['spc_common'])))
@@ -94,11 +88,9 @@ export default function Map({ treeTypes, trees }) {
   let userDisplayTrees = userTrees.filter((tree) => {
     // console.log(tree)
     if (tree['common_name']) {
-      console.log(tree['common_name'], tree['common_name'].toLowerCase().includes(filterBy.toLowerCase()))
       return (tree['common_name'].toLowerCase().includes(filterBy.toLowerCase()))
     }
   })
-  console.log('userDisplayTrees:', userDisplayTrees)
 
   function handleDelete(id) {
     console.log(id)
@@ -110,17 +102,11 @@ export default function Map({ treeTypes, trees }) {
     })
     .then(res => res.json())
     .then((obj) => {
-      // console.log(obj)
       dispatch(setShowInfo(false))
-      // setShowTreeInfo(false)
       dispatch(setUserTrees(userTrees.filter(t => {
         console.log(t.id)
         return t.id !== id
       })))
-      // setUserTrees(userTrees.filter(t => {
-      //   console.log(t.id)
-      //   return t.id !== id
-      // }))
     })
   }
 

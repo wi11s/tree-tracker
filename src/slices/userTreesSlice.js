@@ -7,7 +7,6 @@ export const userTreesSlice = createSlice({
     },
     reducers: {
         set: (state, action) => {
-            console.log(action.payload)
             state.userTrees = action.payload
         }
     }

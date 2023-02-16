@@ -22,7 +22,6 @@ import { set as setUserTrees, selectUserTrees } from '../slices/userTreesSlice'
 
 
 function App() {
-  // console.log('start')
 
   const user = useSelector(selectUser)
   const dispatch = useDispatch()
@@ -104,9 +103,7 @@ function App() {
 
   // set trees from user data
 
-  // const [userTrees, setUserTrees] = useState([])
   const userTrees = useSelector(selectUserTrees).userTrees
-  console.log(userTrees)
 
   useEffect(() => {
     if (user && user.id) {
@@ -125,18 +122,6 @@ function App() {
     }
   }, [user])
 
-  // set states
-
-  const [showTreeInfo, setShowTreeInfo] = useState(false)
-  const [treeInfo, setTreeInfo] = useState({spc_common: '', userAdded: true})
-
-  const [allTrees, setAllTrees] = useState([])
-
-  useEffect(() => {
-    setAllTrees([...trees, ...userTrees])
-    // console.log([...trees, ...userTrees])
-  }, [trees, userTrees])
-
   // check to see if user is logged in
   if (!user) {
     return (<div className="login"><Login/></div>);
@@ -147,9 +132,9 @@ function App() {
       <Header/>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="map" element={<Map treeTypes={treeTypes} trees={trees}/>} />
-        <Route path="addtree" element={<AddTree user={user} treeTypes={treeTypes} allTrees={allTrees} setAllTrees={setAllTrees}/>} />
-        <Route path="profile" element={<Profile treeTypes={treeTypes} userTrees={userTrees} user={user}/>} />
+        <Route path="map" element={<Map treeTypes={treeTypes} trees={trees} />} />
+        <Route path="addtree" element={<AddTree user={user} treeTypes={treeTypes} />} />
+        <Route path="profile" element={<Profile treeTypes={treeTypes} userTrees={userTrees} user={user} />} />
         <Route path="*" element={<Error />} /> 
         <Route path="login" element={<Login />} />
         <Route path="forum" element={<Forum/>} />

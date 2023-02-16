@@ -10,5 +10,5 @@ export default configureStore({
     position: positionReducer,
     info: infoReducer,
     userTrees: userTreesReducer
-  }
+    }
 })
