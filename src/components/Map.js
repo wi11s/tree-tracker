@@ -1,11 +1,26 @@
 import React, { useState, useEffect, useRef, ReactElement } from "react";
 import {useJsApiLoader, GoogleMap, Marker} from "@react-google-maps/api"
 import TreeInfo from "./TreeInfo";
-import { useInRouterContext } from "react-router-dom";
 import { motion } from 'framer-motion'
 
+import { useSelector, useDispatch } from 'react-redux'
+import { set as setPosition, selectPosition } from '../slices/positionSlice'
+import { set as setInfo, setShowInfo, selectInfo } from '../slices/infoSlice'
+import { set as setUserTrees, selectUserTrees } from '../slices/userTreesSlice'
 
-export default function Map({center, zoom, showTreeInfo, setShowTreeInfo, treeInfo, setTreeInfo, treeTypes, trees, pos, userTrees, setUserTrees}) {
+export default function Map({ treeTypes, trees }) {
+  const pos = useSelector(selectPosition)
+  const userPosition = pos.userPosition
+  const center = pos.center
+  const zoom = pos.zoom
+
+  const info = useSelector(selectInfo)
+  // console.log(info)
+  const showInfo = info.showInfo
+  const userTrees = useSelector(selectUserTrees).userTrees
+
+  const dispatch = useDispatch()
+
   const {isLoaded} = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_API_KEY 
   })
@@ -16,17 +31,20 @@ export default function Map({center, zoom, showTreeInfo, setShowTreeInfo, treeIn
   function handleClick(tree) {
 
     if (treeId === tree['tree_id']) {
-      setShowTreeInfo(!showTreeInfo)
+      dispatch(setShowInfo(!showInfo))
+      // setShowTreeInfo(!showTreeInfo)
     } else if (opens===0) {
-      setShowTreeInfo(true)
+      dispatch(setShowInfo(true))
+      // setShowTreeInfo(true)
     } else if (treeId !== tree['tree_id']) {
-      setShowTreeInfo(true)
+      dispatch(setShowInfo(true))
+      // setShowTreeInfo(true)
     }
 
     setOpens(1)
     setTreeId(tree['tree_id'])
     
-    setTreeInfo({spc_common: tree['spc_common'], health: tree.health, tree: tree, userAdded: false})
+    dispatch(setInfo({id: tree.id, spc_common: tree['spc_common'], health: tree.health, tree: tree, userAdded: false}))
   }
 
   function handleUserTreeClick(tree) {
@@ -34,18 +52,18 @@ export default function Map({center, zoom, showTreeInfo, setShowTreeInfo, treeIn
 
     if (treeId === tree['id']) {
       console.log(tree)
-      setShowTreeInfo(!showTreeInfo)
+      dispatch(setShowInfo(!showInfo))
     } else if (opens===0) {
-      setShowTreeInfo(true)
+      dispatch(setShowInfo(true))
     } else if (treeId !== tree['tree_id']) {
-      setShowTreeInfo(true)
+      dispatch(setShowInfo(true))
     }
 
     setOpens(1)
     setTreeId(tree['id'])
     
     
-    setTreeInfo({pet_name: tree['pet_name'], spc_common: tree['common_name'], wiki: tree.wiki, image: tree.image, userAdded: true, id: tree.id})
+    dispatch(setInfo({id: tree.id, pet_name: tree['pet_name'], spc_common: tree['common_name'], wiki: tree.wiki, image: tree.image, userAdded: true, id: tree.id}))
   }
 
   const userTreeOptions = userTrees.filter((item, index) => index === userTrees.indexOf(userTrees.find(tree => tree['spc_common'] === item['spc_common'])))
@@ -83,12 +101,12 @@ export default function Map({center, zoom, showTreeInfo, setShowTreeInfo, treeIn
       }
     })
     .then(res => res.json())
-    .then(() => {
-      setShowTreeInfo(false)
-      setUserTrees(userTrees.filter(t => {
+    .then((obj) => {
+      dispatch(setShowInfo(false))
+      dispatch(setUserTrees(userTrees.filter(t => {
         console.log(t.id)
         return t.id !== id
-      }))
+      })))
     })
   }
 
@@ -96,7 +114,6 @@ export default function Map({center, zoom, showTreeInfo, setShowTreeInfo, treeIn
     return <p>loading</p>
   }
 
-  // console.log(pos)
   return (
     <main className="map">
       <motion.div className='container' initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1, transition:{duration: .8}}}>
@@ -118,10 +135,10 @@ export default function Map({center, zoom, showTreeInfo, setShowTreeInfo, treeIn
               }
             })}
           </select>
-          {pos.lat ? null : <label>Loading Your Location...</label>}
+          {userPosition.lat ? null : <label>Loading Your Location...</label>}
         </div>
         <div className="feature">
-          <div className={`map-container ${showTreeInfo ? '' : 'map-container-full'}`}>
+          <div className={`map-container ${showInfo ? '' : 'map-container-full'}`}>
           <GoogleMap center={center} zoom={zoom} mapContainerStyle={{ width: '100%', height: '100%'}}>
               {displayTrees.map(tree => {           
                 if (tree['spc_common']) {
@@ -135,11 +152,11 @@ export default function Map({center, zoom, showTreeInfo, setShowTreeInfo, treeIn
                   <Marker onClick={() => handleUserTreeClick(tree)} key={tree.id} position={{ lat:parseFloat(tree.lat), lng:parseFloat(tree.lng) }} icon={{url:'https://i.imgur.com/6WzuSjd.png'}}/>
                 )
               })}
-              <Marker position={{ lat:pos.lat, lng:pos.lng }}/>
+              <Marker position={{ lat:userPosition.lat, lng:userPosition.lng }}/>
             </GoogleMap>
           </div>
-          <div className={`card ${showTreeInfo ? '' : 'card-none'}`}>
-            {showTreeInfo ? <TreeInfo info={treeInfo} handleClick={handleDelete} treeTypes={treeTypes}/> : null} 
+          <div className={`card ${showInfo ? '' : 'card-none'}`}>
+            {showInfo ? <TreeInfo info={info} handleClick={() => handleDelete(info.id)} treeTypes={treeTypes}/> : null} 
           </div>
         </div>
         

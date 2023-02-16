@@ -3,7 +3,13 @@ import Replies from './Replies';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
-export default function Post({post, username, user, setPosts, posts}) {
+import { useSelector } from 'react-redux'
+import { selectUser } from '../../slices/userSlice'
+
+export default function Post({post, setPosts, posts}) {
+
+  const user = useSelector(selectUser)
+  const username = post.user.username
   // console.log(post)
   const [liked, setLiked] = useState(false)
   const [likes, setLikes] = useState(post.likes_count)

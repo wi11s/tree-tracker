@@ -2,7 +2,14 @@ import React, { useState, useEffect } from 'react'
 import Post from './Post'
 import { motion } from 'framer-motion'
 
-export default function Home({user}) {
+import { useSelector } from 'react-redux'
+import { selectUser } from '../../slices/userSlice'
+
+
+export default function Home() {
+
+  const user = useSelector(selectUser)
+
   const [posts, setPosts] = useState([])
   const [newPost, setNewPost] = useState(false)
   const [content, setContent] = useState('')
@@ -73,7 +80,7 @@ export default function Home({user}) {
           </div>
         </form>
         {posts.map(post => {
-          return <Post key={post.id} post={post} posts={posts} setPosts={setPosts} username={post.user.username} user={user}/>
+          return <Post key={post.id} post={post} posts={posts} setPosts={setPosts}/>
         })}
       </motion.div>
     </div>

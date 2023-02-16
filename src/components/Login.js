@@ -2,8 +2,12 @@ import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom' 
 import { motion } from "framer-motion";
 
+import { useDispatch } from 'react-redux'
+import { set } from '../slices/userSlice'
 
-export default function Login({setUser}) {
+export default function Login() {
+    const dispatch = useDispatch()
+
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [name, setName] = useState('')
@@ -28,7 +32,9 @@ export default function Login({setUser}) {
           console.log(data)
           if (data.user) {
             localStorage.setItem("jwt", data.token);
-            setUser(data);
+            console.log(data)
+            dispatch(set(data))
+            // setUser(data);
             navigate('/')
           } else {
             alert(data.message)
@@ -54,7 +60,8 @@ export default function Login({setUser}) {
         .then((data) => {
           if (data.user) {
             localStorage.setItem("jwt", data.token);
-            setUser(data);
+            dispatch(set(data))
+            // setUser(data);
             navigate('/')
           } else {
             alert(data.errors)
