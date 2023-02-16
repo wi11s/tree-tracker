@@ -18,6 +18,7 @@ import Search from './Search'
 import { useSelector, useDispatch } from 'react-redux'
 import { set, selectUser } from '../slices/userSlice'
 import { set as setPosition } from '../slices/positionSlice'
+import { set as setUserTrees, selectUserTrees } from '../slices/userTreesSlice'
 
 
 function App() {
@@ -103,8 +104,10 @@ function App() {
 
   // set trees from user data
 
-  const [userTrees, setUserTrees] = useState([])
-  
+  // const [userTrees, setUserTrees] = useState([])
+  const userTrees = useSelector(selectUserTrees).userTrees
+  console.log(userTrees)
+
   useEffect(() => {
     if (user && user.id) {
       fetch(`/users/${user.id}`, {
@@ -116,7 +119,8 @@ function App() {
       .then((res) => res.json())
       .then(obj => {
         // console.log(obj['tree_types'])
-        setUserTrees(obj['user_trees'])
+        dispatch(setUserTrees(obj['user_trees']))
+        // setUserTrees(obj['user_trees'])
       })
     }
   }, [user])
@@ -143,8 +147,8 @@ function App() {
       <Header/>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="map" element={<Map treeTypes={treeTypes} trees={trees} userTrees={userTrees} setUserTrees={setUserTrees}/>} />
-        <Route path="addtree" element={<AddTree user={user} treeTypes={treeTypes} userTrees={userTrees} setUserTrees={setUserTrees}/>} />
+        <Route path="map" element={<Map treeTypes={treeTypes} trees={trees}/>} />
+        <Route path="addtree" element={<AddTree user={user} treeTypes={treeTypes} allTrees={allTrees} setAllTrees={setAllTrees}/>} />
         <Route path="profile" element={<Profile treeTypes={treeTypes} userTrees={userTrees} user={user}/>} />
         <Route path="*" element={<Error />} /> 
         <Route path="login" element={<Login />} />

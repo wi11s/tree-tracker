@@ -3,7 +3,6 @@ import React, {useState} from 'react'
 import {motion} from 'framer-motion'
 
 export default function TreeInfo({info, handleClick, treeTypes}) {
-  console.log(info)
   const imageExists = info.image !== undefined
   const [description, setDescription] = useState('');
   const [wikiLink, setWikiLink] = useState('')
@@ -33,7 +32,6 @@ export default function TreeInfo({info, handleClick, treeTypes}) {
       console.log(error);
     }
   })();
-  console.log(info)
   return (
     <motion.div initial={{ scale: .98, opacity: 0 }} animate={{ scale: 1, opacity: 1, transition:{duration: .8}}}>
         <div className='details'>{info['spc_common']}</div>

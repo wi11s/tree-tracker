@@ -6,16 +6,19 @@ import { motion } from 'framer-motion'
 import { useSelector, useDispatch } from 'react-redux'
 import { set as setPosition, selectPosition } from '../slices/positionSlice'
 import { set as setInfo, setShowInfo, selectInfo } from '../slices/infoSlice'
+import { set as setUserTrees, selectUserTrees } from '../slices/userTreesSlice'
 
-export default function Map({ treeTypes, trees, userTrees, setUserTrees}) {
+export default function Map({ treeTypes, trees }) {
   const pos = useSelector(selectPosition)
   const userPosition = pos.userPosition
   const center = pos.center
   const zoom = pos.zoom
 
   const info = useSelector(selectInfo)
-  console.log(info)
+  // console.log(info)
   const showInfo = info.showInfo
+  const userTrees = useSelector(selectUserTrees).userTrees
+  console.log('usertrees:', userTrees)
 
   const dispatch = useDispatch()
 
@@ -91,9 +94,11 @@ export default function Map({ treeTypes, trees, userTrees, setUserTrees}) {
   let userDisplayTrees = userTrees.filter((tree) => {
     // console.log(tree)
     if (tree['common_name']) {
+      console.log(tree['common_name'], tree['common_name'].toLowerCase().includes(filterBy.toLowerCase()))
       return (tree['common_name'].toLowerCase().includes(filterBy.toLowerCase()))
     }
   })
+  console.log('userDisplayTrees:', userDisplayTrees)
 
   function handleDelete(id) {
     console.log(id)
@@ -105,13 +110,17 @@ export default function Map({ treeTypes, trees, userTrees, setUserTrees}) {
     })
     .then(res => res.json())
     .then((obj) => {
-      console.log(obj)
+      // console.log(obj)
       dispatch(setShowInfo(false))
       // setShowTreeInfo(false)
-      setUserTrees(userTrees.filter(t => {
+      dispatch(setUserTrees(userTrees.filter(t => {
         console.log(t.id)
         return t.id !== id
-      }))
+      })))
+      // setUserTrees(userTrees.filter(t => {
+      //   console.log(t.id)
+      //   return t.id !== id
+      // }))
     })
   }
 

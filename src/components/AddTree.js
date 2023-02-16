@@ -5,16 +5,15 @@ import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { set as setPosition, selectPosition } from '../slices/positionSlice'
 import { set as setInfo, setShowInfo, selectInfo } from '../slices/infoSlice'
+import { set as setUserTrees, selectUserTrees } from '../slices/userTreesSlice'
 
-
-export default function AddTree({ user, treeTypes, setAllTrees, allTrees, userTrees, setUserTrees }) {
+export default function AddTree({ user, treeTypes, setAllTrees, allTrees }) {
   const navigate = useNavigate()
 
   const pos = useSelector(selectPosition)
   const userPosition = pos.userPosition
-  console.log(userPosition)
   const info = useSelector(selectInfo)
-  console.log(info)
+  const userTrees = useSelector(selectUserTrees).userTrees
   const dispatch = useDispatch()
 
   const apiKey = process.env.REACT_APP_PLANT_KEY
@@ -92,9 +91,7 @@ export default function AddTree({ user, treeTypes, setAllTrees, allTrees, userTr
     e.preventDefault()
     console.log(petName)
 
-    if (newTree['common_name']) {
-      // console.log(newTree)
-    
+    if (newTree['common_name']) {    
       fetch('user_trees', {
         method: 'POST',
         headers: {
@@ -117,14 +114,16 @@ export default function AddTree({ user, treeTypes, setAllTrees, allTrees, userTr
             image: obj.image, 
             userAdded: obj.userAdded
           }))
-          console.log(info)
 
-          navigate('/map')  
+          console.log(info)
           setAllTrees(() => [...allTrees, obj])
+
           let newUserTrees = [...userTrees, obj]
-          setUserTrees(newUserTrees)
-    
-          console.log('about to show info')
+          console.log('HERERERE', newUserTrees)
+          dispatch(setUserTrees(newUserTrees))
+          
+          navigate('/map')  
+
           return obj
         }
       })
