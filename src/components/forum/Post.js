@@ -13,6 +13,7 @@ export default function Post({post, setPosts, posts}) {
   // console.log(post)
   const [liked, setLiked] = useState(false)
   const [likes, setLikes] = useState(post.likes_count)
+  const [commonToggle, setCommonToggle] = useState(false)
   const [replyCount, setReplyCount] = useState(post.initial_replies.length)
   const [expand, setExpand] = useState(false)
   const [replies, setReplies] = useState(false)
@@ -76,6 +77,7 @@ export default function Post({post, setPosts, posts}) {
 
   function handleReplyClick() {
     setReplies(!replies)
+    setCommonToggle(!commonToggle)
   }
 
   function handleContentChange(e) {
@@ -103,6 +105,7 @@ export default function Post({post, setPosts, posts}) {
         setExpand(true)
         setReplyingState(!replyingState)
         setReplyCount(replyCount => replyCount + 1)
+        setContent('')
       } else {
         alert(data.exception)
       }
@@ -150,7 +153,7 @@ export default function Post({post, setPosts, posts}) {
             </div>
 
             <div className="post-icons">
-              <i className='bx bx-message-square-dots' onClick={handleReplyClick}></i>
+              {commonToggle ? <i className='bx bxs-message-square-dots' onClick={handleReplyClick}></i> : <i className='bx bx-message-square-dots' onClick={handleReplyClick}></i>}
               <p>{replyCount}</p>
             </div>
           </div>
@@ -162,7 +165,7 @@ export default function Post({post, setPosts, posts}) {
       {replies ? (
         <div className='post-card'>
             <form className="replyForm" onSubmit={handleReplySubmit}>
-              <input type="text" className="form-control-reply form-control" placeholder="Reply to this post" onChange={handleContentChange}/>
+              <input type="text" className="post-reply-form" placeholder="Reply to this post" onChange={handleContentChange} value={content}/>
               <div className="box">
                 <input type="submit" className="forum-btn reply-btn" value="Reply" />
               </div>

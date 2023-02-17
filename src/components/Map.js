@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef, ReactElement } from "react";
 import {useJsApiLoader, GoogleMap, Marker} from "@react-google-maps/api"
 import TreeInfo from "./TreeInfo";
-import { motion } from 'framer-motion'
+import { useInRouterContext } from "react-router-dom";
+import { motion } from 'framer-motion';
+import LoadingScreen from "./LoadingScreen";
 
 import { useSelector, useDispatch } from 'react-redux'
 import { set as setPosition, selectPosition } from '../slices/positionSlice'
@@ -111,7 +113,7 @@ export default function Map({ treeTypes, trees }) {
   }
 
   if (!isLoaded) {
-    return <p>loading</p>
+    return <LoadingScreen />
   }
 
   return (
@@ -163,7 +165,6 @@ export default function Map({ treeTypes, trees }) {
         
       </motion.div>
     </main>
-
   )
 }
 
