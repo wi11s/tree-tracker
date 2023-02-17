@@ -919,29 +919,65 @@ form .submitBtn input:hover{
 }
 
 .L {
-animation: bounce 1s ease infinite;
+animation: bounce 2s ease infinite;
 }
 
 .o {
-animation: bounce 1s ease infinite .1s;
+animation: bounce 2s ease infinite .1s;
 }
 
 .a {
-animation: bounce 1s ease infinite .2s;
+animation: bounce 2s ease infinite .2s;
 }
 
 .d {
-animation: bounce 1s ease infinite .3s;
+animation: bounce 2s ease infinite .3s;
 }
 
 .i {
-animation: bounce 1s ease infinite .4s;
+animation: bounce 2s ease infinite .4s;
 }
 
 .n {
-animation: bounce 1s ease infinite .5s;
+animation: bounce 2s ease infinite .5s;
 }
 
 .g {
-    animation: bounce 1s ease infinite .6s;
+animation: bounce 2s ease infinite .6s;
+}
+
+.space {
+margin: 0 2px;
+}
+
+.l {
+animation: bounce 2s ease infinite .8s;
+}
+
+.o2 {
+animation: bounce 2s ease infinite .9s;
+}
+
+.c {
+animation: bounce 2s ease infinite 1s;
+}
+
+.a2 {
+animation: bounce 2s ease infinite 1.1s;
+}
+
+.t {
+animation: bounce 2s ease infinite 1.2s;
+}
+
+.i2 {
+animation: bounce 2s ease infinite 1.3s;
+}
+
+.o3 {
+animation: bounce 2s ease infinite 1.4s;
+}
+
+.n2 {
+animation: bounce 2s ease infinite 1.5s;
 }

@@ -85,7 +85,7 @@ export default function Home() {
         : 
         <div className='no-post-message'>
           <i class='bx bx-shocked'></i>
-          <p>You don't have any post yet.</p>
+          <p>You don't have any posts yet.</p>
         </div>}
       </motion.div>
     </div>
