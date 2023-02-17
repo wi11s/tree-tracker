@@ -7,8 +7,8 @@ export default function Reply({reply, user, postId, setReplies, replies, setPare
     const [likes, setLikes] = useState(reply.like_count)
     const [replyCount, setReplyCount] = useState(reply.reply_count)
     const [expand, setExpand] = useState(false)
-    const [nestedReplies, setNestedReplies] = useState(replies)
-    const [showReplies, setShowReplies] = useState(false)
+    const [nestedReplies, setNestedReplies] = useState([])
+    const [showReplyForm, setShowReplyForm] = useState(false)
     const [content, setContent] = useState('')
 
     const navigate = useNavigate()
@@ -35,6 +35,20 @@ export default function Reply({reply, user, postId, setReplies, replies, setPare
         setExpand(false)
       }
     }
+
+    useEffect(() => {
+      fetch(`/replies/${reply.id}`, {
+        method: 'GET',
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('jwt')}`
+        }
+      })
+      .then(r => r.json())
+      .then(data => {
+        console.log(data)
+        setNestedReplies(data.sort((a, b) => b.like_count - a.like_count).filter(onlyUnique))  
+      })
+    }, [])
 
     useEffect(() => {
         fetch(`/like/reply/${user.id}/${reply.id}`, {
@@ -87,7 +101,7 @@ export default function Reply({reply, user, postId, setReplies, replies, setPare
     }
 
     function handleReplyClick() {
-        setShowReplies(!showReplies)
+      setShowReplyForm(!showReplyForm)
     }
 
     function handleContentChange(e) {
@@ -138,7 +152,8 @@ export default function Reply({reply, user, postId, setReplies, replies, setPare
             .then(data => {
               setNestedReplies(data)
               setExpand(true)
-              setShowReplies(false)
+              setShowReplyForm(false)
+              setContent('')
             })
           } else {
             alert(data.exception)
@@ -192,19 +207,20 @@ export default function Reply({reply, user, postId, setReplies, replies, setPare
         
             </div>
 
-            {showReplies ? (
-              <form className="replyForm" onSubmit={handleReplySubmit}>
-                <input type="text" className="form-control-reply form-control" placeholder="Reply to this common" onChange={handleContentChange}/>
-                <motion.div
-                  className="box"
-                  whileHover={{ scale: 1.04 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                >
-                  <input type="submit" className="forum-btn reply-btn" value="Reply" />
-                </motion.div>
-              </form>
+            {showReplyForm ? (
+              <div className="pop-up-form-container">
+                <form className="pop-up-form" onSubmit={handleReplySubmit}>
+                  <p>Reply to <span>{reply.user.username} :</span></p>
+                  <input type="text" className="pop-up-input" placeholder="Post your reply" onChange={handleContentChange}/>
+                  <div className="box">
+                    <input type="submit" className="forum-btn reply-btn" value="Reply" />
+                  </div>
+                  <i className='bx bx-x' onClick={handleReplyClick}></i>
+                </form>
+              </div>
             ) : null}
-        {expand ? (
+            
+        {nestedReplies.length > 0 ? (
             nestedReplies.map(reply => {
                 return <Reply key={reply.id} user={user} postId={postId} reply={reply} setReplies={setNestedReplies} replies={nestedReplies} parentReplyCount={replyCount} setParentReplyCount={setReplyCount}/>
             })

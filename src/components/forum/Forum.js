@@ -67,14 +67,19 @@ export default function Home({user}) {
         }}
       >
         <form onSubmit={handleSubmit} className='newPost'>
-          <textarea className="form-control" type="text" placeholder="What's on your mind?" onChange={handleChange}/>
+          <textarea className="form-control" type="text" placeholder="What's on your mind?" onChange={handleChange} value={content}/>
           <div className="box">
             <input className="forum-btn" type="submit" value="Post"/>
           </div>
         </form>
-        {posts.map(post => {
+        {posts.length !== 0 ? posts.map(post => {
           return <Post key={post.id} post={post} posts={posts} setPosts={setPosts} username={post.user.username} user={user}/>
-        })}
+        }) 
+        : 
+        <div className='no-post-message'>
+          <i class='bx bx-shocked'></i>
+          <p>You don't have any post yet.</p>
+        </div>}
       </motion.div>
     </div>
   )
