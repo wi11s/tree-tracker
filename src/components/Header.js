@@ -24,8 +24,8 @@ function Header() {
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink to='/forum' end className='link' style={({ isActive }) => ({borderBottom: isActive? '1.5px solid #3d4637' : null, paddingBottom: isActive ? "5px" : null})}>
-                        Forum
+                        <NavLink to='/feed' end className='link' style={({ isActive }) => ({borderBottom: isActive? '1.5px solid #3d4637' : null, paddingBottom: isActive ? "5px" : null})}>
+                        Feed
                         </NavLink>
                     </li>
                     <li>

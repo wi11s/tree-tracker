@@ -50,7 +50,7 @@ export default function AddTree({ user, treeTypes }) {
         images: [base64files],
         modifiers: ["similar_images"],
         plant_details: ["common_names", "url"],
-        }),
+      }),
     })
     .then(response => response.json())
     .then(data => {
@@ -69,6 +69,7 @@ export default function AddTree({ user, treeTypes }) {
         user_id: user.id
       })
 
+      setAllCommonNames(data.suggestions[0]['plant_details']['common_names'])
       dispatch(setShowInfo(true))
     })
     .catch((error) => {
@@ -80,6 +81,7 @@ export default function AddTree({ user, treeTypes }) {
     setUploaded(true)
     let file = e.target.files[0];
     let reader = new FileReader();
+    // console.log('reader', reader)
     reader.onloadend = function() {
         idPost(reader.result.slice(23))
         // console.log(reader.result.slice(23), pos)
