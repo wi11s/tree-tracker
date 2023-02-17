@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import Reply from './Reply'
 
-export default function Replies({postId, user, replyCount, setParentReplyCount, parentReplyCount}) {
+export default function Replies({user, postId, replyCount, setParentReplyCount, parentReplyCount}) {
+
     const [replies, setReplies] = useState([])
     useEffect(() => {
         fetch(`/posts/replies/${postId}`, {
