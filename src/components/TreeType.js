@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react'
 
-export default function TreeType({tree, userTrees, userId}) {
+export default function TreeType({tree}) {
     let collected = false 
     
-    console.log(tree)
+    // console.log(tree)
     if (tree.collected == 't') {
         collected = true
     }
@@ -22,7 +22,7 @@ export default function TreeType({tree, userTrees, userId}) {
             </h4>
             <div className="bottom">
                 <span>{tree.frequency}</span>
-                {collected ? <i class='bx bxs-check-circle'></i> : <span className='circle'></span>}
+                {collected ? <i className='bx bxs-check-circle'></i> : <span className='circle'></span>}
             </div>
             
         </div>
