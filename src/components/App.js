@@ -23,6 +23,21 @@ import { set as setUserTrees, selectUserTrees } from '../slices/userTreesSlice'
 
 function App() {
 
+  // const apiKey = process.env.REACT_APP_PLANT_KEY
+
+  // useEffect(() => {
+  //   fetch('https://api.plant.id/v2/usage_info', {
+  //     method: 'GET',
+  //     headers: {
+  //       "Api-Key": apiKey
+  //     }
+  //   })
+  //   .then(response => response.json())
+  //   .then(data => {
+  //     console.log('Success:', data);
+  //   })
+  // }, [])
+
   const user = useSelector(selectUser)
   const dispatch = useDispatch()
 

@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom'
 
@@ -20,9 +20,10 @@ export default function AddTree({ user, treeTypes }) {
 
   const [allCommonNames, setAllCommonNames] = useState([])
   const [useCustomLocation, setUseCustomLocation] = useState(true)
-  const [uploaded, setUploaded] = useState(false)
   const [petName, setPetName] = useState('')
   const [newTree, setNewTree] = useState({})
+  const [allowSubmit, setAllowSubmit] = useState(false)
+  const [uploaded, setUploaded] = useState(false)
 
 
   const [latitude, setLatitude] = useState(null)
@@ -48,14 +49,15 @@ export default function AddTree({ user, treeTypes }) {
       },
       body: JSON.stringify({
         images: [base64files],
-        modifiers: ["similar_images"],
+        latitude: userPosition.lat,
+        longitude: userPosition.lng,
         plant_details: ["common_names", "url"],
       }),
     })
     .then(response => response.json())
     .then(data => {
-      console.log('Success:', data.suggestions[0]['plant_details']['common_names']);
-      console.log(petName)
+      console.log('Success:', data);
+      setAllowSubmit(true)
 
       setNewTree({
         common_name: data.suggestions[0]['plant_details']['common_names'][0],
@@ -76,6 +78,8 @@ export default function AddTree({ user, treeTypes }) {
       console.error('Error:', error);
     });
   }
+
+
 
   function encodeImageFileAsURL(e) {
     setUploaded(true)
@@ -186,7 +190,7 @@ export default function AddTree({ user, treeTypes }) {
 
           <div className="upload-img">
             <span className='sub-head'>Upload Image</span>
-            <input type='file' onChange={(e) => encodeImageFileAsURL(e)}/>
+            { userPosition.lat ? (<input type='file' onChange={(e) => encodeImageFileAsURL(e)}/>) : (<p>loading location</p>) }
           </div>
 
           <div className="upload-img">
@@ -196,14 +200,21 @@ export default function AddTree({ user, treeTypes }) {
                 setPetName(e.target.value)
               }}/>
           </div>
+          { allowSubmit ? (
+            <p>{newTree['common_name']}</p>
+          ) : null }
 
-          {uploaded ? (
-            userPosition.lat ? (
-              <div className='submitBtn'>
-                <input type="submit" value='Submit'/>
-              </div>
-            ) : <h3>Please Wait...</h3>
-          ) : <h3>Please Upload Image</h3>}         
+          {
+            uploaded ? (
+              allowSubmit ? (
+                userPosition.lat ? (
+                  <div className='submitBtn'>
+                    <input type="submit" value='Submit'/>
+                  </div>
+                ) : <h3>Please Wait...</h3>
+              ) : <h3>Loading image, please wait...</h3>
+            ) : <h3>Please upload image</h3>
+          }         
         </div>
       </form>
     </motion.div>
