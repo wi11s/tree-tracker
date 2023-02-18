@@ -1,8 +1,19 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 
 export default function UserCard({displayUser, user}) {
     // console.log(displayUser)
     const [requested, setRequested] = useState(displayUser.requested)
+    const [alreadyFriends, setAlreadyFriends] = useState(false)
+
+    useEffect(() => {
+        if (user && user.friendships) {
+            if (user.friendships.map(friend => friend.id).includes(displayUser.id)) {
+                console.log('already friends')
+                setAlreadyFriends(true)
+            }
+        }
+
+    }, [user])
 
     function handleFriendRequest(id) {
         fetch('/requests', {
@@ -26,9 +37,13 @@ export default function UserCard({displayUser, user}) {
   return (
     <div className='user-card'>
         <h3>{displayUser.username}</h3>
-        {requested ? <p>Friend Request Sent</p> : (
-            <button onClick={() => handleFriendRequest(displayUser.id)}>Add Friend</button>
-        )}
+        {
+            !alreadyFriends ? (
+                requested ? <p>Friend Request Sent</p> : (
+                    <button onClick={() => handleFriendRequest(displayUser.id)}>Add Friend</button>
+                )
+            ) : null
+        }
     </div>
   )
 }

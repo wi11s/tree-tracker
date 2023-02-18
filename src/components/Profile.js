@@ -3,12 +3,16 @@ import TreeType from './TreeType'
 import { motion } from 'framer-motion'
 import { NavLink } from 'react-router-dom';
 import FriendRequests from './FriendRequests';
+import Friends from './Friends';
 
 
 export default function ({ treeTypes, userTrees, setUser, user }) {
+    console.log(user)
+
     const [points, setPoints] = useState(0)
     const [requests, setRequests] = useState([])
     const [showRequests, setShowRequests] = useState(false)
+    const [showFriends, setShowFriends] = useState(false)
 
     useEffect(() => {
       setRequests(user.requests)
@@ -51,7 +55,10 @@ export default function ({ treeTypes, userTrees, setUser, user }) {
           { showRequests ? (
             <FriendRequests user={user} requests={requests}/>
           ) : null }
-
+          <button onClick={() => setShowFriends(!showFriends)}>friends</button>
+          { showFriends ? (
+            <Friends user={user}/>
+          ) : null }
         </main>
       )
 }

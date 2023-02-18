@@ -5,7 +5,7 @@ export const userSlice = createSlice({
     initialState: {
         id: null,
         email: null,
-        friends: null,
+        friendships: null,
         name: null,
         posts: [],
         tree_types: [],
@@ -17,7 +17,7 @@ export const userSlice = createSlice({
         set: (state, action) => {
             state.id = action.payload.id
             state.email = action.payload.email
-            state.friends = action.payload.friends
+            state.friendships = action.payload.friendships
             state.name = action.payload.name
             state.posts = action.payload.posts
             state.tree_types = action.payload.tree_types

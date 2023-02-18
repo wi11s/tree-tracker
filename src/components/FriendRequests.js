@@ -4,11 +4,54 @@ export default function FriendRequests({user, requests}) {
     console.log(requests)
 
     function handleAccept(id) {
-        
+        fetch("/friends", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+            },
+            body: JSON.stringify({
+                user1_id: id,
+                user2_id: user.id
+            })
+        })
+        .then(r => r.json())
+        .then(obj => {
+            console.log(obj)
+        })
+        .then(() => {
+            fetch("/friends", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+                },
+                body: JSON.stringify({
+                    user1_id: user.id,
+                    user2_id: id
+                })
+            })
+        })
+        .then(() => {
+            fetch(`/requests/${user.id}/${id}`, {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("jwt")}`
+                }
+            })
+        })
+        .then(() => {
+            requests.filter(request => request.sender_id !== id)
+        })
     }
 
     function handleDecline(id) {
-
+        fetch(`/requests/${user.id}/${id}`, {
+            method: "DELETE",
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("jwt")}`
+            }
+        })
     }
 
   return (
