@@ -7,7 +7,7 @@ import Friends from './Friends';
 
 
 export default function ({ treeTypes, userTrees, setUser, user }) {
-    console.log(user)
+    // console.log(user)
 
     const [points, setPoints] = useState(0)
     const [requests, setRequests] = useState([])

@@ -19,12 +19,12 @@ export default function UserCard({displayUser, user}) {
         fetch('/requests', {
             method: 'POST',
             headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${localStorage.getItem('jwt')}`
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${localStorage.getItem('jwt')}`
             },
             body: JSON.stringify({
-            sender_id: user.id,
-            receiver_id: id
+                sender_id: user.id,
+                receiver_id: id
             })
         })
         .then(r => r.json())

@@ -1,9 +1,12 @@
 import React from 'react'
+import { useDispatch } from 'react-redux'
+import { set } from '../slices/userSlice'
 
 export default function FriendRequests({user, requests, setRequests}) {
     console.log(requests)
+    const dispatch = useDispatch()
 
-    function handleAccept(id) {
+    function handleAccept(request) {
         fetch("/friends", {
             method: "POST",
             headers: {
@@ -11,13 +14,13 @@ export default function FriendRequests({user, requests, setRequests}) {
                 Authorization: `Bearer ${localStorage.getItem("jwt")}`,
             },
             body: JSON.stringify({
-                user1_id: id,
+                user1_id: request.id,
                 user2_id: user.id
             })
         })
         .then(r => r.json())
         .then(obj => {
-            console.log(obj)
+            // console.log(obj)
         })
         .then(() => {
             fetch("/friends", {
@@ -28,34 +31,47 @@ export default function FriendRequests({user, requests, setRequests}) {
                 },
                 body: JSON.stringify({
                     user1_id: user.id,
-                    user2_id: id
+                    user2_id: request.id
                 })
             })
-        })
-        .then(() => {
-            fetch(`/requests/${user.id}/${id}`, {
-                method: "DELETE",
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem("jwt")}`
-                }
+            .then(r => r.json())
+            .then(obj => {
+                // console.log(obj)
+
+                let newRequests = requests.filter(x => {
+                    console.log(x.id, request.id)
+                    return x.id !== request.id
+                })
+                console.log('newRequests')
+                setRequests(() => ['dd'])
+                dispatch(set({requests: newRequests}))
+
+                let newFriendships = [...user.friendships, request]
+                // console.log(newFriendships)
+                dispatch(set({friendships: newFriendships}))
             })
-            .catch(err => console.log(err))
-        })
-        .then(() => {
-            let newRequests = requests.filter(request => request.sender_id !== id)
-            setRequests(newRequests)
+            .then(() => {
+                fetch(`/requests/${user.id}/${request.id}`, {
+                    method: "DELETE",
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("jwt")}`
+                    }
+                })
+                .catch(err => console.log(err))
+            })
         })
     }
 
-    function handleDecline(id) {
-        fetch(`/requests/${user.id}/${id}`, {
+    function handleDecline(request) {
+        fetch(`/requests/${user.id}/${request.id}`, {
             method: "DELETE",
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("jwt")}`
             }
         })
         .then(() => {
-            let newRequests = requests.filter(request => request.sender_id !== id)
+            let newRequests = requests.filter(x => x.id !== request.id)
+            console.log(newRequests)
             setRequests(newRequests)
         })
     }
@@ -73,8 +89,8 @@ export default function FriendRequests({user, requests, setRequests}) {
                             <h3>{request.username}</h3>
                         </div>
                         <div className='friend-request-buttons'>
-                            <button className='accept' onClick={() => handleAccept(request.id)}>Accept</button>
-                            <button className='decline' onClick={() => handleDecline(request.id)}>Decline</button>
+                            <button className='accept' onClick={() => handleAccept(request)}>Accept</button>
+                            <button className='decline' onClick={() => handleDecline(request)}>Decline</button>
                         </div>
                         </div>
                     )

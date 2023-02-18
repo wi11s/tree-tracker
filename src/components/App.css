@@ -987,7 +987,7 @@ animation: bounce 2s ease infinite 1.5s;
 .search-container {
     position: absolute;
     top: 20%;
-    left: 50%;
+    left: 0%;
     bottom: 0;
     right: 20%;
     display: flex;
@@ -995,8 +995,6 @@ animation: bounce 2s ease infinite 1.5s;
     align-items: center;
     width: 100%;
     position: fixed;
-    top: 0;
-    left: 0;
     z-index: 100;
 }
 
