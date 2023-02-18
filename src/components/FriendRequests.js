@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function FriendRequests({user, requests}) {
+export default function FriendRequests({user, requests, setRequests}) {
     console.log(requests)
 
     function handleAccept(id) {
@@ -39,9 +39,11 @@ export default function FriendRequests({user, requests}) {
                     Authorization: `Bearer ${localStorage.getItem("jwt")}`
                 }
             })
+            .catch(err => console.log(err))
         })
         .then(() => {
-            requests.filter(request => request.sender_id !== id)
+            let newRequests = requests.filter(request => request.sender_id !== id)
+            setRequests(newRequests)
         })
     }
 
@@ -51,6 +53,10 @@ export default function FriendRequests({user, requests}) {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("jwt")}`
             }
+        })
+        .then(() => {
+            let newRequests = requests.filter(request => request.sender_id !== id)
+            setRequests(newRequests)
         })
     }
 

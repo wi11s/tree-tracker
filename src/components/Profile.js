@@ -53,7 +53,7 @@ export default function ({ treeTypes, userTrees, setUser, user }) {
           </motion.div>
           <button onClick={() => setShowRequests(!showRequests)}>show friend requests</button>
           { showRequests ? (
-            <FriendRequests user={user} requests={requests}/>
+            <FriendRequests user={user} requests={requests} setRequests={setRequests}/>
           ) : null }
           <button onClick={() => setShowFriends(!showFriends)}>friends</button>
           { showFriends ? (
