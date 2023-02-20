@@ -85,7 +85,7 @@ export default function Feed() {
         : 
         <div className='no-post-message'>
           <i class='bx bx-shocked'></i>
-          <p>You don't have any posts yet.</p>
+          <p>You don't have any post yet.</p>
         </div>}
       </motion.div>
     </div>
