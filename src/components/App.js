@@ -23,20 +23,21 @@ import { set as setUserTrees, selectUserTrees } from '../slices/userTreesSlice'
 
 function App() {
 
-  // const apiKey = process.env.REACT_APP_PLANT_KEY
+  const apiKey = process.env.REACT_APP_PLANT_KEY
 
-  // useEffect(() => {
-  //   fetch('https://api.plant.id/v2/usage_info', {
-  //     method: 'GET',
-  //     headers: {
-  //       "Api-Key": apiKey
-  //     }
-  //   })
-  //   .then(response => response.json())
-  //   .then(data => {
-  //     console.log('Success:', data);
-  //   })
-  // }, [])
+  useEffect(() => {
+    fetch('https://api.plant.id/v2/usage_info', {
+      method: 'GET',
+      headers: {
+        "Api-Key": apiKey
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Success:', data);
+    })
+  }, [])
+
 
   const user = useSelector(selectUser)
   const dispatch = useDispatch()
@@ -124,7 +125,6 @@ function App() {
       setTreeTypes(obj)
     })
   }, [user])
-
   // set trees from census data
 
   useEffect(() => {
@@ -155,9 +155,8 @@ function App() {
       })
     }
   }, [user])
-
   // check to see if user is logged in
-  if (!user) {
+  if (user.id === null) {
     return (<div className="login"><Login/></div>);
   }
 

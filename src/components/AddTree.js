@@ -15,15 +15,17 @@ export default function AddTree({ user, treeTypes }) {
   const info = useSelector(selectInfo)
   const userTrees = useSelector(selectUserTrees).userTrees
   const dispatch = useDispatch()
-
   const apiKey = process.env.REACT_APP_PLANT_KEY
 
   const [allCommonNames, setAllCommonNames] = useState([])
-  const [useCustomLocation, setUseCustomLocation] = useState(true)
+  const [useCustomLocation, setUseCustomLocation] = useState(false)
+
   const [petName, setPetName] = useState('')
   const [newTree, setNewTree] = useState({})
   const [allowSubmit, setAllowSubmit] = useState(false)
   const [uploaded, setUploaded] = useState(false)
+  const [fileName, setFileName] = useState('')
+
 
 
   const [latitude, setLatitude] = useState(null)
@@ -85,6 +87,8 @@ export default function AddTree({ user, treeTypes }) {
     setUploaded(true)
     let file = e.target.files[0];
     let reader = new FileReader();
+    setFileName(file.name)
+
     // console.log('reader', reader)
     reader.onloadend = function() {
         idPost(reader.result.slice(23))
@@ -169,55 +173,118 @@ export default function AddTree({ user, treeTypes }) {
   }
 
   return (
-  <main className='add-tree'>
-    <motion.div className='form-container' initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1, transition:{duration: .8}}}>
-      <div className='title'>ADD TREE</div>
-      <hr></hr>
-      <form onSubmit={e => handleSubmit(e, useCustomLocation)}>
-        <div className="details">
-          <div className="input-box">
-            <div className="check-box">
-              <span className='sub-head'>Use Current Location</span>
-              <input type='checkbox' onChange={handleCheckBox} checked={useCustomLocation}/>
+    <div className="add-tree-container">
+      <form className='add-tree-form' onSubmit={e => handleSubmit(e, useCustomLocation)}>
+
+        {/* ----------- step one ----------- */}
+
+        <motion.div initial={{ opacity: 0, y: 10 }} 
+                    whileInView={{ opacity: 1, y: 0}} 
+                    transition={{ duration: .3, delay: .3 }} 
+                    viewport={{ once: true }}
+                    className="add-tree-island">
+          <h1 className="add-tree-header">
+            <p>1. Choose Location</p>
+          </h1>
+
+          <div className="add-tree-action">
+            <div className="add-tree-location-indicator">
+              {userPosition.lat ? <i className='bx bx-check'></i> : <i className='bx bx-loader' ></i>}
+              <p>Current Location</p>
             </div>
-            {useCustomLocation ? 
-            null :
-            <>
-            <input type='text' className='inputStyle' placeholder='Latitude' onChange={handleLatChange}/>
-            <input type='text' className='inputStyle' placeholder='Longitude' onChange={handleLngChange}/>
-            </>}
+
+            <div className="add-tree-custom-location" onClick={handleCheckBox}>
+              <p>Custom Location</p>
+            </div>
+
           </div>
 
-          <div className="upload-img">
-            <span className='sub-head'>Upload Image</span>
-            { userPosition.lat ? (<input type='file' onChange={(e) => encodeImageFileAsURL(e)}/>) : (<p>loading location</p>) }
+          <div className="add-tree-check">
+            {userPosition.lat ? <i className='bx bxs-check-circle' ></i> : <i className='bx bxs-check-circle' style={{opacity: ".2"}}></i>}
           </div>
+        </motion.div>
 
-          <div className="upload-img">
-              <span className="sub-head">Add Nickname</span>
-              <input className='inputStyle' type='text' placeholder='Enter Nickname' onChange={(e) => {
-                console.log(e.target.value)
-                setPetName(e.target.value)
-              }}/>
+        {/* ----------- custome location ----------- */}
+
+        {useCustomLocation ? 
+          <div className="custom-location-container">
+          <div className="custom-input">
+            <div className="custom-location">
+              <p>Latitude:</p>
+              <input type="text" placeholder='ex: 30.26' onChange={handleLatChange}/>
+            </div>
+
+            <div className="custom-location">
+              <p>Longitude:</p>
+              <input type="text" placeholder='ex: 50.33' onChange={handleLngChange}/>
+            </div>
           </div>
-          { allowSubmit ? (
-            <p>{newTree['common_name']}</p>
-          ) : null }
-
-          {
-            uploaded ? (
-              allowSubmit ? (
-                userPosition.lat ? (
-                  <div className='submitBtn'>
-                    <input type="submit" value='Submit'/>
-                  </div>
-                ) : <h3>Please Wait...</h3>
-              ) : <h3>Loading image, please wait...</h3>
-            ) : <h3>Please upload image</h3>
-          }         
         </div>
+        :
+        null
+        }  
+
+        {/* ----------- step twp ----------- */}
+
+        <motion.div initial={{ opacity: 0, y: 10 }} 
+                    whileInView={{ opacity: 1, y: 0}} 
+                    transition={{ duration: .3, delay: .5 }} 
+                    viewport={{ once: true }}
+                    className="add-tree-island">
+          <h1 className="add-tree-header">
+            <p>2. Upload Image</p>
+          </h1>
+
+          <div className="add-tree-action">
+            <label class="custom-file-upload">
+                <input type="file" onChange={(e) => encodeImageFileAsURL(e)} />
+                <i className='bx bx-plus' ></i> 
+                <p>Choose File</p>    
+            </label>
+
+            <div className="add-tree-alert">
+              {uploaded ? (allowSubmit ? <p>{fileName.substring(0, 20)}</p> : <p>Loading image...</p>): <p>Please Upload Image</p>}
+            </div>
+          </div>
+
+            <div className="add-tree-check">
+              {allowSubmit ? <i className='bx bxs-check-circle' ></i> : <i className='bx bxs-check-circle' style={{opacity: '.2'}}></i>}
+            </div>
+        </motion.div>
+
+        {/* ----------- step three ----------- */}
+
+        <motion.div initial={{ opacity: 0, y: 10 }} 
+                    whileInView={{ opacity: 1, y: 0}} 
+                    transition={{ duration: .3, delay: .7 }} 
+                    viewport={{ once: true }}
+                    className="add-tree-island">
+          <h1 className="add-tree-header">
+            <p>3. Name Your Tree</p>
+          </h1>
+
+          <div className="add-tree-action">
+            <div className="add-tree-input">
+              <input type='text' placeholder='Enter Nickname' onChange={(e) => {setPetName(e.target.value)}}/>
+            </div>
+          </div>
+
+          <div className="add-tree-check">
+            {petName !== "" ? <i className='bx bxs-check-circle' ></i> : <i className='bx bxs-check-circle' style={{opacity: '.2'}}></i>}
+          </div>
+        </motion.div>
+
+        {/* ----------- submit button ----------- */}
+
+        <motion.div initial={{ opacity: 0, y: 10 }} 
+                    whileInView={{ opacity: 1, y: 0}} 
+                    transition={{ duration: .3, delay: .9 }} 
+                    viewport={{ once: true }}
+                    className="add-tree-btn">
+          <button type='submit'>Submit</button>
+        </motion.div>
+
       </form>
-    </motion.div>
-  </main>
+    </div>
   )
 }
