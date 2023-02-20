@@ -9,6 +9,7 @@ import { selectUser } from '../../slices/userSlice'
 export default function Feed() {
 
   const user = useSelector(selectUser)
+  console.log(user)
 
   const [posts, setPosts] = useState([])
   const [newPost, setNewPost] = useState(false)
@@ -23,9 +24,9 @@ export default function Feed() {
   })
   .then(r => r.json())
   .then(posts => {
-    let arrayOfFollowingIds = []
-    user.following.map(following => arrayOfFollowingIds.push(following.id))
-    let filteredPosts = posts.filter(post => (arrayOfFollowingIds.includes(post.user.id))||(post.user.id===user.id))
+    let arrayOfFriendIds = []
+    user.friendshipts.map(friend => arrayOfFriendIds.push(friend.id))
+    let filteredPosts = posts.filter(post => (arrayOfFriendIds.includes(post.user.id))||(post.user.id===user.id))
     console.log(filteredPosts)
     setPosts(filteredPosts.sort((a, b) => b.created_at - a.created_at))
   })
@@ -84,7 +85,7 @@ export default function Feed() {
         }) 
         : 
         <div className='no-post-message'>
-          <i class='bx bx-shocked'></i>
+          <i className='bx bx-shocked'></i>
           <p>You don't have any posts yet.</p>
         </div>}
       </motion.div>
