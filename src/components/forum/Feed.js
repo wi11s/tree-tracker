@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux'
 import { selectUser } from '../../slices/userSlice'
 
 
-export default function Home() {
+export default function Feed() {
 
   const user = useSelector(selectUser)
 
