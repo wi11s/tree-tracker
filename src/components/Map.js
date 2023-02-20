@@ -137,7 +137,32 @@ export default function Map({ treeTypes, trees }) {
               }
             })}
           </select>
-          {userPosition.lat ? null : <label>Loading Your Location...</label>}
+          {userPosition.lat ? null : (            
+            <div className="loading-content">
+              <i className='bx bxs-tree'></i>
+              <div className="bouncing-text">
+                  <div className="L">L</div>
+                  <div className="o">o</div>
+                  <div className="a">a</div>
+                  <div className="d">d</div>
+                  <div className="i">i</div>
+                  <div className="n">n</div>
+                  <div className="g">g</div>
+                  <div className="space"> </div>
+                  <div className="l">l</div>
+                  <div className="o2">o</div>
+                  <div className="c">c</div>
+                  <div className="a2">a</div>
+                  <div className="t">t</div>
+                  <div className="i2">i</div>
+                  <div className="o3">o</div>
+                  <div className="n2">n</div>
+                  <div className="dot1">.</div>
+                  <div className="dot2">.</div>
+                  <div className="dot3">.</div>
+              </div>
+            </div>
+          )}
         </div>
         <div className="feature">
           <div className={`map-container ${showInfo ? '' : 'map-container-full'}`}>

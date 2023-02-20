@@ -19,11 +19,13 @@ export default function AddTree({ user, treeTypes }) {
 
   const [allCommonNames, setAllCommonNames] = useState([])
   const [useCustomLocation, setUseCustomLocation] = useState(false)
+
   const [petName, setPetName] = useState('')
   const [newTree, setNewTree] = useState({})
   const [allowSubmit, setAllowSubmit] = useState(false)
   const [uploaded, setUploaded] = useState(false)
   const [fileName, setFileName] = useState('')
+
 
 
   const [latitude, setLatitude] = useState(null)
@@ -86,6 +88,7 @@ export default function AddTree({ user, treeTypes }) {
     let file = e.target.files[0];
     let reader = new FileReader();
     setFileName(file.name)
+
     // console.log('reader', reader)
     reader.onloadend = function() {
         idPost(reader.result.slice(23))
@@ -170,56 +173,6 @@ export default function AddTree({ user, treeTypes }) {
   }
 
   return (
-  // <main className='add-tree'>
-  //   <motion.div className='form-container' initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1, transition:{duration: .8}}}>
-  //     <div className='title'>ADD TREE</div>
-  //     <hr></hr>
-  //     <form onSubmit={e => handleSubmit(e, useCustomLocation)}>
-  //       <div className="details">
-  //         <div className="input-box">
-  //           <div className="check-box">
-  //             <span className='sub-head'>Use Current Location</span>
-  //             <input type='checkbox' onChange={handleCheckBox} checked={useCustomLocation}/>
-  //           </div>
-  //           {useCustomLocation ? 
-  //           null :
-  //           <>
-  //           <input type='text' className='inputStyle' placeholder='Latitude' onChange={handleLatChange}/>
-  //           <input type='text' className='inputStyle' placeholder='Longitude' onChange={handleLngChange}/>
-  //           </>}
-  //         </div>
-
-  //         <div className="upload-img">
-  //           <span className='sub-head'>Upload Image</span>
-  //           { userPosition.lat ? (<input type='file' onChange={(e) => encodeImageFileAsURL(e)}/>) : (<p>loading location</p>) }
-  //         </div>
-
-  //         <div className="upload-img">
-  //             <span className="sub-head">Add Nickname</span>
-  //             <input className='inputStyle' type='text' placeholder='Enter Nickname' onChange={(e) => {
-  //               console.log(e.target.value)
-  //               setPetName(e.target.value)
-  //             }}/>
-  //         </div>
-  //         { allowSubmit ? (
-  //           <p>{newTree['common_name']}</p>
-  //         ) : null }
-
-  //         {
-  //           uploaded ? (
-  //             allowSubmit ? (
-  //               userPosition.lat ? (
-  //                 <div className='submitBtn'>
-  //                   <input type="submit" value='Submit'/>
-  //                 </div>
-  //               ) : <h3>Please Wait...</h3>
-  //             ) : <h3>Loading image, please wait...</h3>
-  //           ) : <h3>Please upload image</h3>
-  //         }         
-  //       </div>
-  //     </form>
-  //   </motion.div>
-  // </main>
     <div className="add-tree-container">
       <form className='add-tree-form' onSubmit={e => handleSubmit(e, useCustomLocation)}>
 
@@ -243,6 +196,7 @@ export default function AddTree({ user, treeTypes }) {
             <div className="add-tree-custom-location" onClick={handleCheckBox}>
               <p>Custom Location</p>
             </div>
+
           </div>
 
           <div className="add-tree-check">

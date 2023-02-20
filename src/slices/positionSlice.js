@@ -11,13 +11,15 @@ export const positionSlice = createSlice({
             lat: 40.74, 
             lng: -73.90 
         },
-        zoom: 12
+        zoom: 12,
+        isInitial: true
     },
     reducers: {
         set: (state, action) => {
             state.userPosition = action.payload.userPosition
             state.center = action.payload.center
             state.zoom = action.payload.zoom
+            state.isInitial = action.payload.isInitial
         }
     }
 })
