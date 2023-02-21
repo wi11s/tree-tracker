@@ -227,7 +227,7 @@ export default function AddTree({ user, treeTypes }) {
 
         <motion.div initial={{ opacity: 0, y: 10 }} 
                     whileInView={{ opacity: 1, y: 0}} 
-                    transition={{ duration: .3, delay: .3 }} 
+                    transition={{ duration: .3, delay: 0 }} 
                     viewport={{ once: true }}
                     className="add-tree-island">
           <h1 className="add-tree-header">
@@ -274,7 +274,7 @@ export default function AddTree({ user, treeTypes }) {
 
         <motion.div initial={{ opacity: 0, y: 10 }} 
                     whileInView={{ opacity: 1, y: 0}} 
-                    transition={{ duration: .3, delay: .5 }} 
+                    transition={{ duration: .3, delay: .3 }} 
                     viewport={{ once: true }}
                     className="add-tree-island">
           <h1 className="add-tree-header">
@@ -302,7 +302,7 @@ export default function AddTree({ user, treeTypes }) {
 
         <motion.div initial={{ opacity: 0, y: 10 }} 
                     whileInView={{ opacity: 1, y: 0}} 
-                    transition={{ duration: .3, delay: .7 }} 
+                    transition={{ duration: .3, delay: .5 }} 
                     viewport={{ once: true }}
                     className="add-tree-island">
           <h1 className="add-tree-header">
