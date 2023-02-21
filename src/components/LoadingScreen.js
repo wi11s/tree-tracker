@@ -5,17 +5,17 @@ export default function LoadingScreen() {
         <div className="loading-container">
             <div className="loading-content">
                 <i className='bx bxs-tree'></i>
-                <div class="bouncing-text">
-                    <div class="L">L</div>
-                    <div class="o">o</div>
-                    <div class="a">a</div>
-                    <div class="d">d</div>
-                    <div class="i">i</div>
-                    <div class="n">n</div>
-                    <div class="g">g</div>
-                    <div class="dot1">.</div>
-                    <div class="dot2">.</div>
-                    <div class="dot3">.</div>
+                <div className="bouncing-text">
+                    <div className="L">L</div>
+                    <div className="o">o</div>
+                    <div className="a">a</div>
+                    <div className="d">d</div>
+                    <div className="i">i</div>
+                    <div className="n">n</div>
+                    <div className="g">g</div>
+                    <div className="dot1">.</div>
+                    <div className="dot2">.</div>
+                    <div className="dot3">.</div>
                 </div>
             </div>
         </div>

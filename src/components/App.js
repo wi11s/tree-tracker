@@ -38,6 +38,7 @@ function App() {
     })
   }, [])
 
+
   const user = useSelector(selectUser)
   const dispatch = useDispatch()
 
@@ -160,9 +161,6 @@ function App() {
   // if (user.id === null) {
   //   return (<div className="login"><Login/></div>);
   // }
-
-  console.log(treeTypes)
-  console.log(user)
 
   return (
     <div className="App">
