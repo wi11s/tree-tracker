@@ -26,15 +26,11 @@ export default function AddTree({ user, treeTypes }) {
   const [uploaded, setUploaded] = useState(false)
   const [fileName, setFileName] = useState('')
 
-
-
-  const [latitude, setLatitude] = useState(null)
-  const [longitude, setLongitude] = useState(null)
-
   function handleCheckBox() {
     setUseCustomLocation(!useCustomLocation)
   }
 
+  // change to dispatch
   function handleLatChange(e) {
     setLatitude(e.target.value)
   }
