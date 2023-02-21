@@ -32,10 +32,10 @@ export default function AddTree({ user, treeTypes }) {
 
   // change to dispatch
   function handleLatChange(e) {
-    setLatitude(e.target.value)
+    // setLatitude(e.target.value)
   }
   function handleLngChange(e) {
-    setLongitude(e.target.value)
+    // setLongitude(e.target.value)
   }
 
   function idPost(base64files) {
@@ -98,7 +98,7 @@ export default function AddTree({ user, treeTypes }) {
     console.log(petName)
 
     if (newTree['common_name']) {    
-      fetch('user_trees', {
+      fetch('https://tree-tracker-backend.herokuapp.com/user_trees', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -142,7 +142,7 @@ export default function AddTree({ user, treeTypes }) {
 
           if (allCommonNamesString.toLowerCase().replace(/\s+/g, '').includes(treeTypes[x]['common_name'].toLowerCase().replace(/\s+/g, ''))) {
             // console.log(treeTypes[x].id, 'about to post jointype')
-            fetch('/join_types', {
+            fetch('https://tree-tracker-backend.herokuapp.com/join_types', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',

@@ -51,7 +51,7 @@ function App() {
   // set user
 
   useEffect(() => {
-    fetch("/me", {
+    fetch("https://tree-tracker-backend.herokuapp.com/me", {
       method: "GET",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("jwt")}`,
@@ -113,7 +113,7 @@ function App() {
   // set tree types
 
   useEffect(() => {
-    fetch(`/tree_types`, {
+    fetch(`https://tree-tracker-backend.herokuapp.com/tree_types`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${localStorage.getItem("jwt")}`
@@ -141,7 +141,7 @@ function App() {
 
   useEffect(() => {
     if (user && user.id) {
-      fetch(`/users/${user.id}`, {
+      fetch(`https://tree-tracker-backend.herokuapp.com/users/${user.id}`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${localStorage.getItem("jwt")}`

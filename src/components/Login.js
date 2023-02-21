@@ -19,7 +19,7 @@ export default function Login() {
 
     function handleSubmit(e) {
         e.preventDefault()
-        fetch('/auth/login', {
+        fetch('https://tree-tracker-backend.herokuapp.com/auth/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ 
@@ -45,7 +45,7 @@ export default function Login() {
 
       function handleSignupSubmit(e) {
         e.preventDefault()
-        fetch('/users', {
+        fetch('https://tree-tracker-backend.herokuapp.com/users', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
