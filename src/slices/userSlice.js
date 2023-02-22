@@ -11,7 +11,8 @@ export const userSlice = createSlice({
         tree_types: [],
         user_trees: [],
         requests: [],
-        username: null
+        username: null,
+        score: 0
     },
     reducers: {
         set: (state, action) => {
@@ -24,6 +25,7 @@ export const userSlice = createSlice({
             state.user_trees = action.payload.user_trees
             state.requests = action.payload.requests
             state.username = action.payload.username
+            state.score = action.payload.score
         }
     }
 })

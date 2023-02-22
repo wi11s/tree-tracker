@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { useDispatch } from 'react-redux'
 import { set } from '../slices/userSlice'
 
-export default function Login() {
+export default function Login({setIslogin}) {
     const dispatch = useDispatch()
 
     const [username, setUsername] = useState('')
@@ -34,6 +34,7 @@ export default function Login() {
             localStorage.setItem("jwt", data.token);
             console.log(data)
             dispatch(set(data))
+            setIslogin(false)
             // setUser(data);
             navigate('/')
           } else {
@@ -61,6 +62,7 @@ export default function Login() {
           if (data.user) {
             localStorage.setItem("jwt", data.token);
             dispatch(set(data))
+            setIslogin(false)
             // setUser(data);
             navigate('/')
           } else {
@@ -70,10 +72,11 @@ export default function Login() {
       }
 
   return (
-    <div>
+    <div className='login-container'>
+      <i className='bx bx-x' onClick={() => setIslogin(false)}></i>
         {showSignup ? (
-          <main className='add-tree'>
-            <motion.div className='form-container' initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1, transition:{duration: .8}}}>
+          <main className='add-tree login'>
+            <motion.div className='form-container login-form' initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1, transition:{duration: .8}}}>
               <div className='title'>LOG IN</div>
               <hr></hr>
               <form onSubmit={handleSubmit}>
@@ -92,8 +95,8 @@ export default function Login() {
             </motion.div>
           </main>
         ) : (
-          <main className='add-tree'>
-            <motion.div className='form-container' initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1, transition:{duration: .8}}}>
+          <main className='add-tree login'>
+            <motion.div className='form-container login-form' initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1, transition:{duration: .8}}}>
               <div className='title'>SIGN UP</div>
               <hr></hr>
               <form onSubmit={handleSignupSubmit}>
@@ -118,6 +121,7 @@ export default function Login() {
             </motion.div>
           </main>
         )}
+        
     </div>
   )
 }
