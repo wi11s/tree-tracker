@@ -124,7 +124,6 @@ export default function AddTree({ user, treeTypes }) {
           console.log(info)
 
           let newUserTrees = [...userTrees, obj]
-          console.log('HERERERE', newUserTrees)
           dispatch(setUserTrees(newUserTrees))
 
           navigate('/map')  
@@ -157,6 +156,47 @@ export default function AddTree({ user, treeTypes }) {
             .then(response => response.json())
             .then((obj) => {
               console.log(obj)
+              const rarity = {
+                verycommon: {
+                    color: '#bdbbbb',
+                    point: 20,
+                },
+                common: {
+                    color: '#3bad4c',
+                    point: 40,
+                },
+                uncommon: {
+                    color: '#1cc7e6',
+                    point: 60,
+                },
+                rare: {
+                    color: '#743bad',
+                    point: 80,
+                },
+                veryrare: {
+                    color: '#e67d1c',
+                    point: 100,
+                }
+              }
+          
+
+              console.log(treeTypes[x].frequency.replace(/\s+/g, ''))
+              fetch(`/users/score/${user.id}`, {
+                method: 'PATCH',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: `Bearer ${localStorage.jwt}`
+                },
+                body: JSON.stringify({
+                  score: rarity[treeTypes[x].frequency.replace(/\s+/g, '')].point
+                })
+              })
+              .then(response => response.json())
+              .then((obj) => {
+                console.log(obj)
+                // dispatch(setUser(obj))
+              })
+              
             })
             break
           }
@@ -176,7 +216,7 @@ export default function AddTree({ user, treeTypes }) {
 
         <motion.div initial={{ opacity: 0, y: 10 }} 
                     whileInView={{ opacity: 1, y: 0}} 
-                    transition={{ duration: .3, delay: .3 }} 
+                    transition={{ duration: .3, delay: 0 }} 
                     viewport={{ once: true }}
                     className="add-tree-island">
           <h1 className="add-tree-header">
@@ -224,7 +264,7 @@ export default function AddTree({ user, treeTypes }) {
 
         <motion.div initial={{ opacity: 0, y: 10 }} 
                     whileInView={{ opacity: 1, y: 0}} 
-                    transition={{ duration: .3, delay: .5 }} 
+                    transition={{ duration: .3, delay: .3 }} 
                     viewport={{ once: true }}
                     className="add-tree-island">
           <h1 className="add-tree-header">
@@ -232,7 +272,7 @@ export default function AddTree({ user, treeTypes }) {
           </h1>
 
           <div className="add-tree-action">
-            <label class="custom-file-upload">
+            <label className="custom-file-upload">
                 <input type="file" onChange={(e) => encodeImageFileAsURL(e)} />
                 <i className='bx bx-plus' ></i> 
                 <p>Choose File</p>    
@@ -252,7 +292,7 @@ export default function AddTree({ user, treeTypes }) {
 
         <motion.div initial={{ opacity: 0, y: 10 }} 
                     whileInView={{ opacity: 1, y: 0}} 
-                    transition={{ duration: .3, delay: .7 }} 
+                    transition={{ duration: .3, delay: .5 }} 
                     viewport={{ once: true }}
                     className="add-tree-island">
           <h1 className="add-tree-header">

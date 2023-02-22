@@ -48,7 +48,19 @@ function App() {
   const [trees, setTrees] = useState([])
   const [treeTypes, setTreeTypes] = useState([])
 
+  const [isLogin, setIslogin] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // console.log(isLoggedIn)
+
   // set user
+
+  useEffect(() => {
+    if (user && user.id) {
+      setIsLoggedIn(true)
+    } else {
+      setIsLoggedIn(false)
+    }
+  }, [user])
 
   useEffect(() => {
     fetch("https://tree-tracker-backend.herokuapp.com/me", {
@@ -156,22 +168,32 @@ function App() {
     }
   }, [user])
   // check to see if user is logged in
-  if (user.id === null) {
-    return (<div className="login"><Login/></div>);
-  }
+  // if (user.id === null) {
+  //   return (<div className="login"><Login/></div>);
+  // }
+
+  // console.log(user)
 
   return (
     <div className="App">
-      <Header/>
+      <Header user={user} setIslogin={setIslogin} isLoggedIn={isLoggedIn}/>
+      {isLogin ? <Login setIslogin={setIslogin} /> : null}
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="map" element={<Map treeTypes={treeTypes} trees={trees} />} />
-        <Route path="addtree" element={<AddTree user={user} treeTypes={treeTypes} />} />
-        <Route path="profile" element={<Profile treeTypes={treeTypes} userTrees={userTrees} user={user} />} />
-        <Route path="*" element={<Error />} /> 
-        <Route path="login" element={<Login />} />
-        <Route path="feed" element={<Feed/>} />
-        <Route path="search" element={<Search user={user}/>} />
+        {isLoggedIn ?
+        <>
+          <Route path="map" element={<Map treeTypes={treeTypes} trees={trees} />} />
+          <Route path="addtree" element={<AddTree user={user} treeTypes={treeTypes} />} />
+          <Route path="profile" element={<Profile treeTypes={treeTypes} userTrees={userTrees} user={user}/>} />
+          <Route path="*" element={<Error />} /> 
+          <Route path="login" element={<Login />} />
+          <Route path="feed" element={<Feed/>} />
+          <Route path="search" element={<Search user={user}/>} /> 
+        </>
+          :
+          null
+        }
+        
       </Routes>
       {/* <Footer /> */}
     </div>
