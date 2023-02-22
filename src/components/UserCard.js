@@ -14,6 +14,8 @@ export default function UserCard({displayUser, user}) {
         }
 
     }, [user])
+    
+    console.log(user)
 
     function handleFriendRequest(id) {
         fetch('/requests', {
