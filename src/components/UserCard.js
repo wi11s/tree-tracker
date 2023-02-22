@@ -16,7 +16,7 @@ export default function UserCard({displayUser, user}) {
     }, [user])
 
     function handleFriendRequest(id) {
-        fetch('/requests', {
+        fetch('https://tree-tracker-backend.herokuapp.com/requests', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

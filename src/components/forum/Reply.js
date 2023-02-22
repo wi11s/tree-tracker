@@ -19,7 +19,7 @@ export default function Reply({reply, user, postId, setReplies, replies, setPare
 
     function handleExpand() {
       if (!expand) {
-        fetch(`/replies/${reply.id}`, {
+        fetch(`https://tree-tracker-backend.herokuapp.com/replies/${reply.id}`, {
           method: 'GET',
           headers: {
               Authorization: `Bearer ${localStorage.getItem('jwt')}`
@@ -37,7 +37,7 @@ export default function Reply({reply, user, postId, setReplies, replies, setPare
     }
 
     useEffect(() => {
-      fetch(`/replies/${reply.id}`, {
+      fetch(`https://tree-tracker-backend.herokuapp.com/replies/${reply.id}`, {
         method: 'GET',
         headers: {
             Authorization: `Bearer ${localStorage.getItem('jwt')}`
@@ -51,7 +51,7 @@ export default function Reply({reply, user, postId, setReplies, replies, setPare
     }, [])
 
     useEffect(() => {
-        fetch(`/like/reply/${user.id}/${reply.id}`, {
+        fetch(`https://tree-tracker-backend.herokuapp.com/like/reply/${user.id}/${reply.id}`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${localStorage.getItem("jwt")}`
@@ -68,7 +68,7 @@ export default function Reply({reply, user, postId, setReplies, replies, setPare
 
     function handleClick() {
         if (liked === false) {
-            fetch('likes', {
+            fetch('https://tree-tracker-backend.herokuapp.com/likes', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -87,7 +87,7 @@ export default function Reply({reply, user, postId, setReplies, replies, setPare
               setLikes(newLikes)
             })
           } else
-            fetch(`/like/reply/${user.id}/${reply.id}`, {
+            fetch(`https://tree-tracker-backend.herokuapp.com/like/reply/${user.id}/${reply.id}`, {
               method: 'DELETE',
               headers: {
                 'Authorization': `Bearer ${localStorage.getItem('jwt')}`
@@ -110,7 +110,7 @@ export default function Reply({reply, user, postId, setReplies, replies, setPare
 
     function handleReplySubmit(e) {
       e.preventDefault()
-      fetch('/replies', {
+      fetch('https://tree-tracker-backend.herokuapp.com/replies', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -125,7 +125,7 @@ export default function Reply({reply, user, postId, setReplies, replies, setPare
       .then(r => r.json())
       .then(data => {
         console.log(reply.id, data.id)
-        fetch('/join_replies', {
+        fetch('https://tree-tracker-backend.herokuapp.com/join_replies', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -142,7 +142,7 @@ export default function Reply({reply, user, postId, setReplies, replies, setPare
           if (data.id) {
             setReplyCount(replyCount => replyCount + 1)
             setContent('')
-            fetch(`/replies/${reply.id}`, {
+            fetch(`https://tree-tracker-backend.herokuapp.com/replies/${reply.id}`, {
               method: 'GET',
               headers: {
                   Authorization: `Bearer ${localStorage.getItem('jwt')}`
@@ -167,7 +167,7 @@ export default function Reply({reply, user, postId, setReplies, replies, setPare
     }
 
     function handleDelete() {
-      fetch(`/replies/${reply.id}`, {
+      fetch(`https://tree-tracker-backend.herokuapp.com/replies/${reply.id}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${localStorage.getItem('jwt')}`

@@ -7,7 +7,7 @@ export default function FriendRequests({user, requests, setRequests}) {
     const dispatch = useDispatch()
 
     function handleAccept(request) {
-        fetch("/friends", {
+        fetch("https://tree-tracker-backend.herokuapp.com/friends", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -23,7 +23,7 @@ export default function FriendRequests({user, requests, setRequests}) {
             // console.log(obj)
         })
         .then(() => {
-            fetch("/friends", {
+            fetch("https://tree-tracker-backend.herokuapp.com/friends", {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json',
@@ -51,7 +51,7 @@ export default function FriendRequests({user, requests, setRequests}) {
                 dispatch(set({friendships: newFriendships}))
             })
             .then(() => {
-                fetch(`/requests/${user.id}/${request.id}`, {
+                fetch(`https://tree-tracker-backend.herokuapp.com/requests/${user.id}/${request.id}`, {
                     method: "DELETE",
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem("jwt")}`
@@ -63,7 +63,7 @@ export default function FriendRequests({user, requests, setRequests}) {
     }
 
     function handleDecline(request) {
-        fetch(`/requests/${user.id}/${request.id}`, {
+        fetch(`https://tree-tracker-backend.herokuapp.com/requests/${user.id}/${request.id}`, {
             method: "DELETE",
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("jwt")}`

@@ -22,7 +22,7 @@ export default function Post({post, setPosts, posts}) {
   const navigate = useNavigate()
 
   useEffect(() => {
-    fetch(`/like/${user.id}/${post.id}`, {
+    fetch(`https://tree-tracker-backend.herokuapp.com/like/${user.id}/${post.id}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("jwt")}`
@@ -39,7 +39,7 @@ export default function Post({post, setPosts, posts}) {
 
   function handleClick() {
     if (liked === false) {
-      fetch('likes', {
+      fetch('https://tree-tracker-backend.herokuapp.com/likes', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -58,7 +58,7 @@ export default function Post({post, setPosts, posts}) {
         setLikes(newLikes)
       })
     } else
-      fetch(`/like/${user.id}/${post.id}`, {
+      fetch(`https://tree-tracker-backend.herokuapp.com/like/${user.id}/${post.id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('jwt')}`
@@ -86,7 +86,7 @@ export default function Post({post, setPosts, posts}) {
 
   function handleReplySubmit(e) {
     e.preventDefault()
-    fetch('/replies', {
+    fetch('https://tree-tracker-backend.herokuapp.com/replies', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -117,7 +117,7 @@ export default function Post({post, setPosts, posts}) {
   }
 
   function handleDelete() {
-    fetch(`/posts/${post.id}`, {
+    fetch(`https://tree-tracker-backend.herokuapp.com/posts/${post.id}`, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${localStorage.getItem('jwt')}`
