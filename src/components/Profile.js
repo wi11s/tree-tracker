@@ -87,14 +87,14 @@ export default function ({ treeTypes, userTrees, user }) {
   console.log(user.score)
   return (
     <div className="profile" id='top'>
-        <button onClick={() => setShowRequests(!showRequests)}>show friend requests</button>
+        {/* <button onClick={() => setShowRequests(!showRequests)}>show friend requests</button>
         { showRequests ? (
           <FriendRequests user={user} requests={requests} setRequests={setRequests}/>
         ) : null }
         <button onClick={() => setShowFriends(!showFriends)}>friends</button>
         { showFriends ? (
           <Friends user={user}/>
-        ) : null }
+        ) : null } */}
       <div className="profile-container">
         <div className="user-profile-container">
           <div className="user-info-island">
