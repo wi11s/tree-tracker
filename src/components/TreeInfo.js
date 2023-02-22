@@ -3,6 +3,8 @@ import React, {useState} from 'react'
 import {motion} from 'framer-motion'
 
 export default function TreeInfo({info, handleClick, treeTypes}) {
+  console.log(info.wiki)
+
   const imageExists = info.image !== undefined
   const [description, setDescription] = useState('');
   const [wikiLink, setWikiLink] = useState('')
@@ -19,6 +21,8 @@ export default function TreeInfo({info, handleClick, treeTypes}) {
         page = await wiki.page('Fraxinus');
       } else if (info['spc_common']==="black oak") {
         page = await wiki.page('Quercus velutina');
+      } else if (info.userAdded) {
+        page = await wiki.page(info.wiki.slice(30));
       } else {
         page = await wiki.page(info['spc_common']);
       }

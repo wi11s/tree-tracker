@@ -183,7 +183,7 @@ function App() {
         {isLoggedIn ?
         <>
           <Route path="map" element={<Map treeTypes={treeTypes} trees={trees} />} />
-          <Route path="addtree" element={<AddTree user={user} treeTypes={treeTypes} />} />
+          <Route path="addtree" element={<AddTree user={user} treeTypes={treeTypes} setTreeTypes={setTreeTypes}/>} />
           <Route path="profile" element={<Profile treeTypes={treeTypes} userTrees={userTrees} user={user}/>} />
           <Route path="*" element={<Error />} /> 
           <Route path="login" element={<Login />} />

@@ -3,11 +3,13 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom'
 
 import { useSelector, useDispatch } from 'react-redux'
+import { set } from '../slices/userSlice'
 import { set as setPosition, selectPosition } from '../slices/positionSlice'
 import { set as setInfo, setShowInfo, selectInfo } from '../slices/infoSlice'
 import { set as setUserTrees, selectUserTrees } from '../slices/userTreesSlice'
+// import { set as setTreeTypes, selectTreeTypes } from '../slices/treeTypesSlice'
 
-export default function AddTree({ user, treeTypes }) {
+export default function AddTree({ user, treeTypes, setTreeTypes }) {
   const navigate = useNavigate()
 
   const pos = useSelector(selectPosition)
@@ -137,7 +139,7 @@ export default function AddTree({ user, treeTypes }) {
         let allCommonNamesString = allCommonNames.join()
 
         for (let x = 0; x < treeTypes.length; x++) {
-          // console.log(allCommonNamesString.toLowerCase(), treeTypes[x]['common_name'].toLowerCase())
+          console.log(allCommonNamesString.toLowerCase(), treeTypes[x]['common_name'].toLowerCase())
 
           if (allCommonNamesString.toLowerCase().replace(/\s+/g, '').includes(treeTypes[x]['common_name'].toLowerCase().replace(/\s+/g, ''))) {
             // console.log(treeTypes[x].id, 'about to post jointype')
@@ -156,6 +158,8 @@ export default function AddTree({ user, treeTypes }) {
             .then(response => response.json())
             .then((obj) => {
               console.log(obj)
+              setTreeTypes(obj)
+
               const rarity = {
                 verycommon: {
                     color: '#bdbbbb',
@@ -194,7 +198,7 @@ export default function AddTree({ user, treeTypes }) {
               .then(response => response.json())
               .then((obj) => {
                 console.log(obj)
-                // dispatch(setUser(obj))
+                dispatch(set(obj))
               })
               
             })

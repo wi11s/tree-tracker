@@ -27,7 +27,7 @@ export default function Feed() {
     let arrayOfFriendIds = []
     user.friendships.map(friend => arrayOfFriendIds.push(friend.id))
     let filteredPosts = posts.filter(post => (arrayOfFriendIds.includes(post.user.id))||(post.user.id===user.id))
-    console.log(filteredPosts)
+    // console.log(filteredPosts)
     setPosts(filteredPosts.sort((a, b) => b.created_at - a.created_at))
   })
   }, [user])
