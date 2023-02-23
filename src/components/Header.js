@@ -2,7 +2,7 @@ import React from 'react';
 import logo from '../images/logo.png'
 import { NavLink } from 'react-router-dom';
 
-function Header({user, setIslogin, isLoggedIn }) {
+function Header({user, setIslogin, isLoggedIn, setIsFriendList }) {
     return(
         <header className='header'>
             <nav className='nav'>
@@ -35,9 +35,9 @@ function Header({user, setIslogin, isLoggedIn }) {
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink to='/search' end className='link' style={({ isActive }) => ({borderBottom: isActive? '1.5px solid #3d4637' : null, paddingBottom: isActive ? "5px" : null})}>
-                        Search
-                        </NavLink>
+                        <div className='link' onClick={() => setIsFriendList(true)}>
+                        Friends
+                        </div>
                     </li>
                 </ul>
                 : 

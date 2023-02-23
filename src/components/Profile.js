@@ -21,38 +21,6 @@ export default function ({ treeTypes, userTrees, user }) {
   useEffect(() => {
     setRequests(user.requests)
   }, [user])
-  
-  const rarity = {
-    verycommon: {
-        color: '#bdbbbb',
-        point: 20,
-    },
-    common: {
-        color: '#3bad4c',
-        point: 40,
-    },
-    uncommon: {
-        color: '#1cc7e6',
-        point: 60,
-    },
-    rare: {
-        color: '#743bad',
-        point: 80,
-    },
-    veryrare: {
-        color: '#e67d1c',
-        point: 100,
-    }
-  }
-
-  // function userScore(userTypes) {
-  //     let total = 0;
-  //     userTypes.forEach(tree => {
-  //       total += rarity[tree.frequency.replace(/ +/g, "")].point;
-  //     })
-  //     return total;
-  // }
-
 
   function handleClick() {
     navigate('/')
@@ -72,17 +40,11 @@ export default function ({ treeTypes, userTrees, user }) {
     dispatch(set(nullUser));
   }
   
-  function sortTreeTypes(arr) {
-    arr.forEach(a => {
-      a.order = rarity[a.frequency.replace(/ +/g, "")].point
-    })
-    
-    const newArr = arr.sort((a, b) => {
-      return a.order - b.order
-    })
-
-    return newArr;
-  }
+  
+   const sortedTreeTypes = treeTypes.sort((a, b) => {
+      const rarityOrder = {verycommon: 0, common: 1, uncommon: 2, rare: 3, veryrare: 4}
+      return rarityOrder[a.frequency.replace(/ +/g, "")] - rarityOrder[b.frequency.replace(/ +/g, "")]
+  })
 
   console.log(user.score)
   return (
@@ -96,7 +58,11 @@ export default function ({ treeTypes, userTrees, user }) {
           <Friends user={user}/>
         ) : null } */}
       <div className="profile-container">
-        <div className="user-profile-container">
+        <motion.div initial={{ opacity: 0, y: 10 }} 
+                    whileInView={{ opacity: 1, y: 0}} 
+                    transition={{ duration: .3, delay: 0 }} 
+                    viewport={{ once: true }}
+                    className="user-profile-container">
           <div className="user-info-island">
             <div className="user-info">
               <div className="profile-header">
@@ -118,9 +84,13 @@ export default function ({ treeTypes, userTrees, user }) {
               <p>Score</p>
               <h3>{user.score || 0}</h3>
           </div>
-        </div>
+        </motion.div>
 
-        <div className="progress-container">
+        <motion.div initial={{ opacity: 0, y: 10 }} 
+                    whileInView={{ opacity: 1, y: 0}} 
+                    transition={{ duration: .3, delay: 0.3 }} 
+                    viewport={{ once: true }}
+                    className="progress-container">
             <div className="progress-header">
               <h1>PROGRESS</h1>
               <div className="progress-count">
@@ -131,8 +101,8 @@ export default function ({ treeTypes, userTrees, user }) {
             <div className="tree-card-container">
               {treeTypes.length !== 0 
               ? 
-              (sortTreeTypes(treeTypes).map(tree => {
-                  return <TreeCard key={tree['common_name']} tree={tree} rarity={rarity} />
+              (sortedTreeTypes.map(tree => {
+                  return <TreeCard key={tree['common_name']} tree={tree} />
               }))
               : 
               null
@@ -144,7 +114,7 @@ export default function ({ treeTypes, userTrees, user }) {
                 <p>Back To Top</p>
               </a>
             </div>
-        </div>
+        </motion.div>
         
       </div>
     </div>

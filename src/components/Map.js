@@ -118,7 +118,11 @@ export default function Map({ treeTypes, trees }) {
 
   return (
     <main className="map">
-      <motion.div className='container' initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1, transition:{duration: .8}}}>
+      <motion.div initial={{ opacity: 0, y: 10 }} 
+                  whileInView={{ opacity: 1, y: 0}} 
+                  transition={{ duration: .3, delay: 0 }} 
+                  viewport={{ once: true }}
+                  className='container'>
         <h1>EXPLORE MAP</h1>
         <div className="select-container">
           <label>Filter Trees</label>

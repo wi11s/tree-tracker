@@ -77,27 +77,26 @@ export default function FriendRequests({user, requests, setRequests}) {
     }
 
   return (
-    <div className='friend-requests'>
-        {
-            user.requests && (user.requests.length > 0) ? (
-                <div>
-                {requests.map(request => {
-                    console.log(request.username)
-                    return (
-                        <div className='friend-request-container'>
-                        <div className='friend-request-info'>
-                            <h3>{request.username}</h3>
+    <div className='friends-container request-container'>
+        { user.requests && (user.requests.length > 0) ? (
+            <>
+            {requests.map(request => {
+                console.log(request.username)
+                return (
+                    <div className='friend-card request-friend-card'>
+                            <div className="friend-card-info">
+                            <p>{request.name.toUpperCase()}</p>
+                            <i>{request.username}</i>
                         </div>
                         <div className='friend-request-buttons'>
-                            <button className='accept' onClick={() => handleAccept(request)}>Accept</button>
-                            <button className='decline' onClick={() => handleDecline(request)}>Decline</button>
+                            <i className='bx bx-check' onClick={() => handleAccept(request)}></i>
+                            <i class='bx bx-x' onClick={() => handleDecline(request)}></i>
                         </div>
-                        </div>
-                    )
-                })}
-                </div>
-            ) : null
-        }
+                    </div>
+                )
+            })}
+            </>
+        ) : <i className="friend-list-message">No requests</i> }
     </div>
   )
 }
