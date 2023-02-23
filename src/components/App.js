@@ -50,7 +50,7 @@ function App() {
   const [treeTypes, setTreeTypes] = useState([])
 
   const [isLogin, setIslogin] = useState(false);
-  const [isFriendList, setIsFriendList] = useState(true);
+  const [isFriendList, setIsFriendList] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   // console.log(isLoggedIn)
 
@@ -178,9 +178,9 @@ function App() {
 
   return (
     <div className="App">
-      <Header user={user} setIslogin={setIslogin} isLoggedIn={isLoggedIn}/>
+      <Header user={user} setIslogin={setIslogin} isLoggedIn={isLoggedIn} setIsFriendList={setIsFriendList}/>
       {isLogin ? <Login setIslogin={setIslogin} /> : null}
-      {isFriendList ? <FriendList user={user}/> : null}
+      {isFriendList && user.id !== null ? <FriendList user={user} isFriendList={isFriendList} setIsFriendList={setIsFriendList}/> : null}
       <Routes>
         <Route path="/" element={<Home />} />
         {isLoggedIn ?
