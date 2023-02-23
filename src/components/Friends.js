@@ -1,7 +1,11 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 
 export default function Friends({user}) {
-    const [friends, setFriends] = useState(user.friendships)
+    const [friends, setFriends] = useState([])
+
+    useEffect(() => {
+        setFriends(user.friendships)
+    }, [user.friendships])
     
   return (
     <div className='friends-container'>

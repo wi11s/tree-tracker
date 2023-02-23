@@ -1,6 +1,6 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
-import { set } from '../slices/userSlice'
+import { set, setFriendships, setRequests } from '../slices/userSlice'
 
 export default function FriendRequests({user, requests, setRequests}) {
     console.log(requests)
@@ -43,12 +43,24 @@ export default function FriendRequests({user, requests, setRequests}) {
                     return x.id !== request.id
                 })
                 console.log('newRequests')
-                setRequests(() => ['dd'])
-                dispatch(set({requests: newRequests}))
-
+                // setRequests(() => ['dd'])
                 let newFriendships = [...user.friendships, request]
                 // console.log(newFriendships)
-                dispatch(set({friendships: newFriendships}))
+
+                const newUser = {
+                    id: user.id,
+                    email: user.email,
+                    friendships: newFriendships,
+                    name: user.name,
+                    posts: user.posts,
+                    tree_types: user.tree_types,
+                    user_trees: user.user_trees,
+                    requests: newRequests,
+                    username: user.username,
+                    score: user.score
+                }
+
+                dispatch(set(newUser))
             })
             .then(() => {
                 fetch(`/requests/${user.id}/${request.id}`, {

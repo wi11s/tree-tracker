@@ -182,7 +182,7 @@ function App() {
       {isLogin ? <Login setIslogin={setIslogin} /> : null}
       {isFriendList && user.id !== null ? <FriendList user={user} isFriendList={isFriendList} setIsFriendList={setIsFriendList}/> : null}
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home isLoggedIn={isLoggedIn} setIslogin={setIslogin}/>} />
         {isLoggedIn ?
         <>
           <Route path="map" element={<Map treeTypes={treeTypes} trees={trees} />} />
