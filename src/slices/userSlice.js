@@ -26,12 +26,6 @@ export const userSlice = createSlice({
             state.requests = action.payload.requests
             state.username = action.payload.username
             state.score = action.payload.score
-        },
-        setFriendships: (state, action) => {
-            state.friendships = action.payload
-        },
-        setRequests: (state, action) => {
-            state.requests = action.payload
         }
     }
 })
