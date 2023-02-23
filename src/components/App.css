@@ -1222,7 +1222,6 @@ input[type="text"] {
     padding-top: 150px;
     padding-bottom: 100px;
     display: flex;
-    flex-direction: column;
     justify-content: center;
     width: 100vw;
     font-family: var(--main-font);
