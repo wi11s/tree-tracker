@@ -4,6 +4,7 @@ import TreeInfo from "./TreeInfo";
 import { useInRouterContext } from "react-router-dom";
 import { motion } from 'framer-motion';
 import LoadingScreen from "./LoadingScreen";
+import Footer from './Footer';
 
 import { useSelector, useDispatch } from 'react-redux'
 import { set as setPosition, selectPosition } from '../slices/positionSlice'
@@ -193,6 +194,8 @@ export default function Map({ treeTypes, trees }) {
         
         
       </motion.div>
+
+      <Footer />
     </main>
   )
 }

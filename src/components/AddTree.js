@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom'
+import Footer from './Footer';
 
 import { useSelector, useDispatch } from 'react-redux'
 import { set } from '../slices/userSlice'
@@ -325,6 +326,8 @@ export default function AddTree({ user, treeTypes, setTreeTypes }) {
         </motion.div>
 
       </form>
+
+      <Footer />
     </div>
   )
 }

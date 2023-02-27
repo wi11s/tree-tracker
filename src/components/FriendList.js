@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import FriendRequests from './FriendRequests';
 import Friends from './Friends';
 import UserCard from "./UserCard";
@@ -13,6 +13,7 @@ export default function FriendList({user, setIsFriendList, isFriendList}) {
     const [searchInput, setSearchInput] = useState('');
     const [isSearch, setIsSearch] = useState(true);
     const [isRequest, setIsRequest] = useState(false);
+    let friendsRef = useRef();
 
     useEffect(() => {
         if (user.id !== null) {
@@ -31,7 +32,20 @@ export default function FriendList({user, setIsFriendList, isFriendList}) {
         }
     }, [user])
 
+    useEffect(() => {
+        let handler = e => {
+            if(!friendsRef.current.contains(e.target)) {
+                setIsFriendList(false);
+            }
+        }
     
+        document.addEventListener('mousedown', handler);
+    
+        return () => {
+            document.removeEventListener('mousedown', handler);
+        }
+    })
+
     function handleChange(e) {
         setSearchInput(e.target.value)
 
@@ -67,11 +81,12 @@ export default function FriendList({user, setIsFriendList, isFriendList}) {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ ease: "easeOut", duration: .1 }}
                 exit={{ opacity: 0, x: 250 }}
+                ref={friendsRef}
                 className='friend-list'>
                     
-                <div className="friend-list-quit" onClick={() => setIsFriendList(false)}>
+                {/* <div className="friend-list-quit" onClick={() => setIsFriendList(false)}>
                     <i className='bx bx-x'></i>
-                </div>
+                </div> */}
                 
                 <div className="my-friends-section">
                     <div className="section-header">
@@ -109,6 +124,11 @@ export default function FriendList({user, setIsFriendList, isFriendList}) {
                         </div>
 
                         <div className="friend-list-switch" onClick={handleRequest}>
+                            {requests.length > 0 ? 
+                            <div className="request-notification">
+                                <p style={{fontSize: "10px"}}>{requests.length}</p>
+                            </div> 
+                            : null}
                             <p>Friend Requests</p>
                         </div>
                     </div>
