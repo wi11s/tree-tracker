@@ -3,7 +3,7 @@ import React, {useState} from 'react'
 import {motion} from 'framer-motion'
 
 export default function TreeInfo({info, handleClick, treeTypes}) {
-  console.log(info.wiki)
+  // console.log(info.wiki)
 
   const imageExists = info.image !== undefined
   const [description, setDescription] = useState('');

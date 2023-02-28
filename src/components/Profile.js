@@ -6,17 +6,13 @@ import { useSelector, useDispatch } from 'react-redux'
 import { set, selectUser } from '../slices/userSlice'
 
 import { NavLink } from 'react-router-dom';
-import FriendRequests from './FriendRequests';
-import Friends from './Friends';
 
 export default function ({ treeTypes, userTrees, user }) {
+  // console.log(user.tree_types.length)
   const navigate = useNavigate();
   const dispatch = useDispatch()
   
-  const [points, setPoints] = useState(0)
   const [requests, setRequests] = useState([])
-  const [showRequests, setShowRequests] = useState(false)
-  const [showFriends, setShowFriends] = useState(false)
 
   useEffect(() => {
     setRequests(user.requests)
@@ -46,17 +42,9 @@ export default function ({ treeTypes, userTrees, user }) {
       return rarityOrder[a.frequency.replace(/ +/g, "")] - rarityOrder[b.frequency.replace(/ +/g, "")]
   })
 
-  console.log(user.score)
+  // console.log(user.score)
   return (
     <div className="profile" id='top'>
-        {/* <button onClick={() => setShowRequests(!showRequests)}>show friend requests</button>
-        { showRequests ? (
-          <FriendRequests user={user} requests={requests} setRequests={setRequests}/>
-        ) : null }
-        <button onClick={() => setShowFriends(!showFriends)}>friends</button>
-        { showFriends ? (
-          <Friends user={user}/>
-        ) : null } */}
       <div className="profile-container">
         <motion.div initial={{ opacity: 0, y: 10 }} 
                     whileInView={{ opacity: 1, y: 0}} 
@@ -94,7 +82,7 @@ export default function ({ treeTypes, userTrees, user }) {
             <div className="progress-header">
               <h1>PROGRESS</h1>
               <div className="progress-count">
-                <p>{userTrees.length} / {treeTypes.length}</p>
+                <p>{user.tree_types.length} / {treeTypes.length}</p>
               </div>
             </div>
 

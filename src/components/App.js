@@ -174,7 +174,7 @@ function App() {
   //   return (<div className="login"><Login/></div>);
   // }
 
-  // console.log(user)
+  // console.log(treeTypes)
 
   return (
     <div className="App">

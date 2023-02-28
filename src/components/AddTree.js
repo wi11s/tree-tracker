@@ -59,17 +59,32 @@ export default function AddTree({ user, treeTypes, setTreeTypes }) {
       console.log('Success:', data);
       setAllowSubmit(true)
 
-      setNewTree({
-        common_name: data.suggestions[0]['plant_details']['common_names'][0],
-        scientific_name: data.suggestions[0]['plant_details']['scientific_name'],
-        wiki: data.suggestions[0]['plant_details'].url,
-        image: data.images[0].url,
-        lat: userPosition.lat,
-        lng: userPosition.lng,
-        health: '',
-        description: '',
-        user_id: user.id
-      })
+      if (data.suggestions[0]['plant_details']['common_names'][0] !== 'Nom cientific') {
+        setNewTree({
+          common_name: data.suggestions[0]['plant_details']['common_names'][0],
+          scientific_name: data.suggestions[0]['plant_details']['scientific_name'],
+          wiki: data.suggestions[0]['plant_details'].url,
+          image: data.images[0].url,
+          lat: userPosition.lat,
+          lng: userPosition.lng,
+          health: '',
+          description: '',
+          user_id: user.id
+        })
+      } else {
+        setNewTree({
+          common_name: data.suggestions[0]['plant_details']['common_names'][1],
+          scientific_name: data.suggestions[0]['plant_details']['scientific_name'],
+          wiki: data.suggestions[0]['plant_details'].url,
+          image: data.images[0].url,
+          lat: userPosition.lat,
+          lng: userPosition.lng,
+          health: '',
+          description: '',
+          user_id: user.id
+        })
+      }
+
 
       setAllCommonNames(data.suggestions[0]['plant_details']['common_names'])
       dispatch(setShowInfo(true))
@@ -139,7 +154,7 @@ export default function AddTree({ user, treeTypes, setTreeTypes }) {
         let allCommonNamesString = allCommonNames.join()
 
         for (let x = 0; x < treeTypes.length; x++) {
-          console.log(allCommonNamesString.toLowerCase(), treeTypes[x]['common_name'].toLowerCase())
+          // console.log(allCommonNamesString.toLowerCase(), treeTypes[x]['common_name'].toLowerCase())
 
           if (allCommonNamesString.toLowerCase().replace(/\s+/g, '').includes(treeTypes[x]['common_name'].toLowerCase().replace(/\s+/g, ''))) {
             // console.log(treeTypes[x].id, 'about to post jointype')
