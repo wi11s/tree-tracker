@@ -15,7 +15,9 @@ function Home({isLoggedIn, setIslogin}) {
         <main className='home'>
             <motion.div className='home-container' initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1, transition:{duration: .8}}} >
                 <h1>TREE TRACKER</h1>
-                <img src={banner} alt='banner' />
+                <div className='home-img-container'>
+                    <img src={banner} alt='banner' />
+                </div>
                 <p>
                 We got you started with one thousand trees (39 species). Identify these species yourself, and discover new ones. You take it from here. 
                 </p>

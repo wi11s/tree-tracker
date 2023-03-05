@@ -37,7 +37,6 @@ export default function UserCard({displayUser, user}) {
     }
 
   return (
-    <div className='friends-container add-padding'>
         <div className="friend-card suggest-friend-card">
             <div className="friend-card-info">
                 <p>{displayUser.name.toUpperCase()}</p>
@@ -48,7 +47,6 @@ export default function UserCard({displayUser, user}) {
                 requested ? <i>Request Sent</i> : (
                 <k className='bx bx-message-square-add' onClick={() => handleFriendRequest(displayUser.id)}></k> )
             ) : null }
-        </div>      
-    </div>
+        </div>    
   )
 }
