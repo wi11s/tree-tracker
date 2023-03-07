@@ -80,7 +80,7 @@ export default function ({ treeTypes, userTrees, user }) {
                     viewport={{ once: true }}
                     className="progress-container">
             <div className="progress-header">
-              <h1>PROGRESS</h1>
+              <h1>FIRST AWARD</h1>
               <div className="progress-count">
                 <p>{user.tree_types.length} / {treeTypes.length}</p>
               </div>

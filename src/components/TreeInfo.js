@@ -2,7 +2,7 @@ import { IDLE_NAVIGATION } from '@remix-run/router'
 import React, {useState} from 'react'
 import {motion} from 'framer-motion'
 
-export default function TreeInfo({info, handleClick, treeTypes}) {
+export default function TreeInfo({info, handleClick}) {
   // console.log(info.wiki)
 
   const imageExists = info.image !== undefined

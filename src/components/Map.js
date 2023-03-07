@@ -17,7 +17,7 @@ export default function Map({ treeTypes, trees }) {
   const zoom = pos.zoom
 
   const info = useSelector(selectInfo)
-  // console.log(info)
+  console.log(info)
   const showInfo = info.showInfo
   const userTrees = useSelector(selectUserTrees).userTrees
 
