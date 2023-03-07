@@ -2,6 +2,7 @@ import React from 'react';
 import banner from '../images/banner.png'
 import { motion } from 'framer-motion';
 import { NavLink } from 'react-router-dom';
+import Footer from './Footer';
 
 function Home({isLoggedIn, setIslogin}) {
     function handleExploreClick() {
@@ -19,7 +20,9 @@ function Home({isLoggedIn, setIslogin}) {
                 We got you started with one thousand trees (39 species). Identify these species yourself, and discover new ones. You take it from here. 
                 </p>
                 <NavLink to={isLoggedIn ? '/map' : '/'} end className='button' onClick={handleExploreClick}>Explore Map</NavLink>
-            </motion.div>           
+            </motion.div>     
+
+            <Footer />      
         </main>
     )
 }

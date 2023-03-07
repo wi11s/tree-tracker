@@ -6,13 +6,12 @@ import {Routes, Route } from "react-router-dom"
 
 import Home from './Home';
 import Header from './Header';
-import Footer from './Footer';
 import Map from './Map';
 import Error from './Error';
 import AddTree from './AddTree';
 import Profile from './Profile';
-import Login from './Login';
-import Feed from './forum/Feed.js'
+import Login from './login/Login';
+import Feed from './forum/Feed.js';
 import Search from './Search';
 import FriendList from './FriendList';
 
