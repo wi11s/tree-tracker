@@ -87,13 +87,14 @@ export default function FriendList({user, setIsFriendList, isFriendList}) {
                 {/* <div className="friend-list-quit" onClick={() => setIsFriendList(false)}>
                     <i className='bx bx-x'></i>
                 </div> */}
-                
-                <div className="my-friends-section">
-                    <div className="section-header">
-                        <p>Friends</p>
-                    </div>
 
-                    <Friends user={user}/>
+                {/* <div className="section-header">
+                    <p>Friends</p>
+                </div> */}
+                <div className="my-friends-section">
+                    <div className="friend-box-container">
+                        <Friends user={user}/>
+                    </div>
                 </div>
 
                 <div className="bottom">
@@ -102,20 +103,20 @@ export default function FriendList({user, setIsFriendList, isFriendList}) {
                         <>
                         <div className="search-friends-bar">
                             <i className='bx bx-search' ></i>
-                            <input type="text" placeholder="Search" className='search-bar' onChange={handleChange} value={searchInput}/>
+                            <input type="text" placeholder="Search by username" className='search-bar' onChange={handleChange} value={searchInput}/>
                         </div>
-
-                        {displayUsers !== null && searchInput !== '' ? displayUsers.map(displayUser => {
-                        return (
-                            <UserCard displayUser={displayUser} user={user} key={displayUser.id}/>
-                        )
-                        
-                        }) : <i className="friend-list-message">Search by username</i>}
+                        <div className="search-box-container">
+                            {displayUsers !== null && searchInput !== '' ? displayUsers.map(displayUser => {
+                            return (
+                                <UserCard displayUser={displayUser} user={user} key={displayUser.id}/>
+                            )
+                            }) : null}
+                        </div>
                         </>
                     : null
                     }
                     
-                    {isRequest ? <FriendRequests user={user} requests={requests} setRequests={setRequests}/> : null}
+                    {isRequest ? <div className="request-box-container"><FriendRequests user={user} requests={requests} setRequests={setRequests}/></div>: null}
                     </div>
 
                     <div className="friend-list-switch-container">

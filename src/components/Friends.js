@@ -18,7 +18,8 @@ export default function Friends({user}) {
                         </div>
                     )
                 })
-            ) : null }
+            ) : <i className="friend-list-message">No friends</i> }
+            
     </div>
   )
 }

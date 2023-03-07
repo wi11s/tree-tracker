@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState, useRef} from 'react'
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom'
 import Footer from './Footer';
@@ -28,6 +28,22 @@ export default function AddTree({ user, treeTypes, setTreeTypes }) {
   const [allowSubmit, setAllowSubmit] = useState(false)
   const [uploaded, setUploaded] = useState(false)
   const [fileName, setFileName] = useState('')
+
+  let locationRef = useRef();
+
+  useEffect(() => {
+    let handler = e => {
+        if(!locationRef.current.contains(e.target)) {
+            setUseCustomLocation(false);
+        }
+    }
+
+    document.addEventListener('mousedown', handler);
+
+    return () => {
+        document.removeEventListener('mousedown', handler);
+    }
+})
 
   function handleCheckBox() {
     setUseCustomLocation(!useCustomLocation)
@@ -249,8 +265,25 @@ export default function AddTree({ user, treeTypes, setTreeTypes }) {
               <p>Current Location</p>
             </div>
 
-            <div className="add-tree-custom-location" onClick={handleCheckBox}>
-              <p>Custom Location</p>
+            <div className="add-tree-custom-location" ref={locationRef}>
+              <p onClick={handleCheckBox}>Custom Location</p>
+              {useCustomLocation ? 
+              <div className="custom-location-container">
+                <div className="custom-input">
+                  <div className="custom-location">
+                    <p>Latitude:</p>
+                    <input type="text" placeholder='ex: 30.26' onChange={handleLatChange}/>
+                  </div>
+
+                  <div className="custom-location">
+                    <p>Longitude:</p>
+                    <input type="text" placeholder='ex: 50.33' onChange={handleLngChange}/>
+                  </div>
+                </div>
+              </div>
+              :
+              null
+              }
             </div>
 
           </div>
@@ -262,8 +295,8 @@ export default function AddTree({ user, treeTypes, setTreeTypes }) {
 
         {/* ----------- custome location ----------- */}
 
-        {useCustomLocation ? 
-          <div className="custom-location-container">
+        {/* {useCustomLocation ? 
+        <div className="custom-location-container">
           <div className="custom-input">
             <div className="custom-location">
               <p>Latitude:</p>
@@ -278,7 +311,7 @@ export default function AddTree({ user, treeTypes, setTreeTypes }) {
         </div>
         :
         null
-        }  
+        }   */}
 
         {/* ----------- step twp ----------- */}
 
@@ -341,8 +374,9 @@ export default function AddTree({ user, treeTypes, setTreeTypes }) {
         </motion.div>
 
       </form>
-
-      <Footer />
+        <div className='add-tree-footer'> 
+          <Footer /> 
+        </div>
     </div>
   )
 }

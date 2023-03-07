@@ -124,50 +124,52 @@ export default function Map({ treeTypes, trees }) {
                   transition={{ duration: .3, delay: 0 }} 
                   viewport={{ once: true }}
                   className='container'>
-        <h1>EXPLORE MAP</h1>
-        <div className="select-container">
-          <label>Filter Trees</label>
-          <select onChange={handleSelectChange} type='select'>
-            <option value='all'>ALL</option>
-            <option value='none'>NONE</option>
-            {treeTypes.map(tree => {
-              if (tree['common_name']) {
-                return (<option value={tree['common_name']} key={tree['common_name']}>{tree['common_name'].toLowerCase()}</option>)
-              }
-            })}
-            {userTreeOptions.map(tree => {
-              // console.log(tree['common_name'])
-              if (tree['common_name']) {
-                return (<option value={tree['common_name']} key={tree['common_name']}>{tree['common_name'].toLowerCase()}</option>)
-              }
-            })}
-          </select>
-          {userPosition.lat ? null : (            
-            <div className="loading-content">
-              <i className='bx bxs-tree'></i>
-              <div className="bouncing-text">
-                  <div className="L">L</div>
-                  <div className="o">o</div>
-                  <div className="a">a</div>
-                  <div className="d">d</div>
-                  <div className="i">i</div>
-                  <div className="n">n</div>
-                  <div className="g">g</div>
-                  <div className="space"> </div>
-                  <div className="l">l</div>
-                  <div className="o2">o</div>
-                  <div className="c">c</div>
-                  <div className="a2">a</div>
-                  <div className="t">t</div>
-                  <div className="i2">i</div>
-                  <div className="o3">o</div>
-                  <div className="n2">n</div>
-                  <div className="dot1">.</div>
-                  <div className="dot2">.</div>
-                  <div className="dot3">.</div>
+        <div className="map-header-container">
+          <h1>EXPLORE MAP</h1>
+          <div className="select-container">
+            <label>Filter Trees</label>
+            <select onChange={handleSelectChange} type='select'>
+              <option value='all'>ALL</option>
+              <option value='none'>NONE</option>
+              {treeTypes.map(tree => {
+                if (tree['common_name']) {
+                  return (<option value={tree['common_name']} key={tree['common_name']}>{tree['common_name'].toLowerCase()}</option>)
+                }
+              })}
+              {userTreeOptions.map(tree => {
+                // console.log(tree['common_name'])
+                if (tree['common_name']) {
+                  return (<option value={tree['common_name']} key={tree['common_name']}>{tree['common_name'].toLowerCase()}</option>)
+                }
+              })}
+            </select>
+            {userPosition.lat ? null : (            
+              <div className="loading-content">
+                <i className='bx bxs-tree'></i>
+                <div className="bouncing-text">
+                    <div className="L">L</div>
+                    <div className="o">o</div>
+                    <div className="a">a</div>
+                    <div className="d">d</div>
+                    <div className="i">i</div>
+                    <div className="n">n</div>
+                    <div className="g">g</div>
+                    <div className="space"> </div>
+                    <div className="l">l</div>
+                    <div className="o2">o</div>
+                    <div className="c">c</div>
+                    <div className="a2">a</div>
+                    <div className="t">t</div>
+                    <div className="i2">i</div>
+                    <div className="o3">o</div>
+                    <div className="n2">n</div>
+                    <div className="dot1">.</div>
+                    <div className="dot2">.</div>
+                    <div className="dot3">.</div>
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
         <div className="feature">
           <div className={`map-container ${showInfo ? '' : 'map-container-full'}`}>

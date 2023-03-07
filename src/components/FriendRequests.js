@@ -106,7 +106,7 @@ export default function FriendRequests({user, requests, setRequests}) {
                 )
             })}
             </>
-        ) : <i className="friend-list-message">No requests</i> }
+        ) : <i className="friend-list-message">No friend requests</i> }
     </div>
   )
 }
