@@ -17,7 +17,7 @@ export default function FriendList({user, setIsFriendList, isFriendList}) {
 
     useEffect(() => {
         if (user.id !== null) {
-        fetch(`/users/filtered/${user.id}`, {
+        fetch(`https://tree-tracker-backend.herokuapp.com/users/filtered/${user.id}`, {
             method: 'GET',
             headers: {
             Authorization: `Bearer ${localStorage.getItem('jwt')}`

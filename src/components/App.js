@@ -34,7 +34,7 @@ function App() {
     })
     .then(response => response.json())
     .then(data => {
-      console.log('Success:', data);
+      // console.log('Success:', data);
     })
   }, [])
 
@@ -64,7 +64,7 @@ function App() {
   }, [user])
 
   useEffect(() => {
-    fetch("/me", {
+    fetch("https://tree-tracker-backend.herokuapp.com/me", {
       method: "GET",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("jwt")}`,
@@ -74,7 +74,7 @@ function App() {
       // console.log(r)
       if (r.ok) {
         r.json().then((user) => {
-          // console.log(user)
+          console.log(user)
           dispatch(set(user))
         });
       }
@@ -126,7 +126,7 @@ function App() {
   // set tree types
 
   useEffect(() => {
-    fetch(`/tree_types`, {
+    fetch(`https://tree-tracker-backend.herokuapp.com/tree_types`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${localStorage.getItem("jwt")}`
@@ -154,7 +154,7 @@ function App() {
 
   useEffect(() => {
     if (user && user.id) {
-      fetch(`/users/${user.id}`, {
+      fetch(`https://tree-tracker-backend.herokuapp.com/users/${user.id}`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${localStorage.getItem("jwt")}`
@@ -162,7 +162,7 @@ function App() {
       })
       .then((res) => res.json())
       .then(obj => {
-        // console.log(obj['tree_types'])
+        console.log(obj)
         dispatch(setUserTrees(obj['user_trees']))
         // setUserTrees(obj['user_trees'])
       })

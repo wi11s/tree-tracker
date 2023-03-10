@@ -97,7 +97,7 @@ export default function Map({ treeTypes, trees }) {
 
   function handleDelete(id) {
     console.log(id)
-    fetch(`/user_trees/${id}`, {
+    fetch(`https://tree-tracker-backend.herokuapp.com/user_trees/${id}`, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${localStorage.getItem("jwt")}`
