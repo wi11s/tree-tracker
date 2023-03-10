@@ -18,7 +18,7 @@ export default function Replies({user, postId, replyCount, setParentReplyCount, 
         })
     }, [replyCount])
 
-    console.log(replies)
+    // console.log(replies)
     
   return (
     <>{replies.map(reply => {

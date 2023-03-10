@@ -1,13 +1,16 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState, useRef} from 'react'
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom'
+import Footer from './Footer';
 
 import { useSelector, useDispatch } from 'react-redux'
+import { set } from '../slices/userSlice'
 import { set as setPosition, selectPosition } from '../slices/positionSlice'
 import { set as setInfo, setShowInfo, selectInfo } from '../slices/infoSlice'
 import { set as setUserTrees, selectUserTrees } from '../slices/userTreesSlice'
+// import { set as setTreeTypes, selectTreeTypes } from '../slices/treeTypesSlice'
 
-export default function AddTree({ user, treeTypes }) {
+export default function AddTree({ user, treeTypes, setTreeTypes }) {
   const navigate = useNavigate()
 
   const pos = useSelector(selectPosition)
@@ -25,6 +28,22 @@ export default function AddTree({ user, treeTypes }) {
   const [allowSubmit, setAllowSubmit] = useState(false)
   const [uploaded, setUploaded] = useState(false)
   const [fileName, setFileName] = useState('')
+
+  let locationRef = useRef();
+
+  useEffect(() => {
+    let handler = e => {
+        if(!locationRef.current.contains(e.target)) {
+            setUseCustomLocation(false);
+        }
+    }
+
+    document.addEventListener('mousedown', handler);
+
+    return () => {
+        document.removeEventListener('mousedown', handler);
+    }
+})
 
   function handleCheckBox() {
     setUseCustomLocation(!useCustomLocation)
@@ -57,17 +76,32 @@ export default function AddTree({ user, treeTypes }) {
       console.log('Success:', data);
       setAllowSubmit(true)
 
-      setNewTree({
-        common_name: data.suggestions[0]['plant_details']['common_names'][0],
-        scientific_name: data.suggestions[0]['plant_details']['scientific_name'],
-        wiki: data.suggestions[0]['plant_details'].url,
-        image: data.images[0].url,
-        lat: userPosition.lat,
-        lng: userPosition.lng,
-        health: '',
-        description: '',
-        user_id: user.id
-      })
+      if (data.suggestions[0]['plant_details']['common_names'][0] !== 'Nom cientific') {
+        setNewTree({
+          common_name: data.suggestions[0]['plant_details']['common_names'][0],
+          scientific_name: data.suggestions[0]['plant_details']['scientific_name'],
+          wiki: data.suggestions[0]['plant_details'].url,
+          image: data.images[0].url,
+          lat: userPosition.lat,
+          lng: userPosition.lng,
+          health: '',
+          description: '',
+          user_id: user.id
+        })
+      } else {
+        setNewTree({
+          common_name: data.suggestions[0]['plant_details']['common_names'][1],
+          scientific_name: data.suggestions[0]['plant_details']['scientific_name'],
+          wiki: data.suggestions[0]['plant_details'].url,
+          image: data.images[0].url,
+          lat: userPosition.lat,
+          lng: userPosition.lng,
+          health: '',
+          description: '',
+          user_id: user.id
+        })
+      }
+
 
       setAllCommonNames(data.suggestions[0]['plant_details']['common_names'])
       dispatch(setShowInfo(true))
@@ -156,6 +190,8 @@ export default function AddTree({ user, treeTypes }) {
             .then(response => response.json())
             .then((obj) => {
               console.log(obj)
+              setTreeTypes(obj)
+
               const rarity = {
                 verycommon: {
                     color: '#bdbbbb',
@@ -194,7 +230,7 @@ export default function AddTree({ user, treeTypes }) {
               .then(response => response.json())
               .then((obj) => {
                 console.log(obj)
-                // dispatch(setUser(obj))
+                dispatch(set(obj))
               })
               
             })
@@ -229,8 +265,25 @@ export default function AddTree({ user, treeTypes }) {
               <p>Current Location</p>
             </div>
 
-            <div className="add-tree-custom-location" onClick={handleCheckBox}>
-              <p>Custom Location</p>
+            <div className="add-tree-custom-location" ref={locationRef}>
+              <p onClick={handleCheckBox}>Custom Location</p>
+              {useCustomLocation ? 
+              <div className="custom-location-container">
+                <div className="custom-input">
+                  <div className="custom-location">
+                    <p>Latitude:</p>
+                    <input type="text" placeholder='ex: 30.26' onChange={handleLatChange}/>
+                  </div>
+
+                  <div className="custom-location">
+                    <p>Longitude:</p>
+                    <input type="text" placeholder='ex: 50.33' onChange={handleLngChange}/>
+                  </div>
+                </div>
+              </div>
+              :
+              null
+              }
             </div>
 
           </div>
@@ -242,8 +295,8 @@ export default function AddTree({ user, treeTypes }) {
 
         {/* ----------- custome location ----------- */}
 
-        {useCustomLocation ? 
-          <div className="custom-location-container">
+        {/* {useCustomLocation ? 
+        <div className="custom-location-container">
           <div className="custom-input">
             <div className="custom-location">
               <p>Latitude:</p>
@@ -258,7 +311,7 @@ export default function AddTree({ user, treeTypes }) {
         </div>
         :
         null
-        }  
+        }   */}
 
         {/* ----------- step twp ----------- */}
 
@@ -321,6 +374,9 @@ export default function AddTree({ user, treeTypes }) {
         </motion.div>
 
       </form>
+        <div className='add-tree-footer'> 
+          <Footer /> 
+        </div>
     </div>
   )
 }

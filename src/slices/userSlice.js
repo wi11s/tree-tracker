@@ -30,6 +30,6 @@ export const userSlice = createSlice({
     }
 })
 
-export const { set } = userSlice.actions
+export const { set, setFriendships, setRequests } = userSlice.actions
 export const selectUser = state => state.user
 export default userSlice.reducer

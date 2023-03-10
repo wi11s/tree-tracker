@@ -27,7 +27,7 @@ export default function Feed() {
     let arrayOfFriendIds = []
     user.friendships.map(friend => arrayOfFriendIds.push(friend.id))
     let filteredPosts = posts.filter(post => (arrayOfFriendIds.includes(post.user.id))||(post.user.id===user.id))
-    console.log(filteredPosts)
+    // console.log(filteredPosts)
     setPosts(filteredPosts.sort((a, b) => b.created_at - a.created_at))
   })
   }, [user])
@@ -64,16 +64,11 @@ export default function Feed() {
 
   return (
     <div id="forum">
-      <motion.div
-        className="box"
-        initial={{ opacity: 0, scale: 0.6 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{
-          duration: 0.8,
-          delay: 0,
-          ease: [0, 0.71, 0.2, 1.01]
-        }}
-      >
+      <motion.div initial={{ opacity: 0, y: 10 }} 
+                  whileInView={{ opacity: 1, y: 0}} 
+                  transition={{ duration: .3, delay: 0 }} 
+                  viewport={{ once: true }}
+                  className="box">
         <form onSubmit={handleSubmit} className='newPost'>
           <textarea className="form-control" type="text" placeholder="What's on your mind?" onChange={handleChange} value={content}/>
           <div className="box">

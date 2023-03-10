@@ -6,14 +6,14 @@ import {Routes, Route } from "react-router-dom"
 
 import Home from './Home';
 import Header from './Header';
-import Footer from './Footer';
 import Map from './Map';
 import Error from './Error';
 import AddTree from './AddTree';
 import Profile from './Profile';
-import Login from './Login';
-import Feed from './forum/Feed.js'
-import Search from './Search'
+import Login from './login/Login';
+import Feed from './forum/Feed.js';
+import Search from './Search';
+import FriendList from './FriendList';
 
 import { useSelector, useDispatch } from 'react-redux'
 import { set, selectUser } from '../slices/userSlice'
@@ -49,6 +49,7 @@ function App() {
   const [treeTypes, setTreeTypes] = useState([])
 
   const [isLogin, setIslogin] = useState(false);
+  const [isFriendList, setIsFriendList] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   // console.log(isLoggedIn)
 
@@ -172,18 +173,19 @@ function App() {
   //   return (<div className="login"><Login/></div>);
   // }
 
-  // console.log(user)
+  // console.log(treeTypes)
 
   return (
     <div className="App">
-      <Header user={user} setIslogin={setIslogin} isLoggedIn={isLoggedIn}/>
+      <Header user={user} setIslogin={setIslogin} isLoggedIn={isLoggedIn} setIsFriendList={setIsFriendList}/>
       {isLogin ? <Login setIslogin={setIslogin} /> : null}
+      {isFriendList && user.id !== null ? <FriendList user={user} isFriendList={isFriendList} setIsFriendList={setIsFriendList}/> : null}
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home isLoggedIn={isLoggedIn} setIslogin={setIslogin}/>} />
         {isLoggedIn ?
         <>
           <Route path="map" element={<Map treeTypes={treeTypes} trees={trees} />} />
-          <Route path="addtree" element={<AddTree user={user} treeTypes={treeTypes} />} />
+          <Route path="addtree" element={<AddTree user={user} treeTypes={treeTypes} setTreeTypes={setTreeTypes}/>} />
           <Route path="profile" element={<Profile treeTypes={treeTypes} userTrees={userTrees} user={user}/>} />
           <Route path="*" element={<Error />} /> 
           <Route path="login" element={<Login />} />

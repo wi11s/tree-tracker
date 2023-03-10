@@ -68,6 +68,14 @@ html {
     gap: 40px;
 }
 
+.menu i {
+    display: none;
+}
+
+.bx-menu {
+    display: none;
+}
+
 .link {
     position: relative;
     font-family: var(--main-font);
@@ -125,8 +133,19 @@ html {
     line-height: 18px;
 }
 
-.home-container img {
-    border-radius: 15px;
+.home-img-container {
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+.home-img-container img {
+    display: block;
+    width: 100%;
+    height: 150px;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    object-position: center;
+    transition: 200ms transform ease-in-out;
 }
 
 .button {
@@ -166,24 +185,26 @@ html {
 /* ================= Map ================= */
 
 .map {
-    display: flex;
     height: 100vh;
-    padding: 0 50px;
-    align-items: center;
-    align-content: center;
+    padding: 150px 50px 100px 50px;
+}
+
+.map-header-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
 }
 
 .container {
     width: 100%;
+    height: 100%;
 }
 
 .map h1 {
     font-family: var(--main-font);
-    font-weight: var(--extra-bold);
+    font-weight: var(--bold);
     color: var(--main-color);
-    font-size: 30px;
-    letter-spacing: 2px;
-    margin-bottom: 20px;
+    font-size: 25px;
 }
 
 .form h1 {
@@ -197,7 +218,7 @@ html {
 
 .feature {
     display: flex;
-    column-gap: 20px;
+    column-gap:5 20px;
 }
 
 .map-container {
@@ -311,7 +332,6 @@ h4 {
 .select-container {
     display: flex;
     gap: 10px;
-    margin-bottom: 20px;
 }
 
 .select-container label {
@@ -320,9 +340,13 @@ h4 {
     font-weight: var(--regular);
 }
 
+.select-container select {
+    height: 23px;
+}
+
 /* ================= Add Tree ================= */
 
-.sign-up h2 {
+/* .sign-up h2 {
     font-family: var(--main-font);
     font-weight: var(--regular);
     color: var(--main-color);
@@ -355,9 +379,9 @@ h4 {
     padding: 3px 8px;
     transition: .5s;
     cursor: pointer;
-}
+} */
 
-.add-tree {
+/* .add-tree {
     display: flex;
     height: 100vh;
     justify-content: center;
@@ -476,18 +500,20 @@ form .submitBtn input:hover {
     font-weight: var(--medium);
     font-size: 14px;
     margin-top: 12px;
-}
+} */
 
 .add-tree-container {
     height: 100vh;
-    display: flex;
-    justify-content: center;
-    padding-top: 150px;
+    width: 100%;
+    padding: 150px 50px 100px 50px;
     font-family: var(--main-font);
     color: var(--main-color);
 }
 
 .add-tree-island {
+    max-width: 824px;
+    margin-left: auto;
+    margin-right: auto;
     display: flex;
     background-color: #fff;
     box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.05);
@@ -505,7 +531,7 @@ form .submitBtn input:hover {
     height: 100%;
     display: flex;
     align-items: center;
-    width: 216px;
+    min-width: 216px;
 }
 
 .add-tree-header p {
@@ -544,9 +570,11 @@ form .submitBtn input:hover {
     padding-bottom: 2px;
     cursor: pointer;
     transition: .5s;
+    position: relative;
+    z-index: 2;
 }
 
-.add-tree-custom-location:hover {
+.add-tree-custom-location p:hover {
     opacity: .5;
 }
 
@@ -568,6 +596,7 @@ input[type="file"] {
     display: none;
 }
 
+input[type="password"],
 input[type="text"] {
     opacity: .5;
 }
@@ -631,39 +660,35 @@ input[type="text"] {
 }
 
 .custom-location-container {
-    display: flex;
-    justify-content: flex-end;
-    column-gap: 20px;
-    margin-bottom: 40px;
-    margin-top: -20px;
+    position: absolute;
+    left: 0;
+    top: 25px;
+    width: 100%;
 }
 
 .custom-input {
     display: flex;
+    flex-direction: column;
+    row-gap: 10px;
     align-items: center;
     border-radius: 5px;
     column-gap: 20px;
-    padding: 15px 40px;
+    padding: 12px 15px;
     background-color: #fff;
     box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.05);
-}
-
-.custom-location {
-    display: flex;
-    align-items: center;
-    column-gap: 10px;
 }
 
 .custom-location input {
     outline: none;
     border: .5px solid var(--main-color);
-    border-radius: 5px;
-    padding: 5px;
-    width: 100px;
+    border-radius: 3px;
+    padding: 3px 5px;
+    font-size: 10px;
 }
 
 .custom-location p {
-    font-size: 13px;
+    font-size: 11px;
+    margin-bottom: 5px;
 }
 
 .bx-loader {
@@ -801,10 +826,10 @@ input[type="text"] {
 /* ================= Forum ================= */
 
 #forum {
-    width: 600px;
+    max-width: 600px;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 150px;
+    padding: 150px 50px 100px 50px;
 }
 
 .replyDiv {
@@ -1219,10 +1244,8 @@ input[type="text"] {
 /* ================= Profile ================= */
 
 .profile {
-    padding-top: 150px;
-    padding-bottom: 100px;
+    padding: 150px 50px 100px 50px;
     display: flex;
-    flex-direction: column;
     justify-content: center;
     width: 100vw;
     font-family: var(--main-font);
@@ -1415,19 +1438,619 @@ input[type="text"] {
     left: 0;
     width: 100%;
     height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: var(--main-font);
+    color: var(--main-color);
 }
 
 .login-form {
     background-color: #fff;
-    border: none;
+    padding: 25px 30px;
+    border-radius: 10px;
+    width: 300px;
+    position: relative;
 }
 
-.login-container i {
+.close-login {
     position: absolute;
-    top: 40px;
-    right: 40px;
-    opacity: 1;
-    color: #fff;
-    font-size: 40px;
+    top: 0;
+    right: -28px;
+    background-color: #fff;
+    border-radius: 5px;
+    padding: 2px 2px 0px 2px;
     cursor: pointer;
 }
+
+.close-login i {
+    color: var(--main-color);
+    opacity: 1;
+    font-size: 20;
+}
+
+.login-form-title {
+    border-bottom: .5px solid var(--main-color);
+    padding-bottom: 15px;
+    margin-bottom: 25px;
+}
+
+.login-form-title p {
+    font-weight: var(--bold);
+    font-size: 30px;
+}
+
+.login-input-contaienr input {
+    outline: none;
+    border: .5px solid var(--main-color);
+    border-radius: 5px;
+    padding: 7px 10px;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.login-submit-btn button {
+    background-color: var(--main-color);
+    border: none;
+    cursor: pointer;
+    color: #fff;
+    font-size: 15px;
+    outline: none;
+    width: 100%;
+    padding: 8px 0 8px 0;
+    border-radius: 5px;
+    border: .5px solid var(--main-color);
+    transition: .5s;
+}
+
+.login-submit-btn button:hover {
+    background-color: #fff;
+    color: var(--main-color);
+}
+
+.login-input-contaienr {
+    margin-bottom: 25px;
+}
+
+.login-switch {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.login-switch p {
+    font-size: 13px;
+}
+
+.login-switch button {
+    outline: none;
+    border: .5px solid var(--main-color);
+    background-color: #fff;
+    cursor: pointer;
+    padding: 3px 5px;
+    font-size: 11px;
+    border-radius: 3px;
+}
+
+/* ================= Friend List ================= */
+
+.friend-list-container {
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    z-index: 101;
+    background-color: rgba(0, 0, 0, 0.2);
+    font-family: var(--main-font);
+    color: var(--main-color);
+}
+
+.friend-list {
+    width: 325px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    background-color: #fff;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.05);
+    z-index: 102;
+    padding: 25px 30px;
+    border-radius: 10px 0px 0px 10px;
+    transition: .5s;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.section-header p {
+    font-weight: var(--medium);
+    font-size: 15px;
+}
+
+.friend-card {
+    max-width: 265px;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.05);
+    border-radius: 5px;
+    padding: 10px 15px;
+    font-family: var(--main-font);
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+
+.friend-card p {
+    font-weight: var(--medium);
+    font-size: 16px;
+}
+
+.friend-card i {
+    font-size: 12px;
+    opacity: .5;
+}
+
+.my-friends-section {
+    overflow: auto;
+    margin-bottom: 20px;
+}
+
+.search-box-container {
+    height: 135px;
+    overflow: auto;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+.request-box-container {
+    height: 210px;
+    overflow: auto;
+    margin-bottom: 20px;
+}
+
+.friend-box-container {
+    max-height: 490px;
+    /* overflow: auto;
+    margin-top: 20px; */
+}
+
+.my-friends-section::-webkit-scrollbar,
+.friend-box-container::-webkit-scrollbar,
+.request-box-container::-webkit-scrollbar,
+.search-box-container::-webkit-scrollbar,
+.friends-container::-webkit-scrollbar {
+    display: none;
+  }
+
+.suggest-friend-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: default;
+}
+
+.bx-message-square-add {
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.bottom {
+    min-height: 290px;
+    display: flex;
+    flex-direction: column;
+}
+
+.bottom-section{
+    border-top: .5px solid var(--main-color);
+    padding-top: 25px;
+    flex: 1;
+    /* -webkit-mask-image: linear-gradient(180deg, #000 90%, transparent); */
+}
+
+.friend-list-quit {
+    background-color: #fff;
+    border-radius: 5px;
+    padding: 2px 2px 0px 2px;
+    cursor: pointer;
+    position: absolute;
+    top: 5px;
+    left: -30px;
+}
+
+.friend-list-quit .bx-x {
+    color: var(--main-color);
+    opacity: 1;
+    font-size: 20px;
+}
+
+.bottom-section input {
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    width: 100%;
+    padding-top: 10px;
+}
+
+.bottom-section .friends-container {
+    height: 100px;
+}
+
+.search-friends-bar {
+    border: .5px solid var(--main-color);
+    display: flex;
+    align-items: center;
+    column-gap: 10px;
+    padding: 3px 10px;
+    border-radius: 8px;
+}
+
+.request-friend-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: default;
+}
+
+.friend-request-buttons .bx-x {
+    opacity: 1;
+    color: red;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.friend-request-buttons .bx-check {
+    opacity: 1;
+    color: green;
+    font-size: 20px;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+.request-container {
+     margin-top: 0;
+}
+
+.friend-list-switch-container {
+    display: flex;
+    justify-content: space-between;
+    column-gap: 10px;
+}
+
+.friend-list-switch {
+    background-color: #fff;
+    padding: 10px;
+    border: .5px solid var(--main-color);
+    width: 100%;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: .5s;
+    position: relative;
+}
+
+.request-notification {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: red;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+}
+
+.request-notification p {
+    line-height: 16px;
+    color: #fff;
+}
+
+.friend-list-switch:hover {
+    background-color: var(--main-color);
+    color: #fff;
+    border: .5px solid #fff;
+}
+
+.friend-list-switch p {
+    font-size: 13px;
+}
+
+.friend-list-message {
+    font-size: 13px;
+    opacity: .5;
+}
+
+/* ================= Media Query ================= */
+
+@media screen and (max-width: 1106px) {
+    .profile-container {
+        width: 650px;
+    }
+
+    .user-profile-container {
+        flex-direction: column;
+        width: 100%;
+        row-gap: 40px;
+    }
+
+    .profile-header h1 {
+        font-size: 25px;
+    }
+
+    .profile-header i {
+        font-size: 12px;
+    }
+
+    .user-email p {
+        font-size: 12px;
+    }
+
+    .user-info-island {
+        width: 100%;
+    }
+
+    .score-island {
+        width: 100%;
+        padding: 25px 20px 25px 30px;
+    }
+
+    .score-island h3 {
+        font-size: 90px;
+        line-height: 80px;
+    }
+
+    .progress-container {
+        width: 100%;
+    }
+
+    .progress-header h1 {
+        font-size: 25px;
+    }
+
+    .tree-card-container {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media screen and (max-width: 920px) {
+    .link {
+        font-size: 14px;
+    }
+
+    .friend-card p {
+        font-size: 14px;
+    }
+
+    .add-tree-island {
+        max-width: 410px;
+        flex-direction: column;
+        align-items: flex-start;
+        row-gap: 30px;
+        height: auto;
+        position: relative;
+        padding: 30px 40px;
+    }
+
+    .add-tree-header {
+        border: none;
+        border-bottom: .5px solid var(--main-color);
+        width: 100%;
+        padding-bottom: 25px;
+    }
+
+    .add-tree-check {
+        border: none;
+        position: absolute;
+        top: 25px;
+        right: 40px;
+        font-size: 28px;
+    }
+
+    .custom-location input {
+        width: 80px;
+    }
+    
+    .add-tree-btn {
+        padding-bottom: 40px;
+    }
+}
+
+@media screen and (max-width: 668px) {
+    .menu {
+        width: 100%;
+        position: absolute;
+        top: -470%;
+        left: 0;
+        flex-direction: column;
+        text-align: center;
+        background-color: #fff;
+        row-gap: 30px;
+        padding-top: 45px;
+        padding-bottom: 50px;
+        box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.05);
+        border-radius: 0 0 20px 20px;
+        transition: .4s;
+    }
+
+    .toggle-menu {
+        top: 0;
+    }
+
+    .menu i {
+        display: block;
+        position: absolute;
+        top: 40px;
+        right: 50px;
+        opacity: 1;
+        font-size: 25px;
+        color: var(--main-color);
+    }
+
+    .link {
+        font-size: 16px;
+    }
+
+    .link:after {
+        display: none;
+    }
+
+    .bx-menu {
+        display: block;
+        font-size: 25px;
+        cursor: pointer;
+    }
+
+    .nav {
+        margin: 25px 35px;
+    }
+
+    .home {
+        padding: 35px;
+    }
+
+    .map {
+        padding: 130px 35px 130px 35px;
+    }
+
+    .add-tree-container {
+        padding: 130px 35px 130px 35px;
+    }
+
+    .profile {
+        padding: 130px 35px 130px 35px;
+    }
+
+    #forum {
+        padding: 130px 35px 130px 35px;
+    }
+
+    .menu-sub div{
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width: 593px) {
+    .tree-card-container {
+        grid-template-columns: 1fr;
+    }
+
+    .map-header-container {
+        flex-direction: column;
+        row-gap: 20px;
+    }
+
+    .add-tree-btn button {
+        font-size: 15px;
+    }
+}
+
+@media screen and (max-width: 505px) {
+    .add-tree-action {
+        flex-direction: column;
+        align-items: center;
+        row-gap: 20px;
+        width: 100%;
+    }
+
+    .custom-file-upload,
+    .add-tree-location-indicator {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .friend-list {
+        width: 285px;
+    }
+
+    .friend-list-switch p {
+        font-size: 11px;
+    }
+}
+
+@media screen and (max-width: 436px) {
+    .home-container h1 {
+        font-size: 30px;
+    }
+}
+
+@media screen and (max-width: 390px) {
+    .add-tree-header p {
+        font-size: 16px;
+    }
+
+    .add-tree-location-indicator p {
+        font-size: 14px;
+    }
+
+    .add-tree-location-indicator i {
+        font-size: 17px;
+    }
+
+    .add-tree-custom-location p {
+        font-size: 11px;
+    }
+
+    .custom-location input {
+        width: 98%;
+    }
+
+    .add-tree-check {
+        font-size: 21px;
+        padding-top: 3px;
+    }
+}
+
+@media screen and (max-height: 653px) {
+    .footer {
+        display: none;
+    }
+}
+
+@media screen and (max-height: 951px) {
+    .add-tree-footer {
+        display: none;
+    }
+}
+
+/* @media screen and (max-height: 1098px) {
+    .search-box-container {
+       height: 130px;
+    }
+}
+
+@media screen and (max-height: 751px) {
+    .search-box-container {
+       height: 110px;
+    }
+
+    .request-box-container {
+        height: 180px;
+    }
+}
+
+@media screen and (max-height: 711px) {
+    .search-box-container {
+       height: 90px;
+    }
+
+    .request-box-container {
+        height: 150px;
+    }
+}
+
+@media screen and (max-height: 722px) {
+    .request-box-container {
+        height: 170px;
+    }
+}
+
+
+@media screen and (max-height: 706px) {
+    .request-box-container {
+        height: 150px;
+    }
+}
+
+@media screen and (max-height: 692px) {
+    .search-box-container {
+       height: 70px;
+    }
+
+    .request-box-container {
+        height: 135px;
+    }
+} */

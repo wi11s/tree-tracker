@@ -14,6 +14,8 @@ export default function UserCard({displayUser, user}) {
         }
 
     }, [user])
+    
+    console.log(user)
 
     function handleFriendRequest(id) {
         fetch('https://tree-tracker-backend.herokuapp.com/requests', {
@@ -35,15 +37,16 @@ export default function UserCard({displayUser, user}) {
     }
 
   return (
-    <div className='user-card'>
-        <h3>{displayUser.username}</h3>
-        {
-            !alreadyFriends ? (
-                requested ? <p>Friend Request Sent</p> : (
-                    <button onClick={() => handleFriendRequest(displayUser.id)}>Add Friend</button>
-                )
-            ) : null
-        }
-    </div>
+        <div className="friend-card suggest-friend-card">
+            <div className="friend-card-info">
+                <p>{displayUser.name.toUpperCase()}</p>
+                <i>{displayUser.username}</i>
+            </div>
+        
+            { !alreadyFriends ? (
+                requested ? <i>Request Sent</i> : (
+                <k className='bx bx-message-square-add' onClick={() => handleFriendRequest(displayUser.id)}></k> )
+            ) : null }
+        </div>    
   )
 }

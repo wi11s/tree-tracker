@@ -4,6 +4,7 @@ import TreeInfo from "./TreeInfo";
 import { useInRouterContext } from "react-router-dom";
 import { motion } from 'framer-motion';
 import LoadingScreen from "./LoadingScreen";
+import Footer from './Footer';
 
 import { useSelector, useDispatch } from 'react-redux'
 import { set as setPosition, selectPosition } from '../slices/positionSlice'
@@ -17,7 +18,7 @@ export default function Map({ treeTypes, trees }) {
   const zoom = pos.zoom
 
   const info = useSelector(selectInfo)
-  // console.log(info)
+  console.log(info)
   const showInfo = info.showInfo
   const userTrees = useSelector(selectUserTrees).userTrees
 
@@ -118,51 +119,57 @@ export default function Map({ treeTypes, trees }) {
 
   return (
     <main className="map">
-      <motion.div className='container' initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1, transition:{duration: .8}}}>
-        <h1>EXPLORE MAP</h1>
-        <div className="select-container">
-          <label>Filter Trees</label>
-          <select onChange={handleSelectChange} type='select'>
-            <option value='all'>ALL</option>
-            <option value='none'>NONE</option>
-            {treeTypes.map(tree => {
-              if (tree['common_name']) {
-                return (<option value={tree['common_name']} key={tree['common_name']}>{tree['common_name'].toLowerCase()}</option>)
-              }
-            })}
-            {userTreeOptions.map(tree => {
-              // console.log(tree['common_name'])
-              if (tree['common_name']) {
-                return (<option value={tree['common_name']} key={tree['common_name']}>{tree['common_name'].toLowerCase()}</option>)
-              }
-            })}
-          </select>
-          {userPosition.lat ? null : (            
-            <div className="loading-content">
-              <i className='bx bxs-tree'></i>
-              <div className="bouncing-text">
-                  <div className="L">L</div>
-                  <div className="o">o</div>
-                  <div className="a">a</div>
-                  <div className="d">d</div>
-                  <div className="i">i</div>
-                  <div className="n">n</div>
-                  <div className="g">g</div>
-                  <div className="space"> </div>
-                  <div className="l">l</div>
-                  <div className="o2">o</div>
-                  <div className="c">c</div>
-                  <div className="a2">a</div>
-                  <div className="t">t</div>
-                  <div className="i2">i</div>
-                  <div className="o3">o</div>
-                  <div className="n2">n</div>
-                  <div className="dot1">.</div>
-                  <div className="dot2">.</div>
-                  <div className="dot3">.</div>
+      <motion.div initial={{ opacity: 0, y: 10 }} 
+                  whileInView={{ opacity: 1, y: 0}} 
+                  transition={{ duration: .3, delay: 0 }} 
+                  viewport={{ once: true }}
+                  className='container'>
+        <div className="map-header-container">
+          <h1>EXPLORE MAP</h1>
+          <div className="select-container">
+            <label>Filter Trees</label>
+            <select onChange={handleSelectChange} type='select'>
+              <option value='all'>ALL</option>
+              <option value='none'>NONE</option>
+              {treeTypes.map(tree => {
+                if (tree['common_name']) {
+                  return (<option value={tree['common_name']} key={tree['common_name']}>{tree['common_name'].toLowerCase()}</option>)
+                }
+              })}
+              {userTreeOptions.map(tree => {
+                // console.log(tree['common_name'])
+                if (tree['common_name']) {
+                  return (<option value={tree['common_name']} key={tree['common_name']}>{tree['common_name'].toLowerCase()}</option>)
+                }
+              })}
+            </select>
+            {userPosition.lat ? null : (            
+              <div className="loading-content">
+                <i className='bx bxs-tree'></i>
+                <div className="bouncing-text">
+                    <div className="L">L</div>
+                    <div className="o">o</div>
+                    <div className="a">a</div>
+                    <div className="d">d</div>
+                    <div className="i">i</div>
+                    <div className="n">n</div>
+                    <div className="g">g</div>
+                    <div className="space"> </div>
+                    <div className="l">l</div>
+                    <div className="o2">o</div>
+                    <div className="c">c</div>
+                    <div className="a2">a</div>
+                    <div className="t">t</div>
+                    <div className="i2">i</div>
+                    <div className="o3">o</div>
+                    <div className="n2">n</div>
+                    <div className="dot1">.</div>
+                    <div className="dot2">.</div>
+                    <div className="dot3">.</div>
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
         <div className="feature">
           <div className={`map-container ${showInfo ? '' : 'map-container-full'}`}>
@@ -189,6 +196,8 @@ export default function Map({ treeTypes, trees }) {
         
         
       </motion.div>
+
+      <Footer />
     </main>
   )
 }

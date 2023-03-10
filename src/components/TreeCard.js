@@ -1,7 +1,13 @@
 import React from "react";
 
-export default function TreeCard({tree, rarity}) {
-    // console.log(tree)
+export default function TreeCard({tree}) {
+    const rarityColor = {
+        verycommon: '#bdbbbb',
+        common: '#3bad4c',
+        uncommon: '#1cc7e6',
+        rare: '#743bad',
+        veryrare: '#e67d1c',
+      }
 
     let collected = false 
 
@@ -30,7 +36,7 @@ export default function TreeCard({tree, rarity}) {
             </div>
 
             <div className="tree-card-bottom">
-                <div className="tree-card-rarity" style={{backgroundColor: `${rarity[tree.frequency.replace(/ +/g, "")].color}`}}>
+                <div className="tree-card-rarity" style={{backgroundColor: `${rarityColor[tree.frequency.replace(/ +/g, "")]}`}}>
                     <p>{capitalizeFirstLetter(tree.frequency)}</p>
                 </div>
                 {collected ? <i className='bx bxs-check-circle'></i> : <span className='empty-circle'></span>}
