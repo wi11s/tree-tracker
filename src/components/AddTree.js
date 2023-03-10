@@ -215,7 +215,6 @@ export default function AddTree({ user, treeTypes, setTreeTypes }) {
                 }
               }
           
-
               console.log(treeTypes[x].frequency.replace(/\s+/g, ''))
               fetch(`/users/score/${user.id}`, {
                 method: 'PATCH',
