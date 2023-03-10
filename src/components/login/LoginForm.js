@@ -24,7 +24,7 @@ export default function LoginForm({setShowSignup, setIslogin, loginRef}) {
 
     function handleSubmit(e) {
         e.preventDefault()
-        fetch('/auth/login', {
+        fetch('https://tree-tracker-backend.herokuapp.com/auth/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(oldUser)

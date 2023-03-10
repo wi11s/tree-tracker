@@ -132,7 +132,7 @@ export default function AddTree({ user, treeTypes, setTreeTypes }) {
     console.log(petName)
 
     if (newTree['common_name']) {    
-      fetch('user_trees', {
+      fetch('https://tree-tracker-backend.herokuapp.com/user_trees', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -175,7 +175,7 @@ export default function AddTree({ user, treeTypes, setTreeTypes }) {
 
           if (allCommonNamesString.toLowerCase().replace(/\s+/g, '').includes(treeTypes[x]['common_name'].toLowerCase().replace(/\s+/g, ''))) {
             // console.log(treeTypes[x].id, 'about to post jointype')
-            fetch('/join_types', {
+            fetch('https://tree-tracker-backend.herokuapp.com/join_types', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -217,7 +217,7 @@ export default function AddTree({ user, treeTypes, setTreeTypes }) {
           
 
               console.log(treeTypes[x].frequency.replace(/\s+/g, ''))
-              fetch(`/users/score/${user.id}`, {
+              fetch(`https://tree-tracker-backend.herokuapp.com/users/score/${user.id}`, {
                 method: 'PATCH',
                 headers: {
                   'Content-Type': 'application/json',

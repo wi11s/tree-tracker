@@ -5,7 +5,7 @@ export default function Replies({user, postId, replyCount, setParentReplyCount, 
 
     const [replies, setReplies] = useState([])
     useEffect(() => {
-        fetch(`/posts/replies/${postId}`, {
+        fetch(`https://tree-tracker-backend.herokuapp.com/posts/replies/${postId}`, {
             method: 'GET',
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('jwt')}`,
