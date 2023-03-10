@@ -16,18 +16,29 @@ export default function LoginForm({setShowSignup, setIslogin, loginRef}) {
         const name = e.target.name;
         let value = e.target.value;
 
-        setOldUser({
-            ...oldUser,
-            [name]: value,
-        })
+        let newOldUser = {...oldUser}
+        newOldUser[name] = value
+        setOldUser(newOldUser)
     }
 
     function handleSubmit(e) {
         e.preventDefault()
+        // console.log(oldUser)
+        // fetch('https://tree-tracker-backend.herokuapp.com/auth/login', {
+        //   method: 'POST',
+        //   headers: { 'Content-Type': 'application/json' },
+        //   body: JSON.stringify(oldUser)
+        // })
+        console.log(oldUser.email, oldUser.password)
         fetch('https://tree-tracker-backend.herokuapp.com/auth/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(oldUser)
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: oldUser.email,
+                password: oldUser.password
+            })
         })
         .then((res) => res.json())
         .then((data) => {

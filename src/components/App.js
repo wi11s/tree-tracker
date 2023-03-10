@@ -34,7 +34,7 @@ function App() {
     })
     .then(response => response.json())
     .then(data => {
-      console.log('Success:', data);
+      // console.log('Success:', data);
     })
   }, [])
 
@@ -64,6 +64,7 @@ function App() {
   }, [user])
 
   useEffect(() => {
+    console.log(localStorage.getItem("jwt"))
     fetch("https://tree-tracker-backend.herokuapp.com/me", {
       method: "GET",
       headers: {
@@ -74,8 +75,9 @@ function App() {
       // console.log(r)
       if (r.ok) {
         r.json().then((user) => {
-          // console.log(user)
-          dispatch(set(user))
+          console.log(user)
+          dispatch(set(user.user))
+          setIsLoggedIn(true)
         });
       }
     });
